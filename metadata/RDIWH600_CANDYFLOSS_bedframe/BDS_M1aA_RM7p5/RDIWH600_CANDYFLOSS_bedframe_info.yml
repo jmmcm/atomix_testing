@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M1aA' # M1A: Centre differencing, modified regression method
+description: Provided data (M1A). Processed using centre differencing and the modified third-order method for the regression model.
+ 
+

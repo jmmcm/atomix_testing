@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M2uC' # A2S: Mean deducted, DLL using method 2, standard regression model 
+description: Provided data (A2S). Processed using Method 2 differencing and the standard canoncical method for the regression model. Mean deducted at L2.
+ 
+

@@ -1,0 +1,96 @@
+#===================================================================================
+#       PLOT OPTIONS                                                                #
+#===================================================================================    
+# Dataset info:
+# - 50 range bins (0.5 m in size)
+# - 1 day of data (continuous, fS~1.6Hz)
+# - middepth speed ~ 2 m/s
+
+plotVelTS:
+    description: Time series plot of the beam velocity data
+    cLim: [-.2, 0.2]
+ 
+plotEpsTS:
+    description: Time series plot of the dissipation rate
+    indZ: 17
+    indB: 1
+    clim: [-7, -3]
+    
+plotEpsScatter:
+    description: Scatter plot of the dissipation rate for comparing methods
+    limits: [1e-7, 1e-3]
+    
+plotEpsScatterZ:
+    description: Scatter plots of the dissipation rate as a function of Z
+    limits: [1e-7, 1e-3]
+    indZs: [5,15,25,35]
+    
+plotEpsHist:
+    description: Histogram of the dissipation rate
+    nbins: 100
+    xlimits: [-8, -2]  
+    binLimits: [-8, -2]  
+
+plotEpsRatioHist:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB))
+    nbins: 100
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1]  
+
+plotEpsRatioHistZ:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    nbins: 60
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1] 
+    indZs: [5,15,25,35]
+    
+plotEpsRatioStatsZ:
+    description: Statistics of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    lowerPercentile: 2.5
+    upperPercentile: 97.5
+    
+    
+plotDLL:
+    description: Example plot of DLL vs r^(2/3) for the specifed indices
+    indTs: [58, 115, 173, 230] 
+    indB: 1
+    indZ: 17
+    
+plotA1vsA0:
+    description: Scatter plot of the regression coeffcients
+    xlimits: [-0.03, 0.03]
+    ylimits: [-0.005, 0.02]
+    
+    
+plotA0hist:
+    description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
+    xlimits: [-0.005, 0.015]
+    nbins: 100
+    A0expected: 0.004306 #2*sigmaN_v^2 = 2*0.0464^2;
+        
+plotR2hist:
+    description: Histogram of R2
+    nbins: 100
+        
+plotDelEpshist:
+    description: Histogram of deltaEps/epsilon
+    nbins: 100
+    xlimits: [0, 4]
+    binLimits: [0, 6]
+
+plotSpectra:
+    spdVar: SIGNED_SPEED
+    spdBins: [-2.8,-2.2,-1.6,-1.0,-0.4,0.4,1,1.6,2.2,2.8]
+    indZall: [5, 15, 25, 35]
+    nZavg: 3 # Number of bins to average in z (should be odd)
+    noiseLevel: 0.00269 # sigmaN_v^2/(fS/2), where fS=1.6Hz is the sample rate
+    Afit: 1e-3
+    ylimF: [1e-3, 1e-1]
+    ylimK: [1e-4, 1e-1]
+
+plotBacktracking:
+    description: plot DLL and detrended velocities for chosen indices
+    indT: [62,156]
+    indB: [1,1]
+    indZ: [17,17]
+    nDelR: [8,6] # Bin separation to show detrended TS for (NEEDS TO BE EVEN)

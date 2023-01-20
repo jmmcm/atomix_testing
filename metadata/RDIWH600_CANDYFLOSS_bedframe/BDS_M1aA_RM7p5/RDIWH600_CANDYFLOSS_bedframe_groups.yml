@@ -1,0 +1,84 @@
+#===================================================================================
+#       GROUP LEVEL SPECIFIC METADATA #
+#===================================================================================     
+        
+Ancillary:
+  dimensions:
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        
+  VAVH:  Significant wave height data (m) from a Triaxys buoy deployed on a mooring within 1 km of the ADCP mooring.   Hourly observations interpolated to L4 EPSI_FINAL times.
+  
+  TAU_S: Surface wind stress based 3 m wind speed observations from UK Met Office ODAS buoy (World Meteorological Organisation buoy number 62298) and the wave data from the Triaxys buoy, both deployed within 1 km of the ADCP mooring, based on Fairall et al. (2003) and Taylor et al. (2001).  Hourly observations interpolated to L4 EPSI_FINAL times.
+  
+  ENU: Segment mean earth coordinate velocity (East, North, Up, error) by depth based on closest-bin mapping of beam velocity data
+  
+# ================ L1 =================
+
+L1:  # Level 1: Raw instrument data
+   dimensions:  
+        - TIME
+        - Z_DIST 
+        - N_BEAM        
+    
+   processing_level:  Raw along-beam velocity data from the ADCP together with quality control flags and ancillary measurements.  # Add more information to suit
+   
+   burst_mode: true
+   burst_length: 300 # number of profiles per burst
+
+   time_ref: 2014-01-01T00:00:00Z #yyyy-mm-ddTHH:MM:SSZ
+
+# ================ L2 =================
+
+L2:  # Level 2: Segmented data
+   dimensions:  
+        - N_SEGMENT
+        - Z_DIST
+        - N_BEAM
+        - N_SAMPLE
+        
+   processing_level:  L1 R_VEL with all L1 R_VEL_FLAGS qaqc flags applied have been split into segments of standard length and detrended.
+   
+   segment_length: 300 # number of profiles per segment
+   segment_overlap_proportion: 0 # fraction of segment overlapping in successive segments
+   
+   # detrending_method: R_VEL_DETRENDED calculated with no detrending applied as velocity difference between bins due to linear shear is resolved by the modified structure function regression.
+   # detrending_method: R_VEL_DETRENDED calculated by deducting the segment mean evaluated for each beam / bin / burst.
+   detrending_method: R_VEL_DETRENDED calculated by deducting the segment mean and linear trend evaluated for each beam / bin / burst.
+
+# ================ L3 =================
+
+L3: # Level 3: Dll 
+   dimensions:  
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        - N_DEL 
+   
+   processing_level: L2 R_VEL_DETRENDED data with L2 R_VEL_DETRENDED_FLAGS qaqc flags applied has been used to calculate the second-order longitudinal structure function DLL. 
+   
+   dll_method:  Central-difference scheme as per Wiles et al. (2006).
+   # dll_method: Forward-difference scheme as per McMillan et al. (2016).
+       
+# ================ L4 =================
+
+L4: # Level 4: Dissipation 
+   dimensions:  
+        - TIME
+        - Z_DIST 
+        - N_BEAM
+       
+   processing_level: L3 DLL values with L3 DLL_FLAGS qaqc flags applied have been used to produce estimates of TKE dissipation rate (epsilon) for each beam and bin.
+      
+   # regression_model: Regression of DLL against r^(2/3) using standard model y ~ x1 as per Wiles et al. (2006).
+   regression_model: Regression of DLL against r^(2/3) and r^2 using modified model y ~ x1 + x1:x1:x1 as per Scannell et al. (2017).
+   
+   regression_method: Least-squares including all evaluated separation distances to r_max. 
+  
+   r_max_req: 7.5 # maximum separation distances over which the regression is evaluated
+   
+   C2: 2.0 # empirical constant used in the epsilon calculation
+
+   EPSI_FINAL_method: L4 EPSI with values set to NaN where L4EPSI_FLAGS is not 0.
+    

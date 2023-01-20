@@ -1,0 +1,7 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: CEB # Cynthia Bluteau
+method: '0.0' # No method implemented. L1 data simply provided
+description: Level 1 data provided by Cynthia. Any Ancillary data computed by Justine.

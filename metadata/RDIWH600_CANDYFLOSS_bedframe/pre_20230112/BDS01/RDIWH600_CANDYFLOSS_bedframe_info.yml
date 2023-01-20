@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: '1' # Centre differencing, standard regression model
+description: Provided data. Processed using centre differencing and the standard canoncical method for the regression model.
+ 
+

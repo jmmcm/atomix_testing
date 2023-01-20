@@ -1,0 +1,27 @@
+# Example ATOMIX Meta file. Note the use of anchors via & to avoid repeating information
+
+   
+#===================================================================================
+#      NETCDF GROUP SPECIFIC METADATA #
+#===================================================================================     
+        
+L1: #atomix_level  
+   dimensions:  &dim_timeseries  # the & creates an alias dim_timeseries to reuse this info later
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        
+
+    
+   processing_level:  This group includes the raw measurements from the recorder, and ancillary measurements required for quality-controlling them using the manufacturer's recommendations. # Add more information to suit
+   time_ref: 2017-01-01T00:00:00Z #yyyy-mm-ddTHH:MM:SSZ
+   
+Ancillary: # Added by JMM
+  dimensions:
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        - N_BOUND
+  ENU: Segment mean earth coordinate velocity (East, North, Up, error) by depth
+  segment_length: 300 # seconds
+    

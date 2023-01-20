@@ -1,0 +1,7 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M2aC' # Forward differencing, all bin separations kept, bin separations non-unique 
+description: DLL for all possible bin separations within specified r_max limit, but then averaged before regression. Standard regression model. All flag thresholds consistent with standard values on Wiki.

@@ -1,0 +1,65 @@
+# Gobal metadata for ATOMIX sample data from Candyfloss - bedframe instrument, unstratified winter conditions
+
+title: sample CANDYFLOSS turbulence mooring ADCP data - bedframe, unstratified, large surface waves
+platform_type: ADCP gimbal-mounted upward-looking on a bedframe 
+#date_created: appended automatically during file creation
+#disclaimer: also appended automatically
+comment: Candyfloss is part of the UK NERC / DEFRA funded Shelf Sea Biogeochemistry project
+conventions: CF-1.6, ATOMIX
+abstract: Bedframe containing the gimbal-mounted ADCP configured to make turbulent velocity observations for structure function estimates of the TKE dissipation rate in the bottom boundary layer at a Central Celtic Sea site.  Part of a programme between April 2014 and July 2015 with five sucessive deployments and multiple moorings providing concurrent observations of water column velocity, near-bed turbulent velocity, water column temperature and salinity, meteorology and waves. Fourth bedframe deployment on 21/11/2014 with turbulence ADCP configured to start collecting data on 1/1/2015.  Recovery attempt in April 2015 failed, bedframe eventually recovered in August 2015.  Data logging stopped on 2/6/2015 when memory full.
+
+#Location specific
+area: Central Celtic Sea
+geospatial_lat_min: 49.4;
+geospatial_lat_max: 49.4;
+geospatial_lon_min: -8.6;
+geospatial_lon_max: -8.6;
+sea_floor_depth: -145;
+# geospatial_vertical_min: 
+# geospatial_vertical_max: 
+geospatial_vertical_positive: up
+geospatial_vertical_reference: sea surface
+
+#Date and time
+time_coverage_start: '2015-01-01T00:00:00Z' #yyyy-mm-ddTHH:MM:SSZ
+time_coverage_end: '2015-01-10T23:59:59Z'
+time_deployment_start: '2014-11-21T11:50:00Z'
+time_deployment_end: '2015-08-23T16:30:00Z'
+
+#Who recorded 
+institution: National Oceanography Centre / Bangor University
+authors: Joanne E. Hopkins and Tom P. Rippeth and Brian D. Scannell
+project_name: 'Candyfloss'
+cruise:  DY034
+cruise_report: https://www.bodc.ac.uk/resources/inventories/cruise_inventory/reports/dy034.pdf
+vessel: RRS Discovery IMO 9588029 # IMO vessel number    
+creator_name: Dr Brian D. Scannell # Name of person or institution who created this file.
+creator_email:  brian.scannell@bangor.ac.uk
+reference_1:  "Wiles P. J. et al. (2006) A novel technique for measuring the rate of turbulent dissipation in the marine environemnt. Geophys. Res. Lett., 33, L21608, doi:10.1029/2006GL027050"
+reference_2: "Scannell B. D. et al. (2017) Correcting Surface Wave Bias in Structure Function Estimates of Turbulent Kinetic Energy Dissipation Rate. J. Atmos. Oceanic Technol., 34 (10), 2257-2273, doi:10.1175/JTECH-D-17-0059.1"
+reference_3: "Fairall C. W. et al. (2003) Bulk parameterization of air-sea fluxes - updates and verification for the COARE algorithm. J. Climate, 16 (4), 571-591, doi:10.1175/1520-0442(2003)016<0571:BPOASF>2.0.CO;2"
+reference_4: "Taylor P. K. et al. (2001) The Dependence of Sea Surface Roughness on the Height and Steepness of the Waves, J. Phys. Oceanogr. 31 (2), 572-590, doi:10.1175/1520-0485(2001)031<0572:TDOSSR>2.0.CO;2"
+acknowledgements: Sample data provided for testing epsilon algorithm for ATOMIX project
+funding_agency: UK Natural Environment Research Council
+#keywords: 
+source: mooring  #"Use a term from the SeaVoX Platform Categories vocabulary (L06) list, usually one of the following:  subsurface mooring, ship, sub-surface gliders, autonomous underwater vehicle ()
+
+# Instrument specific info for turbulence data ================
+instrument: Teledyne RDI ADCP, 600 KHz WorkHorse
+instrument_serial_number: 12239
+instrument_nominal_depth: -144 # numeric value in m
+instrument_nominal_height:  0.96 # m
+instrument_nominal_orientation: up
+mooring: Bedframe
+instrument_mounting: Gimbal with ADCP transducer at 0.96 m above deck
+# instrument_sample_interval: # in seconds
+instrument_sample_rate: 1 # in Hz (supply only 1)
+instrument_sampling_mode: burst of 300 profiles (duration 5 minutes 7 seconds) with 30 minute interval between start of bursts
+instrument_burst_interval: 1800 s # s
+instrument_burst_duration: 300 s #    
+instrument_program_comment: Mode 12 high ping rate with 2 code reps (sub-pings) averaged as a single ping.  40 bins, size 50 cm, bin 1 centred at 1.91 m above transducer.  Ambiguity velocity set at 80 cm/s (WV80)
+#instrument_beam2xyz_transformation_matrix: "1.1831     0       -1.1831 0;  0      -1.1831     0 1.1831; .5518 0 0.5518 0;  0 .5518 0 0.5518"
+instrument_measured_coordinate_system: BEAM
+instrument_nominal_velocity_range: 0.5 m/s
+ancillary_sensors: integrated temperature sensor.  Bedframe also held a FlowQuest 150 kHz ACP for full water column velocity data and a CTD. #Very brief text detailing additional non-turbulence sensors here, and how they've been processed.
+

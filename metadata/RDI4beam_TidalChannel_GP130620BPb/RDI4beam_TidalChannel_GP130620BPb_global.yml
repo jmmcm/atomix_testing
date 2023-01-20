@@ -1,0 +1,57 @@
+# Metadata for site GP130620BPb.
+
+# Here we add global metadata you may want
+#Global:
+                       
+title: ATOMIX ADCP data sample from a high energy tidal channel
+platform_type: Bottom-mounted frame 
+#date_created: appended automatically during file creation
+#disclaimer: also appended automatically
+comment: Good quality ADCP data collected in a tidal channel
+conventions: CF-1.6, ATOMIX
+abstract: ADCP deployed in Grand Passage, Nova Scotia to measure turbulence.  Bottom pod was deployed in the center of the channel, During this experiment, one other ADCP Bottom Pod that was located 250 m north. This ADCP was programmed to sample in beam coordinates. 
+
+#Location specific
+area: tidal channel
+geospatial_lat_min: 44.2761
+geospatial_lat_max: 44.2761
+geospatial_lon_min: -66.3391
+geospatial_lon_max: -66.3391
+geospatial_vertical_min: 19.3
+geospatial_vertical_max: 26.4
+geospatial_vertical_positive: up 
+#time_coverage_start: append automatically #yyyy-mm-ddTHH:MM:SSZ
+#time_coverage_end: append automatically #yyyy-mm-ddTHH:MM:SSZ
+
+# Who recorded ===================
+institution:  Dalhousie University
+authors: Hay, Alex and McMillan, Justine
+project_name: EcoEII
+creator_name: Dr Justine McMillan # Name of person or institution who created this file.
+# creator_email:  mcmillanjustine@gmail.com  
+references:  J.M. McMillan, and A.E. Hay, 2017. Spectral and structure function estimates of turbulence in a high-flow tidal channel using broadband ADCPs. Journal of Atmospheric and Oceanic Technology.
+acknowledgements: High quality velocity data to be used for testing epsilon algorithm 
+keywords: turbulence, mixing, tidal channel, dissipation rate
+source: subsurface lander  #"Use a term from the SeaVoX Platform Categories vocabulary (L06) list, usually one of the following:  subsurface mooring, ship, sub-surface gliders, autonomous underwater vehicle ()
+
+# Instrument specific info for turbulence data ================
+instrument: RDI Teledyne ADCP 600 kHz # RDI Teledyne ADCP, 1600 KHz Monitor.
+instrument_serial_number: Unknown
+instrument_nominal_depth: 23.0 # numeric value in m
+instrument_nominal_height: 0.5 # numeric value in m
+# instrument_sample_interval: # in seconds
+instrument_sample_rate: 1.67 # in Hz (supply only 1)
+instrument_sampling_mode: continuous # comment about bursting mode or continuous
+instrument_horizontal_noise_level: 0.096 # [m/s] Expected accuracy in the horizontal velocity (\sigma_U). Accuracy in beam velocity: \sigma_v = sqrt(2)*sin(theta)\sigma_U
+
+instrument_nominal_orientation: up 
+#instrument_burst_interval:  #
+#instrument_burst_duration:  #    
+#instrument_program_comment: # more details about the instrument's programming as it pertains to turbulence. Mode 12? High-resolution ADCP etc.  Nominal velocity range
+#instrument_transformation_matrix: "10978      -5527       -5442;  -52        9601      -9558; 1398        1425        1403"
+instrument_measured_coordinate_system: BEAM
+instrument_nominal_velocity_range: 5 m/s # An estimate
+ancillary_sensors: None #Very brief text detailing additional non-turbulence sensors here, and how they've been processed.
+
+instrument_declination: -17.18 # [degrees] To convert heading from magnetic north to true north
+

@@ -1,0 +1,147 @@
+ # ATOMIX ADCP flags and attributes for GP130620BPb.
+
+#========== Level 1 ===========================================================     
+L1: 
+   R_VEL_FLAGS:  &vel_time_boolean  # the & creates an alias vel_time_boolean to rewrite this info later
+        standard_name: status_flag # Modifier for standard_name of R_VEL_FLAGS
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16 
+           - 32
+           - 64
+           - 128
+        flag_meanings: | 
+           unknown
+           low_amplitude 
+           high_amplitude             
+           low_correlation
+           large_obstruction
+           velocity_out_of_range              
+           tilt_out_of_range
+           out_of_water_or_missing
+        
+        comment:  Flags denote the cause for removing velocity samples recorded by the instrument.
+     
+      # Add extra entries, which will appear as attributes in the netcdf    
+        flag_thresholds:  
+           - -999999 # Flag will be applied if value is a Nan for unknown reason
+           - 70 # [dB] Flag values with amplitudes lower than this
+           - 180 # [dB] Flag values with amplitudes higher than this
+           - 100 # [counts] Flag values with correlations lower than this
+           - -999999 # Fish rejection non currently applied 
+           - 5  # [m/s] Flag values with velocities higher than this [
+           - 5  # [degrees] Flag values with pitch or roll greater than this threshold [degrees]
+           - 0.95 # Flag values that are above this ratio (e.g. 95%) of the detected water surface
+        flag_threshold_meanings: | 
+           not_applicable
+           excluded_if_value_below_threshold
+           excluded_if_value_above_threshold
+           excluded_if_value_below_threshold
+           not_applicable
+           excluded_if_value_above_threshold
+           excluded_if_value_above_threshold
+           excluded_if_ratio_above_threshold
+
+ ## ================Level 2 segmented =================
+L2: # No additional flags. Level 1 flags should be used to identify bad data. This section is included as a placeholder
+    R_VEL_DETRENDED_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+
+        flag_meanings: |
+           unknown
+        
+        comment: No flags currently defined for this level
+   
+        flag_thresholds:
+           - -999 # 
+       
+      
+        flag_threshold_meanings: |
+           unused
+
+## ================Level 3 =================
+L3:
+   DLL_FLAGS: &dll_boolean 
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+        flag_meanings: |
+            unknown 
+            insufficient_number_velocity_samples
+            too_close_to_range_limits
+        comment: These flags identify why segments were discarded for fitting the structure function to the DLL observations with respect to deltaR variable
+
+        # Add extra entries, which will appear as attributes in the netcdf
+        flag_thresholds:  
+            - -999999 # Flag will be applied if value is a Nan for unknown reason
+            - 0.5 # ratio of good points in segment (i.e. reject Dll segments if more than 50% of the data is missing or unreliable)
+            - 3 # Minimum number of bins from first range bin or last range bin 
+        flag_threshold_meanings: |
+            not_applicable
+            excluded_if_ratio_below_threshold
+            excluded_if_value_below_threshold
+  
+   TIME: &time
+        bounds: TIME_BNDS
+   TIME_BNDS: &time_bnds  
+        comment: Beginning and end of each time interval specified by the TIME variable
+  
+## ================Level 4 =================
+L4:
+   EPSI_FLAGS: &epsi_boolean
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16 
+           - 32
+           - 64
+           - 128
+        flag_meanings: |
+           unknown
+           Rsquared_too_low
+           delta_epsi_too_large
+           A3_coeff_invalid
+           dll_intercept_too_low
+           dll_intercept_too_high
+           regression_poorly_conditioned
+           dll_slope_out_of_range
+           
+        comment: Flags denote the reason for excluding individual EPSI values from the calculation of EPSI_FINAL
+
+        flag_thresholds: 
+            - -999999 # Flag will be applied if value is a Nan for unknown reason
+            - 0.6 # Flag values where R2 is lower than this
+            - 0.6 # Flag values where deltaEps/Eps > value
+            - 0 # Flag values where a3 < value
+            - 0 # [m^(2) s^(-2)] Flag values where intercept < threshold
+            - 0.00861 # [m^(2) s^(-2)] Flag values where intercept > threshold (threshhold = 2*yint_expected = 2*(2*sigma_v^2), where sigma_v is expected accuracy in along-beam vel. Based on manufacturer, for 2 ping ensembles, 0.5m range bins, accuracy in horizontal vel is 0.096 m/s, so sigma_v = sqrt(2)*sin(20)*0.096 = 0.0464 m/s )
+            - 3 # Flag values where there are fewer than this number of points for the regression
+            - 0 # [m^(4/3)s^(-2)] Flag values where slope < threshold (would lead to negative epsilon)
+            
+            
+
+        flag_threshold_meanings: |
+            not_applicable
+            excluded_if_value_below_threshold
+            excluded_if_ratio_above_threshold
+            excluded_if_value_below_threshold
+            excluded_if_value_below_threshold
+            excluded_if_value_above_threshold
+            excluded_if_value_below_threshold
+            excluded_if_value_below_threshold
+
+   TIME: *time
+   TIME_BNDS: *time_bnds 
+   EPSI_FINAL:
+        cell_methods: N_BEAM:mean
+

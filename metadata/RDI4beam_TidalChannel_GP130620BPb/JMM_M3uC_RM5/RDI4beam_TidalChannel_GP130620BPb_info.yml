@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M3uC' # Anchored differencing (method 3), all bin separations kept, bin separations non-unique       
+description: Implementing Paris/Thompson method for differencing. Standard regression model. All flag thresholds consistent with standard values on Wiki.
+ 
+

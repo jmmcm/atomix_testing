@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M1aC' # Centre differencing, standard regression model (M1C)
+description: Provided data (M1C). Processed using centre differencing and the standard canoncical method for the regression model.
+ 
+

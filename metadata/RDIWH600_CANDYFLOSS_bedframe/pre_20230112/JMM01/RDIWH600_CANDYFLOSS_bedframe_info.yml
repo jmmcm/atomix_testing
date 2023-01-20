@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: '2.1' # Forward differencing, all bin separations kept, bin separations non-unique 
+description: Including all possible bin separations within specified r_max limit. Standard regression model. All flag thresholds consistent with standard values on Wiki.
+ 
+

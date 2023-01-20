@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M1aC' # A1S: Mean deducted, Centre differencing, standard regression model
+description: Provided data (A1S). Processed using centre differencing and the standard canoncical method for the regression model. Mean deducted at L2.
+ 
+

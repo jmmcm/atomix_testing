@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M1aC' # Center differencing, standard regression model       
+description: Processed using centre differencing and the standard canoncical method for the regression model.
+ 
+

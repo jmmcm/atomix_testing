@@ -1,0 +1,102 @@
+# These attributes are only added if the variable is found within each group.
+# You can add extra attributes to ANY variables that will overide any info in the data base as done for TIME and TIME_BNDS at level 2 segmented and beyond
+
+# Example ATOMIX ADCP flags. Note the use of anchors via & to avoid repeating information
+L1: #atomix_level  
+   R_VEL_FLAGS:  &vel_time_boolean  # the & creates an alias vel_time_boolean to rewrite this info later
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16 
+           - 32
+
+   
+        flag_meanings: | 
+           low_amplitude
+           low_correlation 
+           large_obstruction_fish
+           spike
+           suspiciously_large_velocity    
+           out_of_water_or_missing
+           
+        comment:  Flags denote the cause for removing velocity samples recorded by the instrument.  The moving median filter was applied iteratively 3x to ensure all outliers were identified. Detrended velocities greater than 5x standard devitation were also removed via the suspiciously_large_velocity check
+     
+      # Add extra entries, which will appear as attributes in the netcdf    
+        flag_thresholds:  
+           - 40 
+           - 50
+           - 15
+           - 8 # Half-window of median filter. Moving median is 2N+1
+           - 1.5    
+     
+      
+        flag_threshold_meanings: |    
+           excluded_below_threshold             
+           excluded_below_threshold
+           max_allowed_amplitude_difference_btw_beams              
+           half-window_of_median_filter
+           excluded_above_threshold 
+             
+
+   ENU_VEL_FLAGS:  *vel_time_boolean 
+   BEAM_VEL_FLAGS:  *vel_time_boolean
+
+   
+
+
+## ================Level 2segmented =================
+
+L2:
+   R_VEL_FLAGS: &vel_time_enumerated
+        standard_name: status_flag
+        flag_values: 
+           - 0
+           - 1 
+           - 4
+           - 6
+           - 8 
+           - 9
+
+        flag_meanings: | 
+           unknown
+           good
+           unreplaced_bad_sample   # or missing         
+           replaced_with_white_noise
+           interpolated_value
+           missing_sample
+        
+        comment: These flags help identify how the missing data was replaced, if all all.
+   
+
+   TIME: &time
+        bounds: TIME_BNDS
+   TIME_BNDS: &time_bnds  
+        comment: Beginning and end of each time interval specified by the TIME variable
+
+   ROT_ANGLE:
+        comment:  This variable along with ROT_AXIS enables rotating velocities from geographical coordinates into the analysis frame of reference. To do the opposite, i.e., convert velocities from the new frame back into geographical coordinates, the sign of ROT_ANGLE must be changed. ENU_VEL= rotation_matrix*transpose(UVW_VEL) where rotation_matrix is recreated from the 4 value vector [ROT_AXIS -ROT_ANGLE]. In matlab, vrrotvec2mat enables creating the rotation_matrix from ROT_AXIS and -ROT_ANGLE (sign change is needed if rotating data in the analysis frame back to enu).
+        
+   ## ================Level 4 =================
+L4:
+   EPSI_FINAL_FLAGS: &epsi_enumerated
+        standard_name: quality_flag
+        flag_values: 
+           - 0
+           - 1 
+           - 2
+           - 4
+           - 8 
+           - 9
+        flag_meanings: |
+           good_data
+           unknown
+           suspect_data
+           bad_data
+           interpolated_data
+           missing_value
+           
+   TIME: *time
+   TIME_BNDS: *time_bnds  

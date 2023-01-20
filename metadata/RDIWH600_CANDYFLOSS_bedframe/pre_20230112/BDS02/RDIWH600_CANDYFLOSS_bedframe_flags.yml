@@ -1,0 +1,149 @@
+## ================ Level 1 =================
+
+L1:  # Level 1: Raw instrument data
+   R_VEL_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16
+           - 32
+           - 64
+           - 128
+  
+        flag_meanings: |
+           valid_bin_low
+           valid_bin_high 
+           out_of_range_low
+           out_of_range_high
+           low_correlation
+           low_amplitude
+           excessive_tilt
+           fish_rejection
+           
+        comment:  Flags denote the cause for excluding individual velocity samples recorded by the instrument from subsequet analysis. # Add extra entries, which will appear as attributes in the netcdf
+        
+        flag_thresholds:
+           - -999 # first valid bin
+           - -999 # last valid bin
+           - -0.25 # lowest velocity considered valid 
+           - 0.28 # highest velocity considered valid
+           - 65 # CORR minimum threshold (RDI WC)
+           - -999 # ABSIC minimum threshold
+           - 20 # maximum absolute PITCH or ROLL
+           - 50 # ABSIC threshold used in fish rejection algorithm (RDI WA)
+      
+        flag_threshold_meanings: |
+           exclude_bins_below_threshold
+           exclude_bins_above_threshold
+           exclude_values_below_threshold
+           exclude_values_above_threshold
+           exclude_values_if_CORR_below_threshold
+           exclude_values_if_ABSIC_below_threshold
+           exclude_values_if_any_tilt_angle_above_threshold
+           ABSIC_threshold_for_fish_rejection_algorithm
+
+## ================ Level 2 =================
+
+L2:  # Level 2: Segmented data
+   R_VEL_DETRENDED_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+
+        flag_meanings: |
+           unused
+           segment_outlier
+           profile_outlier
+        
+        comment: Flags denote the reason for excluding individual velocity samples in the segmented data (post application of Level 1 qaqc flags).
+   
+        flag_thresholds:
+           - -999 # 
+           - 3 # value excluded if outside threshold standard deviations of segment mean for bin 
+           - 3 # value excluded if outside threshold standard deviations of beam profile mean
+      
+        flag_threshold_meanings: |
+           undefined   
+           value_outside_threshold_standard_deviations_of_segment_mean_for_bin             
+           value_outside_threshold_standard_deviations_of_beam_profile_mean
+        
+
+## ================Level 3 =================
+
+L3: # Level 3: Dll 
+   DLL_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2
+           - 4
+
+        flag_meanings: | 
+           unused
+           insufficient_number_velocity_samples
+           too_close_to_range_limits
+        
+        comment: Flags denote the reason for excluding individual DLL values from the regression
+   
+        flag_thresholds:  
+           - -999 #
+           - 0.5 # minimum fraction of segment samples with velocity difference resolved at a separation distance
+           - -999 # edge bins for specified differencing
+      
+        flag_threshold_meanings: | 
+           undefined
+           minimum_fraction_of_segment_samples_with_velocity_difference_resolved_at_separation_distance
+           bins_too_close_to_the_first_or_last_bin_for_differencing
+
+
+## ================Level 4 =================
+L4: # Level 4: Dissipation 
+   EPSI_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2
+           - 4
+           - 8
+           - 16
+           - 32
+           - 64
+           - 128
+
+        flag_meanings: |
+           edge_bin
+           Rsquared_too_low
+           delta_epsi_too_large
+           A3_coeff_invalid
+           dll_intercept_too_low
+           dll_intercept_too_high
+           regression_poorly_conditioned
+           dll_slope_out_of_range
+           
+        comment: Flags denote the reason for excluding individual EPSI values from the calculation of EPSI_FINAL
+   
+        flag_thresholds:  
+           - 6 # exclude bins less than threshold number of bins from edge
+           - -999 # regression r-squared threshold
+           - 10 # uncertainty derived from the 95% confidence limits
+           - 0 # positive A3 coefficient indicates non-turbulent contribution
+           - 4e-4 # negative A0 coefficient is physically meaningless
+           - 1.6e-3  # A0 above threshold for expected instrument velocity accuracy
+           - 10 # minimum number of separation distances that need to be resolved for regression
+           - 0 # A1 coefficient must be positive for real epsilon
+      
+        flag_threshold_meanings: |    
+           excluded_if_bin_less_than_threshold_bins_from_edge               
+           excluded_if_r_squared_below_threshold
+           excluded_if_confidence_interval_range_above_threshold
+           excluded_if_A3_coefficient_below_threshold
+           excluded_if_A0_coefficient_below_threshold
+           excluded_if_A0_coefficient_above_threshold
+           excluded_if_number_of_separation_distances_resolved_below_threshold
+           excluded_if_A1_coefficient_below_threshold
+

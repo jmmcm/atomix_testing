@@ -1,0 +1,8 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M1aA'  # A1M: Centre differencing, modified regression method
+description: Provided data (A1M). Processed using centre differencing and the modified third-order method for the regression model.
+
