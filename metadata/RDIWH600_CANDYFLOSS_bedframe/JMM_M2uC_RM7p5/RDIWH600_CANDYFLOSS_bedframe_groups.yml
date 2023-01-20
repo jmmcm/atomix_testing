@@ -17,7 +17,7 @@ Ancillary:
 # =====================================
 spectra: # computed from level 2 data, so length of data used is L2.segment_length
    overlap: 50 # [%] 
-   nfft: 60 # [points] 300 points / 5 yields 11 segments with 50% overlap (i.e. 22 degrees of freedom)
+   nfft: 60 # [points] 300 points / 60 = 5 yields 11 segments with 50% overlap (i.e. 22 degrees of freedom)
   
 #==========================
 

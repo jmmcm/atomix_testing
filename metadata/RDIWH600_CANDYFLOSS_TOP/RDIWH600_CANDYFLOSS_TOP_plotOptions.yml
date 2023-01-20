@@ -67,3 +67,13 @@ plotDelEpshist:
     nbins: 100
     xlimits: [0, 4]
     binLimits: [0, 6]
+    
+plotSpectra:
+    spdVar: EVEL_HOR
+    spdBins: [0,0.1,0.2,0.3,0.4,0.5]
+    indZall: [2,10]
+    nZavg: 3 # Number of bins to average in z (should be odd)
+    noiseLevel: 0.00055 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
+    Afit: 1e-3
+    ylimF: [4e-4, 4e0]
+    ylimK: [1e-5, 1e1]

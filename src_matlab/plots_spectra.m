@@ -8,11 +8,11 @@ clear
 mname=mfilename('fullpath');
 flg.saveFigs = 1;
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
-dataSet = 'Signature5beam_TidalShelf';
-processID = 'JMM01'; % Always use my processed file
+%% Dataset and processID (for Ancillary data and spectra parameters)
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 
 
 %% Load data
@@ -28,8 +28,13 @@ specFile = [dataDir,dataFileRoot,'_spectra','.mat'];
 dataSpec = load(specFile);
 
 %% Figures
-figDir = 'Misc';
+figDir = 'Spectra';
 figPath=['../figures/',dataSet,'/',figDir,'/'];
+
+if ~exist(figPath,'dir') & flg.saveFigs
+    disp(['Making ',figPath,'. Press a key to continue.']),pause
+    mkdir(figPath)
+end
 
 
 %% Load plotting options
@@ -61,6 +66,8 @@ for zz = 1:length(indZall)
         speed = nanmean(Anc.(spdVar)(:,indZavg),2);
     elseif strcmp(spdVar,'ENU_HOR')
         speed = nanmean(sqrt(Anc.ENU(:,indZavg,1).^2 + Anc.ENU(:,indZavg,2).^2),2);
+    elseif strcmp(spdVar,'EVEL_HOR')
+        speed = nanmean(sqrt(Anc.EVEL_E(:,indZavg).^2 + Anc.EVEL_N(:,indZavg).^2),2);
     end
     
     % Average spectra into speed bins (TODO: Rethink this... Should only do for

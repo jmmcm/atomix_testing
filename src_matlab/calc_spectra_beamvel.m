@@ -11,11 +11,11 @@ clear all
 close all
 mname = mfilename('fullpath');
 
-%dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
-% dataSet = 'Signature5beam_TidalShelf';
-processID = 'JMM01'; % Always use my processed file because it will have ancillary data and correct format
+%% Dataset and processID (for Ancillary data and spectra parameters)
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 
 %% datafiles
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
