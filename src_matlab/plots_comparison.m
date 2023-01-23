@@ -12,17 +12,18 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+%     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
+%     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
@@ -31,10 +32,10 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
-dataSet = 'Signature5beam_TidalShelf';
+% dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
-    processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
+%     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
 
 
 
@@ -42,7 +43,7 @@ dataSet = 'Signature5beam_TidalShelf';
 
 %% Flags
 flg.matCompare.show = 0;
-flg.saveFigs = 0;
+flg.saveFigs = 1;
 flg.plotEpsTS.show = 1;
 flg.plotEpsScatter.show = 1;
 flg.plotEpsScatterZ.show = 1;
@@ -284,7 +285,9 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         xlim([-0.75 0.75])
         
         pos = get(ax(1),'Position');
-        text_rel_figure(0.01,pos(2)+pos(4)/2,['z = ',num2str(data(1).L1.Z_DIST(indZ)),' m'])
+        text_rel_figure(0.01,pos(2)+pos(4)/2,...
+            {['z = ',num2str(data(1).L1.Z_DIST(indZ)),' m'],
+             ['indZ = ',num2str(indZ)]})
     end
     
     add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())
@@ -438,7 +441,7 @@ end
 
 if flg.plotEpsRatioStatsZ.show && flg.twoSets
     opts = plotOptions.plotEpsRatioStatsZ;
-    z = data(1).L4.Z_DIST;
+    z = 1:length(z);%data(1).L4.Z_DIST;
     NZ = length(z);
 
     varName = 'EPSI';
@@ -453,6 +456,8 @@ if flg.plotEpsRatioStatsZ.show && flg.twoSets
         ratiosMedian(zz) = prctile(ratios,50);
         ratiosUpperP(zz) = prctile(ratios,opts.upperPercentile);
         ratiosLowerP(zz) = prctile(ratios,opts.lowerPercentile);
+        ratiosUpperPf(zz) = prctile(ratios,97.5);
+        ratiosLowerPf(zz) = prctile(ratios,2.5);
 
     end
 
@@ -465,14 +470,17 @@ if flg.plotEpsRatioStatsZ.show && flg.twoSets
     %ph(2) = plot(ratiosUpperP,z,'k','DisplayName',[num2str(opts.upperPercentile),' %'])
     %ph(3) = plot(ratiosLowerP,z,'k','DisplayName',[num2str(opts.lowerPercentile),' %'])
     indGood = find(~isnan(ratiosLowerP) & ~isnan(ratiosUpperP));
-    ph(2) = fill_between([ratiosLowerP(indGood); ratiosUpperP(indGood)],[z(indGood)'; z(indGood)'],[0.6 0.6 0.6]);
+    ph(2) = fill_between([ratiosLowerP(indGood); ratiosUpperP(indGood)],[z(indGood); z(indGood)],[0.6 0.6 0.6]);
     set(ph(2),'DisplayName',[num2str(opts.upperPercentile-opts.lowerPercentile),'% CI'])
-    ph(3) = plot(log10(0.5)*[1 1],get(gca,'ylim'),'--r','DisplayName','factor of 2');
+    indGood = find(~isnan(ratiosLowerPf) & ~isnan(ratiosUpperPf));
+    ph(3) = fill_between([ratiosLowerPf(indGood); ratiosUpperPf(indGood)],[z(indGood); z(indGood)],[0.4 0.4 0.4]);
+    set(ph(3),'DisplayName',['95% CI'])
+    ph(4) = plot(log10(0.5)*[1 1],get(gca,'ylim'),'--r','DisplayName','factor of 2');
     plot(log10(2.0)*[1 1],get(gca,'ylim'),'--r')
-    ph(4) = plot(log10(0.1)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125],'DisplayName','factor of 10');
+    ph(5) = plot(log10(0.1)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125],'DisplayName','factor of 10');
     plot(log10(10)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125])
     xlabel('log10(\epsilon_B/\epsilon_A)')
-    ylabel('z [m]')
+    ylabel('z index')
     legend(ph)
 
     add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())

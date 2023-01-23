@@ -46,8 +46,8 @@ plotEpsRatioHistZ:
     
 plotEpsRatioStatsZ:
     description: Statistics of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
-    lowerPercentile: 2.5
-    upperPercentile: 97.5
+    lowerPercentile: 25
+    upperPercentile: 75
     
     
 plotDLL:

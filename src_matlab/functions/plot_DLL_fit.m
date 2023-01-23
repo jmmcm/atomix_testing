@@ -15,12 +15,16 @@ indB = options.indB;
 indZ = options.indZ;
 
 rNow = squeeze(rAll(indB,:))';
+
 for tt = 1:length(options.indT)
     indT = options.indT(tt);
     
+    indR = find(rNow<lev4.R_MAX(indT,indZ,indB)*1.01);
+    rNow = rNow(indR);
     
-    DNow = squeeze(DAll(indT,indZ,indB,:));
-    DQCNow = squeeze(DQC(indT,indZ,indB,:));
+    
+    DNow = squeeze(DAll(indT,indZ,indB,indR));
+    DQCNow = squeeze(DQC(indT,indZ,indB,indR));
     
     % info about flags
     epsi = lev4.EPSI(indT,indZ,indB);

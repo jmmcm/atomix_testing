@@ -18,7 +18,7 @@ dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
 
-processID = 'BDS_M1p1A_RM7p5';
+processID = 'BDS_M1aC_RM7p5';
 
 %% Flags
 flg.saveFigs = 0; % Not supported yet
