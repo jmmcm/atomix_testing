@@ -22,49 +22,49 @@ plotENUTS:
  
 plotEpsTS:
     description: Time series plot of the dissipation rate
-    indZ: 17
+    indZ: 36
     indB: 1
     clim: [-8, -4]
     
 plotEpsScatter:
     description: Scatter plot of the dissipation rate for comparing methods
-    limits: [1e-8, 1e-4]
+    limits: [1e-10, 1e-4]
     scale: log
 
 plotEpsScatterZ:
     description: Scatter plots of the dissipation rate as a function of Z
-    limits: [1e-8, 1e-4]
-    indZs: [5,15,25,35]
-
+    limits: [1e-10, 1e-4]
+    indZs: [3,14,25,36]
+    
 plotEpsHist:
     description: Histogram of the dissipation rate
     nbins: 100
-    xlimits: [-8, -4]  
-    binLimits: [-8, -4]  
+    xlimits: [-10, -4]  
+    binLimits: [-10, -4]  
     
 plotEpsRatioHist:
     description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB))
-    nbins: 100
+    nbins: 30
     xlimits: [-1, 1]  
     binLimits: [-1, 1]  
     
 plotEpsRatioHistZ:
     description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
-    nbins: 30
+    nbins: 20
     xlimits: [-1, 1]  
     binLimits: [-1, 1] 
-    indZs: [5,15,25,35]
+    indZs: [3,14,25,36]
  
 plotEpsRatioStatsZ:
     description: Statistics of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
-    lowerPercentile: 2.5
-    upperPercentile: 97.5
+    lowerPercentile: 25
+    upperPercentile: 75
     
 plotDLL:
     description: Example plot of DLL vs r^(2/3) for the specifed indices
-    indTs: [230,437]
+    indTs: [318,437]
     indB: 1
-    indZ: 20
+    indZ: 36
     
 plotA1vsA0:
     description: Scatter plot of the regression coeffcients

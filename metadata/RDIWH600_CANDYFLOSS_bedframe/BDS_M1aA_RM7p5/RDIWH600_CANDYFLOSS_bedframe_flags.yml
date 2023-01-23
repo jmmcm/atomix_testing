@@ -68,8 +68,8 @@ L2:  # Level 2: Segmented data
    
         flag_thresholds:
            - -999 # 
-           - 3 # value excluded if outside threshold standard deviations of segment mean for bin 
-           - 3 # value excluded if outside threshold standard deviations of beam profile mean
+           - -999 # value excluded if outside threshold standard deviations of segment mean for bin 
+           - -999 # value excluded if outside threshold standard deviations of beam profile mean
       
         flag_threshold_meanings: |
            undefined   
