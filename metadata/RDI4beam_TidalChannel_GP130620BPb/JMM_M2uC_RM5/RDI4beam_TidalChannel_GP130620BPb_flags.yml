@@ -72,10 +72,12 @@ L3:
            - 1
            - 2 
            - 4
+           - 8
         flag_meanings: |
             unknown 
             insufficient_number_velocity_samples
             too_close_to_range_limits
+            non_existent_bin_pair
         comment: These flags identify why segments were discarded for fitting the structure function to the DLL observations with respect to deltaR variable
 
         # Add extra entries, which will appear as attributes in the netcdf
@@ -83,10 +85,12 @@ L3:
             - -999999 # Flag will be applied if value is a Nan for unknown reason
             - 0.5 # ratio of good points in segment (i.e. reject Dll segments if more than 50% of the data is missing or unreliable)
             - 3 # Minimum number of bins from first range bin or last range bin 
+            - 0 # Value will be excluded if upper or lower bin is a Nan (i.e. non-existent)
         flag_threshold_meanings: |
             not_applicable
             excluded_if_ratio_below_threshold
             excluded_if_value_below_threshold
+            excluded_if_nan
   
    TIME: &time
         bounds: TIME_BNDS

@@ -12,7 +12,7 @@ addpath('functions')
 
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'2A','2B','2C','2D'};
+caseIDs = {'1A'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E'}; %ALL
 
 %% Process
@@ -127,11 +127,11 @@ for caseID = caseIDs
     optionsLev2.figureCheck = 0;
 
     optionsLev3.order = 2;
-    optionsLev3.rMax = metadataGroups.L3.rMax; 
-    optionsLev3.dr = (L1.Z_DIST(2) - L1.Z_DIST(1))/cosd(L1.THETA(1)); % Assumes all bins are the same size and all beam angles are the same
-    optionsLev3.nbinMax = floor(optionsLev3.rMax./optionsLev3.dr); % Max number of bins to use
+    %optionsLev3.rMax = metadataGroups.L3.rMax; 
+    %optionsLev3.dr = (L1.Z_DIST(2) - L1.Z_DIST(1))/cosd(L1.THETA(1)); % Assumes all bins are the same size and all beam angles are the same
+    %optionsLev3.nbinMax = floor(optionsLev3.rMax./optionsLev3.dr); % Max number of bins to use
     optionsLev3.diffMethod = metadataGroups.L3.dll_method;
-    optionsLev3.dllAvg = str2num(metadataGroups.L3.dll_averaging); 
+    %optionsLev3.dllAvg = str2num(metadataGroups.L3.dll_averaging); 
     optionsLev3.flagFile = flagFile;
     optionsLev3.figure = 0;
 
