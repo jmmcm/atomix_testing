@@ -69,7 +69,7 @@ L3:
    DLL_FLAGS: &dll_boolean 
         standard_name: status_flag
         flag_masks: 
-           - 1
+           - 1  
            - 2 
            - 4
            - 8
@@ -84,8 +84,8 @@ L3:
         flag_thresholds:  
             - -999999 # Flag will be applied if value is a Nan for unknown reason
             - 0.5 # ratio of good points in segment (i.e. reject Dll segments if more than 50% of the data is missing or unreliable)
-            - 3 # Minimum number of bins from first range bin or last range bin 
-            - 0 # Value will be excluded if upper or lower bin is a Nan (i.e. non-existent)
+            - 0 # Minimum number of bins from first range bin or last range bin 
+            - 0 # Value will be excluded if upper or lower bin is a Nan (i.e. bin combination not possible)
         flag_threshold_meanings: |
             not_applicable
             excluded_if_ratio_below_threshold

@@ -3,10 +3,10 @@ function lev4 = calc_level4_ATOMIX(lev3,options)
 % processing ADCP data for ATOMIX testing.
 %
 % Syntax:
-%  lev4 = CALC_LEVEL4_ATOMIX(lev2,indBeg,indEnd,options)
+%  lev4 = CALC_LEVEL4_ATOMIX(lev3,indBeg,indEnd,options)
 %
 % Inputs:
-%  - lev2: Structure with all level 2 variables
+%  - lev3: Structure with all level 3 variables
 %  - binPairs: NRx2 matrix containing all the possible bin pairs to compute
 %  - options: Structure with any required options
 %      * dr: delta r value for one bin separation (i.e. dz/theta)
@@ -53,43 +53,71 @@ lev4.REGRESSION_COEFF_A1 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_R2 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
 
+%%
+%optionsLev3. % Assumes all bins are the same size and all beam angles are the same
+    %optionsLev3.nbinMax = floor(optionsLev3.rMax./optionsLev3.dr); % Max number of bins to use
+
 
 %% Calculate epsilon
 disp('* Computing epsilon *')
 count = 0;
 for bb = 1:NB
+    rDel = squeeze(lev3.R_DEL(bb,:));
+    dr = rDel(2) - rDel(1); % Assumes uniform separation
+    
+    nBinMin = floor(options.rMin./dr); % Min number of bins to use
+    nBinMax = floor(options.rMax./dr); % Max number of bins to use
+    
    
-    for zz = 1:NZ
-       
-        % Loop through ensembles and calculate DLL and epsilon
-        for tt = 1:NT
-            % Get simple variables
-            r_del = squeeze(lev3.R_DEL(bb,:));
-            dll = squeeze(lev3.DLL(tt,zz,bb,:));
-            dll_flags = squeeze(lev3.DLL_FLAGS(tt,zz,bb,:));
+    % Loop through ensembles and calculate DLL and epsilon
+    for tt = 1:NT
+        % Get simple variables
+        
+        dll = squeeze(lev3.DLL(tt,:,bb,:));
+        dll_flags = squeeze(lev3.DLL_FLAGS(tt,:,bb,:));
+        binL = squeeze(lev3.BIN_L(tt,:,bb,:));
+        binU = squeeze(lev3.BIN_U(tt,:,bb,:));
+        
+        
+        % Create mask and apply QC
+        dll_flags(dll_flags>0) = NaN;
+        dll_flags = dll_flags+1;
+        dllQC = dll.*dll_flags;
+        
+        for zz = 1:NZ
             
-            % Create mask and apply QC
-            dll_flags(dll_flags>0) = NaN;
-            dll_flags = dll_flags+1;
-            dllQC = dll.*dll_flags;
-                        
-            % Linear regression to get epsilon
-            %if zz == 17; options.figure = 1; end %DEBUGGING
-            [epsi,sigmaN,R2,Rinfo] = calc_eps_SF(r_del,dllQC',options);
-            
-            % Assign to structures
-            lev4.EPSI(tt,zz,bb) = epsi; 
-            lev4.R_MAX(tt,zz,bb) = max(r_del);
-            lev4.REGRESSION_COEFF_A0(tt,zz,bb) = Rinfo.yint;
-            lev4.REGRESSION_COEFF_A1(tt,zz,bb) = Rinfo.slope;
-            lev4.REGRESSION_N(tt,zz,bb) = Rinfo.npts;
-            lev4.REGRESSION_R2(tt,zz,bb) = R2;
-            lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
-            lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
-            lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
+            binPairs = get_DLL_fit_bin_pairs(nBinMin,nBinMax,options.points_selection,zz,[1, NZ]);
+
+
+            % Get fit variables from range
+            if ~isempty(binPairs)
+                indDll = get_DLL_fit_inds(binL,binU,binPairs);
+                [indDllRow,indDllCol] = ind2sub(size(dll),indDll);
+                rDelFit = rDel(indDllCol);
+                dllQCfit = dllQC(indDll);
+
+                % Linear regression to get epsilon
+%                  if zz == 4; 
+%                      options.figure = 1; 
+%                      rDelFit
+%                      dllQCfit
+%                  end %DEBUGGING
+                [epsi,sigmaN,R2,Rinfo] = calc_eps_SF(rDelFit,dllQCfit,options);
+
+                % Assign to structures
+                lev4.EPSI(tt,zz,bb) = epsi; 
+                lev4.R_MAX(tt,zz,bb) = max(rDel);
+                lev4.REGRESSION_COEFF_A0(tt,zz,bb) = Rinfo.yint;
+                lev4.REGRESSION_COEFF_A1(tt,zz,bb) = Rinfo.slope;
+                lev4.REGRESSION_N(tt,zz,bb) = Rinfo.npts;
+                lev4.REGRESSION_R2(tt,zz,bb) = R2;
+                lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
+                lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
+                lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
+            end
             
             count = count+1;
-            disp_percdone(count,NZ*NT*NB,5)
+            disp_percdone(count,NT*NB*NZ,5)
         end
     end
 end

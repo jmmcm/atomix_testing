@@ -65,6 +65,9 @@ L4: # Level 4: Dissipation
         - N_BOUND
    processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
    regression_method: Linear regression # statistical technique used for fitting the spectra.
+   points_selection: 'cloud' # method to choose points for fit (cloud, centered, anchored)
+   rMin: 1.2 # [meters] (equivalent to two bins)
+   rMax: 5.0 #[meters] (equivalent to nine bins)
    C2: 2.0 # Constant used in the calculation of the second order structure function
    sigmaN_v: 0.0464 # Expected noise level in velocity measurements [m/s]. Based on instrument configuration
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.

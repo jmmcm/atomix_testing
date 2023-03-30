@@ -138,8 +138,12 @@ for caseID = caseIDs
     optionsLev4.Const = metadataGroups.L4.C2;
     optionsLev4.sigmaN_v = metadataGroups.L4.sigmaN_v; % Only used for plotting expected intercept 
     optionsLev4.order = optionsLev3.order;
+    optionsLev4.rMin = metadataGroups.L4.rMin;
+    optionsLev4.rMax = metadataGroups.L4.rMax;
+    optionsLev4.points_selection = metadataGroups.L4.points_selection;
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;
+    % NEW
 
 
     %% Checks and warnings
