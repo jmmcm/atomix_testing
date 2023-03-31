@@ -86,22 +86,27 @@ for bb = 1:NB
         
         for zz = 1:NZ
             
+            % Get bin pairs for fit
             binPairs = get_DLL_fit_bin_pairs(nBinMin,nBinMax,options.points_selection,zz,[1, NZ]);
 
-
-            % Get fit variables from range
+            
             if ~isempty(binPairs)
+                % Get indices for bin Pairs
                 indDll = get_DLL_fit_inds(binL,binU,binPairs);
                 [indDllRow,indDllCol] = ind2sub(size(dll),indDll);
-                rDelFit = rDel(indDllCol);
-                dllQCfit = dllQC(indDll);
+                rDeltmp = rDel(indDllCol);
+                dllQCtmp = dllQC(indDll);
+                
+                % Average Dll if necessary
+                if options.dll_averaging
+                    [rDelFit,dllQCfit] = get_DLL_averages(rDeltmp,dllQCtmp);
+                else
+                    rDelFit = rDeltmp;
+                    dllQCfit = dllQCtmp;
+                end
 
                 % Linear regression to get epsilon
-%                  if zz == 4; 
-%                      options.figure = 1; 
-%                      rDelFit
-%                      dllQCfit
-%                  end %DEBUGGING
+%                  if zz == 4;  options.figure = 1; end %DEBUGGING
                 [epsi,sigmaN,R2,Rinfo] = calc_eps_SF(rDelFit,dllQCfit,options);
 
                 % Assign to structures

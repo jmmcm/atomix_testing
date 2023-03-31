@@ -141,6 +141,7 @@ for caseID = caseIDs
     optionsLev4.rMin = metadataGroups.L4.rMin;
     optionsLev4.rMax = metadataGroups.L4.rMax;
     optionsLev4.points_selection = metadataGroups.L4.points_selection;
+    optionsLev4.dll_averaging = str2num(metadataGroups.L4.dll_averaging);
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;
     % NEW

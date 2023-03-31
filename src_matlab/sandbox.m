@@ -1,7 +1,10 @@
 clear
 
+%orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M1aC_RM5_orig.mat');
+%new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M1aC_RM5.mat'); 
 orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\Downloaded\dJMM_M2uC_RM5\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116.mat');
 new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2uC_RM5.mat'); 
+
 
 options.indB = 1;
 options.indZ = 4;
@@ -19,17 +22,23 @@ nBinMin = 2;
 nBinMax = 9;
 binL = squeeze(new.data.L3.BIN_L(options.indT,:,options.indB,:));
 binU = squeeze(new.data.L3.BIN_U(options.indT,:,options.indB,:));
-binPairs = get_DLL_fit_bin_pairs(nBinMin,nBinMax,'cloud',options.indZ,[1 50]);
+binPairs = get_DLL_fit_bin_pairs(nBinMin,nBinMax,new.metadataGroups.L4.points_selection,options.indZ,[1 50]);
 indDll = get_DLL_fit_inds(binL,binU,binPairs);
 [indDllRow,indDllCol] = ind2sub(size(dllN),indDll);
 
-rfitN = new.data.L3.R_DEL(options.indB,indDllCol)
-dfitN = dllN(indDll)
+rfitNa = new.data.L3.R_DEL(options.indB,indDllCol);
+dfitNa = dllN(indDll);
+if str2num(new.metadataGroups.L4.dll_averaging)
+    [rfitN,dfitN] = get_DLL_averages(rfitNa,dfitNa);
+else 
+    rfitN = rfitNa;
+    dfitN = dfitNa;
+end
 eN = new.data.L4.EPSI(options.indT,options.indZ,options.indB);
 
 [epsiN,sigmaN,R2,Rinfo] = calc_eps_SF(rfitN,dfitN,struct('order',2,'Const',2.0,'figure',0,'sigmaN_v',0.0464));
 
-a=[binL(indDll); binU(indDll);rfitN;dfitN;dll_flagsNn(indDll)]'
+a=[binL(indDll); binU(indDll);rfitNa;dfitNa;dll_flagsNn(indDll)]'
 
 %%
 rfitO = orig.data.L3.R_DEL(options.indB,:);
