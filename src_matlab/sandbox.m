@@ -1,10 +1,7 @@
 clear
 
-%orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M1aC_RM5_orig.mat');
-%new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M1aC_RM5.mat'); 
-orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\Downloaded\dJMM_M2uC_RM5\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116.mat');
+orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2uC_RM5_orig.mat');
 new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2uC_RM5.mat'); 
-
 
 options.indB = 1;
 options.indZ = 4;
