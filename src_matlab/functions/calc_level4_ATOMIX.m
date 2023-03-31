@@ -52,6 +52,8 @@ lev4.REGRESSION_COEFF_A0 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A1 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_R2 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
+lev4.REGRESSION_DLL = cell(NT,NZ,NB);
+lev4.REGRESSION_RDEL = cell(NT,NZ,NB);
 
 %%
 %optionsLev3. % Assumes all bins are the same size and all beam angles are the same
@@ -119,6 +121,8 @@ for bb = 1:NB
                 lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
+                lev4.REGRESSION_DLL{tt,zz,bb} = rDelFit;
+                lev4.REGRESSION_RDEL{tt,zz,bb} = dllQCfit;
             end
             
             count = count+1;
