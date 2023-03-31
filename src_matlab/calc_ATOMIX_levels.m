@@ -9,7 +9,7 @@
 clear all
 mname = mfilename('fullpath');
 addpath('functions')
-
+tic
 %% Select dataset and processing ID
 % Select one or more files to process
 caseIDs = {'1A'};
@@ -234,3 +234,5 @@ for caseID = caseIDs
 
     disp('===== CREATE MAT FILE =====')
 end
+
+toc
