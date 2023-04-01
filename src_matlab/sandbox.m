@@ -1,55 +1,49 @@
 clear
 
-orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2uC_RM5_orig.mat');
-new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2uC_RM5.mat'); 
+orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M3uC_RM5_orig.mat');
+new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M3uC_RM5.mat'); 
 
-options.indB = 1;
-options.indZ = 4;
-options.indT = 1;
+indB = 1;
+indZ = 10;
+indT = 11;
+dr = new.data.L3.R_DIST(2) - new.data.L3.R_DIST(1);
 
-%% Put new into original format
-dllN = squeeze(new.data.L3.DLL(options.indT,:,options.indB,:));
-dll_flagsN = squeeze(new.data.L3.DLL_FLAGS(options.indT,:,options.indB,:));
-dll_flagsNn = dll_flagsN;
-dll_flagsN(dll_flagsN>0) = NaN;
-dll_flagsN = dll_flagsN+1;
-dllN = dllN.*dll_flagsN;
+%% New data
+eN = new.data.L4.EPSI(indT,indZ,indB);
 
-nBinMin = 2;
-nBinMax = 9;
-binL = squeeze(new.data.L3.BIN_L(options.indT,:,options.indB,:));
-binU = squeeze(new.data.L3.BIN_U(options.indT,:,options.indB,:));
-binPairs = get_DLL_fit_bin_pairs(nBinMin,nBinMax,new.metadataGroups.L4.points_selection,options.indZ,[1 50]);
-indDll = get_DLL_fit_inds(binL,binU,binPairs);
-[indDllRow,indDllCol] = ind2sub(size(dllN),indDll);
+rdelN = new.data.L3.R_DEL(indB,:);
+dllN = squeeze(new.data.L3.DLL(indT,:,indB,:));
+dll_flagsN = squeeze(new.data.L3.DLL_FLAGS(indT,:,indB,:));
+dllN = flag_data(dllN,dll_flagsN,0);
 
-rfitNa = new.data.L3.R_DEL(options.indB,indDllCol);
-dfitNa = dllN(indDll);
-if str2num(new.metadataGroups.L4.dll_averaging)
-    [rfitN,dfitN] = get_DLL_averages(rfitNa,dfitNa);
-else 
-    rfitN = rfitNa;
-    dfitN = dfitNa;
-end
-eN = new.data.L4.EPSI(options.indT,options.indZ,options.indB);
+% Get fit values (from DLL and method)
+optionsL4 = new.metadataGroups.L4; 
+optionsL4.dll_averaging = str2num(optionsL4.dll_averaging);
+binL = new.data.L3.BIN_L;
+binU = new.data.L3.BIN_U;
+[rfitN,dfitN,rfitNa,dfitNa,indDll,binPairs] = get_DLL_fit_data(indZ,rdelN,dllN,binL,binU,dr,optionsL4);
+
+% Get fit values (saved in file)
+rfitN2 = new.data.L4.REGRESSION_R_DEL{indT,indZ,indB};
+dfitN2 = new.data.L4.REGRESSION_DLL{indT,indZ,indB};
 
 [epsiN,sigmaN,R2,Rinfo] = calc_eps_SF(rfitN,dfitN,struct('order',2,'Const',2.0,'figure',0,'sigmaN_v',0.0464));
 
-a=[binL(indDll); binU(indDll);rfitNa;dfitNa;dll_flagsNn(indDll)]'
+a=[binL(indDll); binU(indDll);rfitNa;dfitNa;dll_flagsN(indDll)]'
 
 %%
-rfitO = orig.data.L3.R_DEL(options.indB,:);
-dfitO = squeeze(orig.data.L3.DLL(options.indT,options.indZ,options.indB,:));
-binLO = squeeze(orig.data.L3.BIN_L(options.indT,options.indZ,options.indB,:));
-binUO = squeeze(orig.data.L3.BIN_U(options.indT,options.indZ,options.indB,:));
+rfitO = orig.data.L3.R_DEL(indB,:);
+dfitO = squeeze(orig.data.L3.DLL(indT,indZ,indB,:));
+binLO = squeeze(orig.data.L3.BIN_L(indT,indZ,indB,:));
+binUO = squeeze(orig.data.L3.BIN_U(indT,indZ,indB,:));
 
 
-dll_flagsO = squeeze(orig.data.L3.DLL_FLAGS(options.indT,options.indZ,options.indB,:));
+dll_flagsO = squeeze(orig.data.L3.DLL_FLAGS(indT,indZ,indB,:));
 
 indGood = find(~isnan(dfitO));
 rfitOg = rfitO(indGood);
 dfitOg = dfitO(indGood);
-eO = orig.data.L4.EPSI(options.indT,options.indZ,options.indB);
+eO = orig.data.L4.EPSI(indT,indZ,indB);
 
 [epsiO,sigmaN,R2,Rinfo] = calc_eps_SF(rfitOg,dfitOg',struct('order',2,'Const',2.0,'figure',0,'sigmaN_v',0.0464));
 
@@ -63,17 +57,19 @@ ax = subplot(1,1,1);
 plot(rfitO.^(2/3),dfitO,'o')
 hold all
 plot(rfitN.^(2/3),dfitN,'d','markersize',10)
+plot(rfitN2.^(2/3),dfitN2,'.','markersize',10)
+
 
 
 %% 
 figure(2),clf
-plot(new.data.L4.EPSI(:,options.indZ,options.indB)-orig.data.L4.EPSI(:,options.indZ,options.indB))
+plot(new.data.L4.EPSI(:,indZ,indB)-orig.data.L4.EPSI(:,indZ,indB))
 shading flat
 colorbar
 
 
 figure(3),clf
-pcolor(new.data.L4.EPSI(:,:,options.indB)'-orig.data.L4.EPSI(:,:,options.indB)')
+pcolor(new.data.L4.EPSI(:,:,indB)'-orig.data.L4.EPSI(:,:,indB)')
 shading flat
 colorbar
 

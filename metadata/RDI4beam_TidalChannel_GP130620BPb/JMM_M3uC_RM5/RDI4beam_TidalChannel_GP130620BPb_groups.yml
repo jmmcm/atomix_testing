@@ -65,7 +65,7 @@ L4: # Level 4: Dissipation
         - N_BOUND
    processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
    regression_method: Linear regression # statistical technique used for fitting the spectra.
-   points_selection: 'anchored' # method to choose points for fit (cloud, centered, anchored)
+   points_select_method: 'anchored' # method to choose points for fit (cloud, centered, anchored)
    dll_averaging: 'false' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
    rMin: 1.2 # [meters] (equivalent to two bins)
    rMax: 5.0 #[meters] (equivalent to nine bins)

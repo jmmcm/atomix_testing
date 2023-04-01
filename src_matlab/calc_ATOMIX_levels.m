@@ -12,7 +12,7 @@ addpath('functions')
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'1A'};
+caseIDs = {'1B','1D'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E'}; %ALL
 
 %% Process
@@ -140,7 +140,7 @@ for caseID = caseIDs
     optionsLev4.order = optionsLev3.order;
     optionsLev4.rMin = metadataGroups.L4.rMin;
     optionsLev4.rMax = metadataGroups.L4.rMax;
-    optionsLev4.points_selection = metadataGroups.L4.points_selection;
+    optionsLev4.points_select_method = metadataGroups.L4.points_select_method;
     optionsLev4.dll_averaging = str2num(metadataGroups.L4.dll_averaging);
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;

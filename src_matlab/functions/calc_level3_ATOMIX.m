@@ -100,9 +100,6 @@ lev3.TIME_BNDS = [nanmin(lev2.TIME,[],2) nanmax(lev2.TIME,[],2)];
 lev3.R_DEL = NaN*ones(NB,NR); 
 lev3.R_DIST = ((lev3.Z_DIST*ones(1,NB)) ./ cosd(ones(NZ,1)*lev2.THETA'));
 lev3.N_SEGMENT = lev2.N_SEGMENT; % Note: NOT NEEDED FOR ANALYSIS, SHOULD THIS BE OPTIONAL?
-
-lev3.BIN_L = NaN*ones(NT,NZ,NB,NR); % My variable: Lower bin for difference
-lev3.BIN_U = NaN*ones(NT,NZ,NB,NR); %  My variable: Upper bin for difference
 lev3.DLL = NaN*ones(NT,NZ,NB,NR);
 lev3.DLL_FLAGS = zeros*ones(NT,NZ,NB,NR); % Perfect data
 lev3.DLL_N = zeros(NT,NZ,NB,NR);
@@ -124,8 +121,6 @@ for bb = 1:NB
         [dll,dll_n,binL,binU] = calc_DLL(vp,options);
         
         % Assign to structures
-        lev3.BIN_L(tt,:,bb,:) = binL;
-        lev3.BIN_U(tt,:,bb,:) = binU;
         lev3.DLL(tt,:,bb,:) = dll;
         lev3.DLL_N(tt,:,bb,:) = dll_n;
         lev3.N_SEGMENT(tt) = tt;
@@ -135,6 +130,10 @@ for bb = 1:NB
         disp_percdone(count,NT*NB,5)
     end % tt
 end % bb
+
+% Same for every time and beam 
+lev3.BIN_L = binL;
+lev3.BIN_U = binU;
 
 %% Apply flags
 disp('* Applying Flags *')
