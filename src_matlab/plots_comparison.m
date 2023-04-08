@@ -16,7 +16,8 @@ dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
@@ -164,7 +165,7 @@ end
 
 %% Scatter plot of all epsilon
 if flg.plotEpsScatter.show && flg.twoSets
-    opts = plotOptions.plotEpsScatter;
+%     opts = plotOptions.plotEpsScatter;
     
     for ii = 1:2
         if ii == 1
@@ -303,6 +304,9 @@ if flg.plotDLL.show && flg.twoSets
     opts = plotOptions.plotDLL;
     opts.indT = opts.indTs(1);
     
+    data(1).L4.procParams = d(1).metadataGroups.L4;
+    data(2).L4.procParams = d(2).metadataGroups.L4;
+    
     figure_named('DLL'),clf,clear ax
     set(gcf,'Position',[285,100,1200,600])
     axW = 1/length(processIDs)/2;
@@ -310,15 +314,19 @@ if flg.plotDLL.show && flg.twoSets
     axY = 0.2;
     
     ax(1) = subplot('Position',[0.10 axY axW axH]);
-    plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
+    [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     title(ax(1),clean_string(names{1}))
     
     ax(2) = subplot('Position',[0.4 axY axW axH]);
-    [~,p]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
-    set(p,'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
+    [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
+    set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
     title(ax(2),clean_string(names{2}))
     ax(3) = subplot('Position',[0.7 axY axW axH]);
-    p=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
+    [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
+    set(p(1),'color',get(p1(2),'color'))
+    set(pl(1),'color',get(p1(2),'color'))
+    set(p(2),'color',get(p2(2),'color'))
+    set(pl(2),'color',get(p2(2),'color'))
     title(ax(3),'Comparison')
     
     ylabel(ax(2),'')

@@ -19,6 +19,9 @@ binPairs = NaN;
 % Handle inputs
 DllMat = squeeze(DllMat);
 rDelVec = squeeze(rDelVec);
+if isequal(class(options.dll_averaging),'char')
+    options.dll_averaging = str2num(options.dll_averaging);
+end
 
 % Size
 [NZ,NR] = size(DllMat);

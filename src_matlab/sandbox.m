@@ -1,7 +1,7 @@
 clear
 
-orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M3uC_RM5_orig.mat');
-new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M3uC_RM5.mat'); 
+orig = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2aC_RM5_orig.mat');
+new = load('D:\ATOMIX\Data\RDI4beam_TidalChannel_GP130620BPb\RDI4beam_TidalChannel_GP130620BPb_JMM_20230116_JMM_M2aC_RM5.mat'); 
 
 indB = 1;
 indZ = 10;
@@ -73,4 +73,17 @@ pcolor(new.data.L4.EPSI(:,:,indB)'-orig.data.L4.EPSI(:,:,indB)')
 shading flat
 colorbar
 
+%%
+plotoptions = new.metadataGroups.L4;
+plotoptions.indT = 1;
+plotoptions.indB = 1;
+plotoptions.indZ = 10;
+figure(4),clf
+ax = subplot(1,3,1);
+plot_DLL_fit(ax,new.data.L3,new.data.L4,plotoptions)
+ax = subplot(1,3,2);
+plotoptions.indB = 3;
+plot_DLL_fit(ax,new.data.L3,new.data.L4,plotoptions)
+ax = subplot(1,3,3);
 
+plot_DLL_compare(new.data.L3,new.data.L4,new.data.L3,new.data.L4,plotoptions)
