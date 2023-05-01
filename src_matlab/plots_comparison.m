@@ -13,11 +13,11 @@ set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
 dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-%     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
+%     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
+    processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
-    processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
