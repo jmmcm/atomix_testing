@@ -117,8 +117,12 @@ for bb = 1:NB
         % Get velocity timeseries for range bins
         vp = reshape(lev2.R_VEL_DETRENDED(tt,:,bb,:),[NZ,NS])';
         
-        % Get SF parameters
-        [dll,dll_n,binL,binU] = calc_DLL(vp,options);
+        % Calculate velocity differences
+        if strcmp(options.diffMethod,'forward')
+            [dll,dll_n,binL,binU] = calc_DLL_DLLL_forward_diff(vp,options);
+        else
+            error('Not implemented for specified differencing method')
+        end
         
         % Assign to structures
         lev3.DLL(tt,:,bb,:) = dll;

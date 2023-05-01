@@ -21,6 +21,7 @@ function lev4 = calc_level4_ATOMIX(lev3,options)
 %
 % 2022-06-20: Update for consistency of variables with Wiki
 % 2022-06-29: Update to use separate function to apply flags
+% 2023-04-08: Update to use forward difference DLL for all methods
 
 if ~isfield(options,'figureCheck'); options.figureCheck = 1; end
 
@@ -54,6 +55,8 @@ lev4.REGRESSION_R2 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_DLL = cell(NT,NZ,NB);
 lev4.REGRESSION_R_DEL = cell(NT,NZ,NB);
+lev4.REGRESSION_IND_DLL = cell(NT,NZ,NB);
+
 
 %%
 %optionsLev3. % Assumes all bins are the same size and all beam angles are the same
@@ -127,6 +130,7 @@ for bb = 1:NB
                 lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
                 lev4.REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
                 lev4.REGRESSION_DLL{tt,zz,bb} = dllFit;
+                lev4.REGRESSION_IND_DLL{tt,zz,bb} = indDll;
             end
             
             count = count+1;
