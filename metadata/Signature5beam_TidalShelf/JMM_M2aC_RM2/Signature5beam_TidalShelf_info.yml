@@ -3,5 +3,5 @@
 #===================================================================================     
 
 creator: JMM # Justine McMillan
-method: 'M2aC' # Forward differencing, all bin separations kept, bin separations non-unique 
-description: DLL for all possible bin separations within specified r_max limit, but then averaged before regression. Standard regression model. All flag thresholds consistent with standard values on Wiki.
+method: 'M2aC' 
+description: DLL values within turbulence 'cloud' for all possible bin separations within specified r_max limit (2m), but then averaged before standard regression. All flag thresholds consistent with standard values on Wiki.

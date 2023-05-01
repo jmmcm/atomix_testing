@@ -3,7 +3,7 @@
 #===================================================================================     
 
 creator: JMM # Justine McMillan
-method: 'M2uC' # Forward differencing, all bin separations kept, bin separations non-unique 
-description: Including all possible bin separations within specified r_max limit. Standard regression model. All flag thresholds consistent with standard values on Wiki.
+method: 'M3uC' 
+description: DLL values anchored on z bin (Paris/Thomson method). Regression includes all possible bin separations within specified r_max limit. Standard regression model. All flag thresholds consistent with standard values on Wiki.
  
 

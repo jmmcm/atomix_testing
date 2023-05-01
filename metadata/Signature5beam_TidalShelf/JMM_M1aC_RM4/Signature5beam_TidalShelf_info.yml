@@ -3,7 +3,7 @@
 #===================================================================================     
 
 creator: JMM # Justine McMillan
-method: 'M1aC' # Center differencing, standard regression model       
-description: Processed using centre differencing and the standard canoncical method for the regression model.
+method: 'M1aC'    
+description: DLL values centered about bin. Values for odd bin separations averaged prior to regression. Standard canoncical method for the regression model.
  
 
