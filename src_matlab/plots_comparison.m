@@ -20,23 +20,24 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
-     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
+%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
-% dataSet = 'Signature5beam_TidalShelf';
+dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
-%     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
+%    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
+    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
 
 
@@ -301,7 +302,7 @@ end
 
 %% Plot DLL
 if flg.plotDLL.show && flg.twoSets
-    try
+%     try
     opts = plotOptions.plotDLL;
     opts.indT = opts.indTs(1);
     
@@ -343,9 +344,9 @@ if flg.plotDLL.show && flg.twoSets
         disp(['Saving: ',figName])
         saveas(gcf,figName);
     end
-    catch
-        disp('Cant plot SF')
-    end
+%     catch
+%         disp('Cant plot SF')
+%     end
 end
 
 %% A1 vs A0
