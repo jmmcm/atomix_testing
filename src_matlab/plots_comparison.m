@@ -12,21 +12,21 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
-%     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+%      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
+%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
@@ -185,7 +185,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         ax(1) = subplot('Position',[0.08 0.2 axW axH]);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'standard';
-        plot_EPSI_scatter(ax(1),eA,eB,opts)
+        plot_EPSI_scatter(ax(1),eA,eB,opts);
         xlabel('\epsilon_A [W/kg]')
         ylabel('\epsilon_B [W/kg]')
         title('scatter plot')
@@ -193,7 +193,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         ax(2) = subplot('Position',[0.42 0.2 axW axH]);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'density';
-        plot_EPSI_scatter(ax(2),eA,eB,opts)
+        plot_EPSI_scatter(ax(2),eA,eB,opts);
         xlabel('log_{10}(\epsilon_A [W/kg])')
         ylabel('log_{10}(\epsilon_B [W/kg])')
         title('density plot')
@@ -246,7 +246,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         ax(1) = subplot(NZ,3,3*zz-2);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'standard';
-        plot_EPSI_scatter(ax(1),eA,eB,opts)
+        plot_EPSI_scatter(ax(1),eA,eB,opts);
         if zz == NZ;
             xlabel('\epsilon_A [W/kg]');
         else
@@ -259,7 +259,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         ax(2) = subplot(NZ,3,3*zz-1);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'density';
-        plot_EPSI_scatter(ax(2),eA,eB,opts)
+        plot_EPSI_scatter(ax(2),eA,eB,opts);
         if zz == NZ;
             xlabel('log_{10}(\epsilon_A [W/kg])');
         else
@@ -301,6 +301,7 @@ end
 
 %% Plot DLL
 if flg.plotDLL.show && flg.twoSets
+    try
     opts = plotOptions.plotDLL;
     opts.indT = opts.indTs(1);
     
@@ -341,6 +342,9 @@ if flg.plotDLL.show && flg.twoSets
         figName = [figPath,'DLLcompare_',figEnd,'.png'];
         disp(['Saving: ',figName])
         saveas(gcf,figName);
+    end
+    catch
+        disp('Cant plot SF')
     end
 end
 

@@ -12,7 +12,7 @@ addpath('functions')
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'1A'};
+caseIDs = {'2A','2B','2C','2D'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E'}; %ALL
 
 %% Process
