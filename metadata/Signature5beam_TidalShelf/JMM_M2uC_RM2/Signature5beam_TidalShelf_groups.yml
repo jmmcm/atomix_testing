@@ -53,9 +53,7 @@ L3: # Level 3: Dll
         - N_DEL
         - N_BOUND
    processing_level: This group includes the structure function Dll as a function of the separation distance.  Any ancillary information required for estimatng the dissipation of turbulent kinetic energy may also be stored here. 
-   rMax: 2 # maximum r_del to compute differences for [meters]
-   dll_method:  method 2 # method 1 or 2 (1 = "centre difference", 2 = "forward difference")
-   dll_averaging: 'false' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
+   dll_method:  'forward' # 'forward' or 'center'
    stationarity_testing: None # details on which type of stationarity testing done on the segmented velocities. Not sure if this should be reported here or level2a.
    noise_testing: None # details of testing the noise levels, or if the signal comprises mostly of noise.
    
@@ -69,6 +67,10 @@ L4: # Level 4: Dissipation
         - N_BOUND
    processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
    regression_method: Linear regression # statistical technique used for fitting the spectra.
+   points_select_method: 'cloud' # method to choose points for fit (cloud, centered, anchored)
+   dll_averaging: 'false' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
+   rMin: 0.45 # [meters] (equivalent to two bins. Needs to be slightly higher than 2*dr since nBinMin = floor(rMin./dr);)
+   rMax: 2.0 #[meters] (equivalent to 9 bins for slant beams, 10 for vertical)
    C2: 2.0 # Constant used in the calculation of the second order structure function
    sigmaN_v: 0.0488 # Expected noise level in velocity measurements [m/s]. Based on peak of histogram of A0 because manufacturer value not known.
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.
