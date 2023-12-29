@@ -62,6 +62,7 @@ L4: # Level 4: Dissipation
         - TIME
         - Z_DIST 
         - N_BEAM 
+        - N_FIT
         - N_BOUND
    processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
    regression_method: Linear regression # statistical technique used for fitting the spectra.
