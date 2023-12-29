@@ -22,6 +22,7 @@ function lev4 = calc_level4_ATOMIX(lev3,options)
 % 2022-06-20: Update for consistency of variables with Wiki
 % 2022-06-29: Update to use separate function to apply flags
 % 2023-04-08: Update to use forward difference DLL for all methods
+% 2023-12-29: Update to output fitted R_DEL and DLL as matrices instead of cells
 
 if ~isfield(options,'figureCheck'); options.figureCheck = 1; end
 
@@ -56,7 +57,6 @@ lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
 
 REGRESSION_DLL = cell(NT,NZ,NB);
 REGRESSION_R_DEL = cell(NT,NZ,NB);
-REGRESSION_IND_DLL = cell(NT,NZ,NB);
 
 
 %%
@@ -131,7 +131,6 @@ for bb = 1:NB
                 lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
                 REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
                 REGRESSION_DLL{tt,zz,bb} = dllFit;
-                REGRESSION_IND_DLL{tt,zz,bb} = indDll;
             end
             
             count = count+1;
@@ -147,7 +146,6 @@ NR = max(len(:));
 [NT,NZ,NB] = size(lev4.EPSI);
 lev4.REGRESSION_DLL = NaN*ones(NT,NZ,NB,NR);
 lev4.REGRESSION_R_DEL = NaN*ones(NT,NZ,NB,NR);
-lev4.REGRESSION_IND_DLL = NaN*ones(NT,NZ,NB,NR);
 
 for tt = 1:NT
     for zz = 1:NZ
@@ -155,7 +153,6 @@ for tt = 1:NT
             nr = length(REGRESSION_DLL{tt,zz,bb});
             lev4.REGRESSION_DLL(tt,zz,bb,1:nr) = REGRESSION_DLL{tt,zz,bb};
             lev4.REGRESSION_R_DEL(tt,zz,bb,1:nr) = REGRESSION_R_DEL{tt,zz,bb};
-            lev4.REGRESSION_IND_DLL(tt,zz,bb,1:nr) = REGRESSION_IND_DLL{tt,zz,bb};
         end
     end
 end
