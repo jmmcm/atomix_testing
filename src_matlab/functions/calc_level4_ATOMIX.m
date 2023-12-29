@@ -120,7 +120,7 @@ for bb = 1:NB
                 
                 % Assign to structures
                 lev4.EPSI(tt,zz,bb) = epsi;
-                lev4.R_MAX(tt,zz,bb) = max(rDel);
+                lev4.R_MAX(tt,zz,bb) = max(rDelFit);
                 lev4.REGRESSION_COEFF_A0(tt,zz,bb) = Rinfo.yint;
                 lev4.REGRESSION_COEFF_A1(tt,zz,bb) = Rinfo.slope;
                 lev4.REGRESSION_N(tt,zz,bb) = Rinfo.npts;
