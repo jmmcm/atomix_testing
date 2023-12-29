@@ -26,6 +26,13 @@ for tt = 1:length(options.indT)
     Dnow = squeeze(DQC(indT,:,indB,:));
     [rFit,dFit,rFitA,dFitA,indDll,binPairs] = get_DLL_fit_data(indZ,rNow,Dnow,lev3.BIN_L,lev3.BIN_U,dr,lev4.procParams);
 
+    % Check that extracted values agree with saved values
+    dFitSaved = squeeze(lev4.REGRESSION_DLL(indT,indZ,indB,:))';
+    rFitSaved = squeeze(lev4.REGRESSION_R_DEL(indT,indZ,indB,:));
+    
+    if (sum(abs(dFitSaved - dFit)) > 1e-6) || (sum(abs(rFitSaved - rFit)) > 1e-6)
+        error('Saved values inconsistent with extracted values')
+    end
     
     % info about flags
     epsi = lev4.EPSI(indT,indZ,indB);
