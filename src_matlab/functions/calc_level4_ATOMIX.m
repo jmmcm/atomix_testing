@@ -53,9 +53,10 @@ lev4.REGRESSION_COEFF_A0 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A1 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_R2 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
-lev4.REGRESSION_DLL = cell(NT,NZ,NB);
-lev4.REGRESSION_R_DEL = cell(NT,NZ,NB);
-lev4.REGRESSION_IND_DLL = cell(NT,NZ,NB);
+
+REGRESSION_DLL = cell(NT,NZ,NB);
+REGRESSION_R_DEL = cell(NT,NZ,NB);
+REGRESSION_IND_DLL = cell(NT,NZ,NB);
 
 
 %%
@@ -128,13 +129,33 @@ for bb = 1:NB
                 lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
-                lev4.REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
-                lev4.REGRESSION_DLL{tt,zz,bb} = dllFit;
-                lev4.REGRESSION_IND_DLL{tt,zz,bb} = indDll;
+                REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
+                REGRESSION_DLL{tt,zz,bb} = dllFit;
+                REGRESSION_IND_DLL{tt,zz,bb} = indDll;
             end
             
             count = count+1;
             disp_percdone(count,NT*NB*NZ,5)
+        end
+    end
+end
+
+%% Convert cells to matrices
+len = cellfun(@length,REGRESSION_DLL);
+NR = max(len(:));
+
+[NT,NZ,NB] = size(lev4.EPSI);
+lev4.REGRESSION_DLL = NaN*ones(NT,NZ,NB,NR);
+lev4.REGRESSION_R_DEL = NaN*ones(NT,NZ,NB,NR);
+lev4.REGRESSION_IND_DLL = NaN*ones(NT,NZ,NB,NR);
+
+for tt = 1:NT
+    for zz = 1:NZ
+        for bb=1:NB
+            nr = length(REGRESSION_DLL{tt,zz,bb});
+            lev4.REGRESSION_DLL(tt,zz,bb,1:nr) = REGRESSION_DLL{tt,zz,bb};
+            lev4.REGRESSION_R_DEL(tt,zz,bb,1:nr) = REGRESSION_R_DEL{tt,zz,bb};
+            lev4.REGRESSION_IND_DLL(tt,zz,bb,1:nr) = REGRESSION_IND_DLL{tt,zz,bb};
         end
     end
 end
@@ -149,6 +170,7 @@ epsitmp(lev4.EPSI_FLAGS>0) = NaN;
 
 lev4.EPSI_FINAL = squeeze(nanmean(epsitmp,3));
 
+%%
 %% Plots to check (Level 4 diagnostics)
 if options.figureCheck
     indB = 1;
