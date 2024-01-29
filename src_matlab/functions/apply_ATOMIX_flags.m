@@ -78,6 +78,8 @@ for ff = 1:length(flagInfo.flag_masks)
                 nanMat = zeros(size(dataStruct.DLL));
                 nanMat(:,indZ,:,:) = 1;
                 ind = find(nanMat);
+            case 'non_existent_bin_pair'
+                ind = find((isnan(dataStruct.BIN_L)) | (isnan(dataStruct.BIN_U)));
         end
     elseif strcmp(varName,'EPSI_FLAGS')
         switch flagMeaning

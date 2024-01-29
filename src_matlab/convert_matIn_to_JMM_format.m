@@ -9,10 +9,10 @@ clear
 close all
 mname = mfilename('fullpath');
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'dJMM_M2uC_RM5'; % Method 2.1 differencing, standard regression (dJMM downloaded data, hack to distinguish downloaded and processed metadata folders)
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'dJMM_M2uC_RM5'; % Method 2.1 differencing, standard regression (dJMM downloaded data, hack to distinguish downloaded and processed metadata folders)
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5'; % Method 1 differencing, canonical regression
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aA_RM7p5'; % Method 1 differencing, modified regression
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M2uC_RM7p5'; % Method 2.1 differencing, standard regression
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M2uC_RM7p5'; % Method 2.1 differencing, standard regression
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5'; % Labelled A1S (Mean deducted, Method 1 differencing, standard regression)
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aA_RM1p5'; % Labelled A1M (Mean deducted, Method 1 differencing, modified regression)
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M2uC_RM1p5'; % Labelled A2S (Mean deducted, Method 2 differencing, standard regression)

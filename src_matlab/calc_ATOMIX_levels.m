@@ -9,11 +9,11 @@
 clear all
 mname = mfilename('fullpath');
 addpath('functions')
-
+tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'2A','2B','2C','2D'};
-% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E'}; %ALL
+caseIDs = {'4F'};
+% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F'}; %ALL
 
 %% Process
 for caseID = caseIDs
@@ -67,6 +67,9 @@ for caseID = caseIDs
         case '4E'
             dataSet = 'Signature5beam_TidalShelf'; rawID = 'CEB'; 
             processID = 'JMM_M1aC_RM4';
+        case '4F'
+            dataSet = 'Signature5beam_TidalShelf'; rawID = 'CEB'; 
+            processID = 'JMM_M2uC_RM2_rmin_3bins';
         otherwise
             error('Need to create case')
     end
@@ -127,19 +130,24 @@ for caseID = caseIDs
     optionsLev2.figureCheck = 0;
 
     optionsLev3.order = 2;
-    optionsLev3.rMax = metadataGroups.L3.rMax; 
-    optionsLev3.dr = (L1.Z_DIST(2) - L1.Z_DIST(1))/cosd(L1.THETA(1)); % Assumes all bins are the same size and all beam angles are the same
-    optionsLev3.nbinMax = floor(optionsLev3.rMax./optionsLev3.dr); % Max number of bins to use
+    %optionsLev3.rMax = metadataGroups.L3.rMax; 
+    %optionsLev3.dr = (L1.Z_DIST(2) - L1.Z_DIST(1))/cosd(L1.THETA(1)); % Assumes all bins are the same size and all beam angles are the same
+    %optionsLev3.nbinMax = floor(optionsLev3.rMax./optionsLev3.dr); % Max number of bins to use
     optionsLev3.diffMethod = metadataGroups.L3.dll_method;
-    optionsLev3.dllAvg = str2num(metadataGroups.L3.dll_averaging); 
+    %optionsLev3.dllAvg = str2num(metadataGroups.L3.dll_averaging); 
     optionsLev3.flagFile = flagFile;
     optionsLev3.figure = 0;
 
     optionsLev4.Const = metadataGroups.L4.C2;
     optionsLev4.sigmaN_v = metadataGroups.L4.sigmaN_v; % Only used for plotting expected intercept 
     optionsLev4.order = optionsLev3.order;
+    optionsLev4.rMin = metadataGroups.L4.rMin;
+    optionsLev4.rMax = metadataGroups.L4.rMax;
+    optionsLev4.points_select_method = metadataGroups.L4.points_select_method;
+    optionsLev4.dll_averaging = str2num(metadataGroups.L4.dll_averaging);
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;
+    % NEW
 
 
     %% Checks and warnings
@@ -229,3 +237,5 @@ for caseID = caseIDs
 
     disp('===== CREATE MAT FILE =====')
 end
+
+toc

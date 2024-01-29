@@ -3,7 +3,7 @@
 #===================================================================================     
 
 creator: BDS # Brian Scannell
-method: 'M1aC' # Centre differencing, standard regression model (M1C)
-description: Provided data (M1C). Processed using centre differencing and the standard canoncical method for the regression model.
+method: 'M1aC' 
+description: Provided data (M1C). Processed using 'centered' DLL values, where values for odd bin separations are averaged. Standard canoncical method for the regression model.
  
 

@@ -4,4 +4,4 @@
 
 creator: JMM # Justine McMillan
 method: 'M2uC'        
-description: DLL values within turbulence 'cloud'. Regression includes all possible bin separations within specified r_max limit (2m). Standard regression model. All flag thresholds consistent with standard values on Wiki.
+description: DLL values within turbulence 'cloud'. Regression includes all possible bin separations within specified r_max limit (2m). Uses minimum of 3 bin separation. Standard regression model. All flag thresholds consistent with standard values on Wiki.

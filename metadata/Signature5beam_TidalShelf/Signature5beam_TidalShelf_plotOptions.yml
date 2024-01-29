@@ -60,7 +60,7 @@ plotDLL:
     description: Example plot of DLL vs r^(2/3) for the specifed indices
     indTs: [15,26,40]
     indB: 5
-    indZ: 17
+    indZ: 7
     
 plotA1vsA0:
     description: Scatter plot of the regression coeffcients

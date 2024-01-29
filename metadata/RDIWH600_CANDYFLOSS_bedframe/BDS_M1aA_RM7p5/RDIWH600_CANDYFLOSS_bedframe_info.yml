@@ -3,7 +3,7 @@
 #===================================================================================     
 
 creator: BDS # Brian Scannell
-method: 'M1aA' # M1A: Centre differencing, modified regression method
-description: Provided data (M1A). Processed using centre differencing and the modified third-order method for the regression model.
+method: 'M1aA' 
+description: Provided data (M1A). Processed using 'centered' DLL values, where values for odd bin separations are averaged. Modified third-order method for the regression model.
  
 

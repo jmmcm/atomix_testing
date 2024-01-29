@@ -12,30 +12,32 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-%     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+%     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+%     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
-%     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
+%      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
+%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
-% dataSet = 'Signature5beam_TidalShelf';
+dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
-%     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
+%    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
+    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
 
 
@@ -164,7 +166,7 @@ end
 
 %% Scatter plot of all epsilon
 if flg.plotEpsScatter.show && flg.twoSets
-    opts = plotOptions.plotEpsScatter;
+%     opts = plotOptions.plotEpsScatter;
     
     for ii = 1:2
         if ii == 1
@@ -184,7 +186,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         ax(1) = subplot('Position',[0.08 0.2 axW axH]);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'standard';
-        plot_EPSI_scatter(ax(1),eA,eB,opts)
+        plot_EPSI_scatter(ax(1),eA,eB,opts);
         xlabel('\epsilon_A [W/kg]')
         ylabel('\epsilon_B [W/kg]')
         title('scatter plot')
@@ -192,7 +194,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         ax(2) = subplot('Position',[0.42 0.2 axW axH]);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'density';
-        plot_EPSI_scatter(ax(2),eA,eB,opts)
+        plot_EPSI_scatter(ax(2),eA,eB,opts);
         xlabel('log_{10}(\epsilon_A [W/kg])')
         ylabel('log_{10}(\epsilon_B [W/kg])')
         title('density plot')
@@ -245,7 +247,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         ax(1) = subplot(NZ,3,3*zz-2);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'standard';
-        plot_EPSI_scatter(ax(1),eA,eB,opts)
+        plot_EPSI_scatter(ax(1),eA,eB,opts);
         if zz == NZ;
             xlabel('\epsilon_A [W/kg]');
         else
@@ -258,7 +260,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         ax(2) = subplot(NZ,3,3*zz-1);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'density';
-        plot_EPSI_scatter(ax(2),eA,eB,opts)
+        plot_EPSI_scatter(ax(2),eA,eB,opts);
         if zz == NZ;
             xlabel('log_{10}(\epsilon_A [W/kg])');
         else
@@ -300,8 +302,12 @@ end
 
 %% Plot DLL
 if flg.plotDLL.show && flg.twoSets
+%     try
     opts = plotOptions.plotDLL;
     opts.indT = opts.indTs(1);
+    
+    data(1).L4.procParams = d(1).metadataGroups.L4;
+    data(2).L4.procParams = d(2).metadataGroups.L4;
     
     figure_named('DLL'),clf,clear ax
     set(gcf,'Position',[285,100,1200,600])
@@ -310,15 +316,19 @@ if flg.plotDLL.show && flg.twoSets
     axY = 0.2;
     
     ax(1) = subplot('Position',[0.10 axY axW axH]);
-    plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
+    [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     title(ax(1),clean_string(names{1}))
     
     ax(2) = subplot('Position',[0.4 axY axW axH]);
-    [~,p]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
-    set(p,'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
+    [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
+    set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
     title(ax(2),clean_string(names{2}))
     ax(3) = subplot('Position',[0.7 axY axW axH]);
-    p=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
+    [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
+    set(p(1),'color',get(p1(2),'color'))
+    set(pl(1),'color',get(p1(2),'color'))
+    set(p(2),'color',get(p2(2),'color'))
+    set(pl(2),'color',get(p2(2),'color'))
     title(ax(3),'Comparison')
     
     ylabel(ax(2),'')
@@ -334,6 +344,9 @@ if flg.plotDLL.show && flg.twoSets
         disp(['Saving: ',figName])
         saveas(gcf,figName);
     end
+%     catch
+%         disp('Cant plot SF')
+%     end
 end
 
 %% A1 vs A0
