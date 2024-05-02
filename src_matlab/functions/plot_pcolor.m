@@ -37,7 +37,7 @@ end
 % TODO: Make inout option
 switch data.var
     case 'EPSI'
-        cmap = cmocean('Dense');
+        cmap = cmocean('Thermal');
     case 'EPSIratio'
          cmap = cmocean('Balance');
 %         cmap = cmocean('oxy');

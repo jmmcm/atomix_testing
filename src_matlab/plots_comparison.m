@@ -33,13 +33,14 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
-dataSet = 'Signature5beam_TidalShelf';
+% dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
-    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
+%     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
-
+dataSet = 'AQD_Windermere_bedframe';
+    processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
 
 
 
@@ -316,10 +317,18 @@ if flg.plotDLL.show && flg.twoSets
     axY = 0.2;
     
     ax(1) = subplot('Position',[0.10 axY axW axH]);
+    opts.dll_averaging = d(1).metadataGroups.L4.dll_averaging;
+    opts.rMin = d(1).metadataGroups.L4.rMin;
+    opts.rMax = d(1).metadataGroups.L4.rMax;
+    opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
     [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     title(ax(1),clean_string(names{1}))
     
     ax(2) = subplot('Position',[0.4 axY axW axH]);
+    opts.dll_averaging = d(2).metadataGroups.L4.dll_averaging;
+    opts.rMin = d(2).metadataGroups.L4.rMin;
+    opts.rMax = d(2).metadataGroups.L4.rMax;
+    opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
     [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
     set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
     title(ax(2),clean_string(names{2}))

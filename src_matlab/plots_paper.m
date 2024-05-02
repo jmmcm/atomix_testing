@@ -30,7 +30,7 @@ end
 indZ = 17;
 indEns = 132;
 indBeams = [1];
-
+hcol = [0.6350 0.0780 0.1840];
 %% L1 figure
 figure(1),clf
 
@@ -42,7 +42,8 @@ for ii = 1:length(indBeams)
     ax1(ii) = subplot(length(indBeams),1,ii);
     plot(t1,data(1).L1.R_VEL(:,indZ,indBeams(ii)),'color',colors(ii,:))
     hold all
-    fill_transparent((data(1).L2.TIME(indEns,1) - data(1).L1.TIME(1))*24+[0 5/60],[-5 5],0.6*[1 1 1])
+    plot((data(1).L2.TIME(indEns,:)- data(1).L1.TIME(1))*24,squeeze(data(1).L2.R_VEL(indEns,indZ,indBeams(ii),:)),'-','color',hcol,'linewidth',2)
+    %fill_transparent((data(1).L2.TIME(indEns,1) - data(1).L1.TIME(1))*24+[0 5/60],[-5 5],0.6*[1 1 1])
     ylabel(['V',num2str(ii),' [m/s]'])
 end
 
@@ -79,7 +80,7 @@ for ii = 1:length(indBeams)
     end
     plot(t2,squeeze(data(1).L2.R_VEL(indEns,indZ,indBeams(ii),:)),'color',0.6*[1 1 1])
     hold all
-    plot(t2,squeeze(data(1).L2.R_VEL_DETRENDED(indEns,indZ,indBeams(ii),:)),'color',colors(ii,:))
+    plot(t2,squeeze(data(1).L2.R_VEL_DETRENDED(indEns,indZ,indBeams(ii),:)),'color',hcol)
     ylabel(['V',num2str(ii),' [m/s]'])
 end
 
@@ -109,20 +110,21 @@ rfit = [1 3];
 for ii = 1:length(indBeams)
     c = colors(ii,:);
 	plot(squeeze(data(1).L4.REGRESSION_R_DEL(indEns,indZ,indBeams(ii),:).^(2/3)),squeeze(data(1).L4.REGRESSION_DLL(indEns,indZ,indBeams(ii),:)),...
-        '.','markersize',15,'color',c);
+        '.','markersize',15,'color',hcol);
     hold all
     p3(ii) = plot(rfit, data(1).L4.REGRESSION_COEFF_A0(indEns,indZ,indBeams(ii))+data(1).L4.REGRESSION_COEFF_A1(indEns,indZ,indBeams(ii))*rfit,...
-        'color',c,'linewidth',1.2);
+        'color',hcol,'linewidth',1.2);
 end
-
+% ylim([0.005 0.02])
+set(gca,'YTick',[0.007 0.01 0.013 0.016])
 % format
 xlabel('r^{2/3} [m^{2/3}]')
 ylabel('D_{LL} [m^2/s^2]')
-legend(p3,'beam 1','beam 2','beam 3','beam 4','location','northwest')
+% legend(p3,'beam 1','beam 2','beam 3','beam 4','location','northwest')
 
 % save
 if figSave
-    set(gcf,'PaperPosition',[0 0 6 2.5],'PaperUnits','inches')
+    set(gcf,'PaperPosition',[0 0 3 2.5],'PaperUnits','inches')
     saveas(gcf,[figDir,'L3_1beam.png']);
 end
 %% L4 figure
@@ -139,7 +141,8 @@ end
 if length(indBeams)>1
     semilogy(t4,data(1).L4.EPSI_FINAL(:,indZ),'k','linewidth',1.2)
 end
-fill_transparent((data(1).L2.TIME(indEns,1) - data(1).L1.TIME(1))*24+[0 5/60],[1e-12 1e-3],0.6*[1 1 1])
+plot((data(1).L2.TIME(indEns,1) - data(1).L1.TIME(1))*24,data(1).L4.EPSI(indEns,indZ,1),...
+    'o','color','k','linewidth',0.5,'markerfacecolor',hcol)
 
 % format
 xlim([0 24])
@@ -159,9 +162,14 @@ end
 %% Structure functions from different data sets
 % -------------------------------------------------
 clear data flags names
-dataSets = {'RDIWH600_CANDYFLOSS_bedframe','RDI4beam_TidalChannel_GP130620BPb','RDI4beam_TidalChannel_GP130620BPb'};
-dataSetsSN = {'Candyfloss Bedframe','Tidal Channel (Slack)','Tidal Channel (Max Flow)'};
-processIDs = {'JMM_M2uC_RM7p5','JMM_M2uC_RM5','JMM_M2uC_RM5'};
+dataSets = {'AQD_Windermere_bedframe','RDIWH600_CANDYFLOSS_bedframe','RDI4beam_TidalChannel_GP130620BPb','RDI4beam_TidalChannel_GP130620BPb'};
+dataSetsSN = {'Lake Windermere','Candyfloss Bedframe','Tidal Channel (Slack)','Tidal Channel (Max Flow)'};
+processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM7p5','JMM_M2uC_RM5','JMM_M2uC_RM5',};
+
+% Reverse order to get low diss to show up on top
+dataSets = fliplr(dataSets);
+dataSetsSN = fliplr(dataSetsSN);
+processIDs = fliplr(processIDs);
 
 for ii = 1:length(dataSets)
     [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSets{ii});
@@ -173,25 +181,27 @@ for ii = 1:length(dataSets)
 end
 
 %% Plot different dissipation estimates
-figure(11),clf
+figure(11),clf, clear p lStr
 
 % setup 
-rfit = linspace(0,8,10);
+rfit = [0:0.0001:8];
 indB = 1;
-indEnsS = [26, 100, 150]; % [Low, Medium, High]
+indEnsS = [23, 26, 100, 150]; % [Very low, Low, Medium, High]
+indEnsS = fliplr(indEnsS);
 indZ = 10;
 
 % Theory
-epsiT = [1e-9, 1e-8,1e-7,1e-6,1e-5,1e-4,1e-3,1e-2];
-nu = 1e-6;
+epsiT = [1e-11, 1e-10,1e-9, 1e-8,1e-7,1e-6,1e-5,1e-4,1e-3,1e-2];
+nu = 1.2e-6;
 Lk = (nu.^3./epsiT).^(1/4);
 DLLT = zeros(length(epsiT),length(rfit));
 
 cols = colormap('gray');
 
 for ii = 1:length(epsiT)-1
+    
     DLLT(ii,:) = 2.0*epsiT(ii)^(2/3)*rfit.^(2/3);
-    indC = floor(length(cols)/(length(epsiT)))*ii
+    indC = floor(length(cols)/(length(epsiT)))*ii;
     c = cols(indC,:);
     
     ax(1) = subplot(121);
@@ -199,11 +209,25 @@ for ii = 1:length(epsiT)-1
     hold all
     
     ax(2) = subplot(122);
-    loglog(rfit.^(2/3),DLLT(ii,:),'color',c,'linewidth',2)
+    p(ii) = loglog(rfit.^(2/3),DLLT(ii,:),'color',c,'linewidth',2);
     hold all
-    scatter(rfit.^(2/3),DLLT(ii,:),10,c)
+    scatter(rfit.^(2/3),DLLT(ii,:),1,c)
+    lstr{ii} = ['\epsilon = ',num2str(epsiT(ii),'%3.1e'),' W/kg'];
+    
+    % Plot Kolmogorov scales (off the chart)
+    indR = get_nearestindex(rfit,Lk(ii));
+    scatter(Lk(ii).^(2/3),DLLT(ii,indR),20,'ok')
+    
+    
+    lk = Lk(ii);
+    Lk23 = lk^(2/3);
+    DLLval = DLLT(ii,indR);
+    DLLTLk(ii) = DLLval;
+    disp(table(epsiT(ii),indR,lk,Lk23,DLLval))
     
 end
+plot(Lk(1:end-1).^(2/3),DLLTLk,'--k')
+legend(p,lstr,'location','northwest')
 caxis([min(log10(epsiT)),max(log10(epsiT))])
 colormap('gray')
 cbar = colorbar;
@@ -240,8 +264,10 @@ ylim(ax(1), [-0.005,0.025])
 for ii = 1:2
     xlabel(ax(ii),'r^{2/3} [m^{2/3}]')
     ylabel(ax(ii),'D_{LL} - A_0 [m^2/s^2]')
-    xlim([0 4])
 end
+xlim(ax(1),[0 4])
+xlim(ax(2),[1e-2 4])
+ylim(ax(2),[1e-8 1e-1])
 
 % save
 if figSave
@@ -249,4 +275,97 @@ if figSave
    
     set(gcf,'PaperPosition',[0 0 10 5],'PaperUnits','inches')
     saveas(gcf,[figDir,'Dll_range.png']);
+end
+
+
+%%
+figure(12),clf
+semilogx(epsiT,Lk,'-o')
+ylabel('Lk [m]')
+xlabel('\epsilon_T [W/kg]')
+%% Plot comparing different regression methods
+clear data flags names ax
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
+markers = {'s','o','^'};
+labels = {'Centered','All','Anchored'};
+for ii = 1:length(processIDs)
+    [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
+    matFile = [dataDir,dataFileRoot,'_',processIDs{ii},'.mat'];
+    d(ii) = load(matFile);
+    data(ii) = d(ii).data;
+    flags(ii) = d(ii).flags;
+    names{ii} = [d(ii).infoProcessing.creator, '_', d(ii).infoProcessing.method];
+
+
+    % override L4 for smaller range
+    d(ii).metadataGroups.L4.rMax = 3; % 5 range bins
+    d(ii).metadataGroups.L4.Const = d(ii).metadataGroups.L4.C2;
+    d(ii).metadataGroups.L4.order = 2;
+    d(ii).metadataGroups.L4.figure = 0;
+    d(ii).metadataGroups.L4.flagFile = d(ii).fileInfo.flagFile;
+    data(ii).L4 = calc_level4_ATOMIX(data(ii).L3,d(ii).metadataGroups.L4);
+end
+%%
+indT = 50;
+indZ = 17;
+indB = 1;
+
+fig = figure(20);clf
+set(gcf,'Position',[500 400 600 400])
+axPos = [0.13 0.14 0.775 0.7];
+ax1 = axes(fig,'position',axPos,'color','none');
+
+for ii = 1:length(processIDs)
+    rDel = squeeze(data(ii).L4.REGRESSION_R_DEL(indT,indZ,indB,:));
+    DLL = squeeze(data(ii).L4.REGRESSION_DLL(indT,indZ,indB,:));
+    A0 = squeeze(data(ii).L4.REGRESSION_COEFF_A0(indT,indZ,indB));
+    A1 = squeeze(data(ii).L4.REGRESSION_COEFF_A1(indT,indZ,indB));
+    epsi = squeeze(data(ii).L4.EPSI(indT,indZ,indB));
+    rFit = [0 4.5];
+    
+
+    p2(ii) = plot(rDel.^(2/3),DLL,'LineStyle','none','Marker',markers{ii},'MarkerSize',6);
+    set(p2(ii),'LineStyle','none','Marker',markers{ii},...
+        'color',colors(ii,:),'MarkerFaceColor','none','linewidth',1)
+    l{ii} = ['\epsilon = ',num2str(epsi,'%3.1e'),' W/kg (',labels{ii},')'];
+    if ii == 1
+        hold all
+    end
+    plot(rFit.^(2/3), A0+A1*rFit.^(2/3),'Color',get(p2(ii),'Color'),'linewidth',2)
+    
+    
+end
+
+
+xlimits = [0 2.5];
+ylimits = get(gca,'ylim');
+set(ax1,'xlim',xlimits)
+set(ax1,'ylim',ylimits)
+set(ax1,'XTick',(0.5/cosd(20)*[1 2 3 4 5 6]).^(2/3))
+set(ax1,'XTickLabels',{'1','2','3','4','5','6'})
+xlabel(ax1,'\delta')
+ylabel(ax1,'D_{LL} [m^2 s^{-2}]')
+
+ax2 = axes(fig,'position',axPos,'color','none');
+set(ax2,'xlim',xlimits)
+set(ax2,'ylim',ylimits)
+set(ax2,'XAxisLocation','top')
+xlabel(ax2,'r^{2/3} [m^{2/3}]')
+set(ax2,'XColor',0.4*[0 1 0])
+set(ax2,'YTick',[])
+
+    
+
+
+uistack(p2,'top')
+legend(p2,l,'location','southeast')
+
+
+% save
+if figSave
+    disp('Saving')
+   
+    set(gcf,'PaperPosition',[0 0 6 3],'PaperUnits','inches')
+    saveas(gcf,[figDir,'RegressMethods.png']);
 end

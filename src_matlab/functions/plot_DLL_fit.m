@@ -24,11 +24,14 @@ for tt = 1:length(options.indT)
     
     % Get fit values (depends on method and options)
     Dnow = squeeze(DQC(indT,:,indB,:));
-    [rFit,dFit,rFitA,dFitA,indDll,binPairs] = get_DLL_fit_data(indZ,rNow,Dnow,lev3.BIN_L,lev3.BIN_U,dr,lev4.procParams);
+    [rFit,dFit,rFitA,dFitA,indDll,binPairs] = get_DLL_fit_data(indZ,rNow,Dnow,lev3.BIN_L,lev3.BIN_U,dr,options);
 
     % Check that extracted values agree with saved values
     dFitSaved = squeeze(lev4.REGRESSION_DLL(indT,indZ,indB,:))';
     rFitSaved = squeeze(lev4.REGRESSION_R_DEL(indT,indZ,indB,:));
+%     ind = find(~isnan(dFitSaved));
+%     dFitSaved = dFitSaved(ind);
+%     rFitSaved = rFitSaved(ind);
     
     if (sum(abs(dFitSaved - dFit)) > 1e-6) || (sum(abs(rFitSaved - rFit)) > 1e-6)
         error('Saved values inconsistent with extracted values')
@@ -48,7 +51,7 @@ for tt = 1:length(options.indT)
     % Regresstion lines and 95% CI
     beta = [lev4.REGRESSION_COEFF_A0(indT,indZ,indB),lev4.REGRESSION_COEFF_A1(indT,indZ,indB)];
     [yUpp,yLow,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0));
-    p(3) = plot(xFit,yFit,'k','linewidth',2)
+    p(3) = plot(xFit,yFit,'k','linewidth',2);
     plot(xFit,yLow,'--','color',0.4*[1 1 1],'linewidth',1)
     plot(xFit,yUpp,'--','color',0.4*[1 1 1],'linewidth',1)
     lStr = {'All Points','Regression Points',...
