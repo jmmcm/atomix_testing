@@ -1,0 +1,106 @@
+#===================================================================================
+#       PLOT OPTIONS                                                                #
+#===================================================================================    
+# Dataset info:
+# - 40 range bins (0.5 m in size)
+# - 10 days of data (bursting: 5 mins on, 25 min off, fS=0.97Hz)
+# - middepth speed ~ 0.3 m/s
+
+plotVelTS:
+    description: Time series plot of the beam velocity data
+    cLim: [-.2, 0.2]
+
+plotENUTS:
+    description: Time series plot of the ENU velocity data
+    tUnits: 'relHours'
+    cLim: 
+        E: [-0.5, 0.5]
+        N: [-0.5, 0.5]
+        U: [-0.02, 0.02]
+        e: [-0.02, 0.02]
+    indZ: 17
+ 
+plotEpsTS:
+    description: Time series plot of the dissipation rate
+    indZ: 22
+    indB: 1
+    clim: [-10, -6]
+    
+plotEpsScatter:
+    description: Scatter plot of the dissipation rate for comparing methods
+    limits: [1e-10, 1e-4]
+    scale: log
+
+plotEpsScatterZ:
+    description: Scatter plots of the dissipation rate as a function of Z
+    limits: [1e-10, 1e-4]
+    indZs: [3,14,25,36]
+    
+plotEpsHist:
+    description: Histogram of the dissipation rate
+    nbins: 100
+    xlimits: [-10, -4]  
+    binLimits: [-10, -4]  
+    
+plotEpsRatioHist:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB))
+    nbins: 30
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1]  
+    
+plotEpsRatioHistZ:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    nbins: 20
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1] 
+    indZs: [3,14,25,36]
+ 
+plotEpsRatioStatsZ:
+    description: Statistics of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    lowerPercentile: 25
+    upperPercentile: 75
+    
+plotDLL:
+    description: Example plot of DLL vs r^(2/3) for the specifed indices
+    indTs: [26,102]
+    indB: 1
+    indZ: 10
+    
+plotA1vsA0:
+    description: Scatter plot of the regression coeffcients
+    xlimits: [-1e-3, 3e-3]
+    ylimits: [-1e-3, 2e-3]
+    
+    
+plotA0hist:
+    description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
+    xlimits: [-1e-3, 3e-3]
+    nbins: 100
+    A0expected: 0.00104 #2*sigmaN_v^2 = 2*0.0228^2;
+        
+plotR2hist:
+    description: Histogram of R2
+    nbins: 100
+        
+plotDelEpshist:
+    description: Histogram of deltaEps/epsilon
+    nbins: 100
+    binLimits: [0, 6]
+
+plotSpectra:
+    spdVar: ENU_HOR
+    spdBins: [0,0.1,0.2,0.3,0.4,0.5]
+    indZall: [2,10]
+    nZavg: 3 # Number of bins to average in z (should be odd)
+    noiseLevel: 0.00107 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
+    Afit: 1e-3
+    ylimF: [1e-4, 1e-2]
+    ylimK: [1e-5, 1e-2]
+
+plotBacktracking:
+    description: plot DLL and detrended velocities for chosen indices
+    indT: [112,423,180,180,246]
+    indB: [1,1,1,1,1]
+    indZ: [17,17,4,4,17]
+    nDelR: [6,6,4,4,6] # Bin separation to show detrended TS for (NEEDS TO BE EVEN)
+

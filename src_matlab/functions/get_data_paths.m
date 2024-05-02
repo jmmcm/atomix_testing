@@ -13,7 +13,9 @@ switch dataSet
     case 'RDIWH600_CANDYFLOSS_bedframe'
         dataFileRoot = 'RDIWH600_CANDYFLOSS_bedframe'; 
     case 'RDIWH600_CANDYFLOSS_TOP'
-        dataFileRoot = 'RDIWH600_CANDYFLOSS_TOP'; 
+        dataFileRoot = 'RDIWH600_CANDYFLOSS_TOP';
+    case 'AQD_Windermere_bedframe'
+        dataFileRoot = 'AQD_Windermere_bedframe';
     case 'Signature5beam_TidalShelf'
        dataFileRoot = 'Signature5beam_TidalShelf';
     otherwise

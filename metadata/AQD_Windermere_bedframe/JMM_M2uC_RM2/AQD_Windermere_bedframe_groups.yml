@@ -1,0 +1,80 @@
+#===================================================================================
+#       GROUP LEVEL SPECIFIC METADATA #
+#===================================================================================     
+        
+Ancillary:
+  dimensions:
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        
+  ENU: Segment mean earth coordinate velocity (East, North, Up) by depth
+  
+# ================ L1 =================
+
+L1: # Level 1: Raw instrument data
+   dimensions:  
+        - TIME
+        - N_BEAM
+        - Z_DIST
+    
+   processing_level:  Raw along-beam velocity data from the ADCP together with quality control flags and ancillary measurements.  # Add more information to suit
+   
+   burst_mode: true
+   burst_length: 1024
+   
+   time_ref: 2017-01-01T00:00:00Z #yyyy-mm-ddTHH:MM:SSZ
+
+# ================ L2 =================
+
+L2:  # Level 2: Segmented data
+   dimensions:  
+        - N_SEGMENT
+        - N_SAMPLE
+        - Z_DIST 
+        - N_BEAM
+        
+   processing_level:  In this group, QAQCd velocities have been split into smaller segments for processing. Each segment has been detrended to remove any linear trend.
+   
+   burst_interval: 7200 # Time [s] between start of subsequent bursts
+   segment_length: 512 # [seconds] 1024 points * 0.5 s/point 
+   segment_overlap_proportion: 0 # fraction of segment overlapping in successive segments 
+   
+   detrending_method: linear least squares regression #Name of technique and citation. 
+
+#===========================
+L3: # Level 3: Dll 
+   dimensions:  
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        - N_DEL
+        - N_BOUND
+   processing_level: This group includes the structure function Dll as a function of the separation distance.  Any ancillary information required for estimatng the dissipation of turbulent kinetic energy may also be stored here. 
+   dll_method:  'forward' # 'forward' or 'center'
+   stationarity_testing: None # details on which type of stationarity testing done on the segmented velocities. Not sure if this should be reported here or level2a.
+   noise_testing: None # details of testing the noise levels, or if the signal comprises mostly of noise.
+
+#==========================
+
+L4: # Level 4: Dissipation 
+   dimensions:  
+        - TIME
+        - Z_DIST 
+        - N_BEAM 
+        - N_BOUND
+   processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
+   regression_model: standard
+   regression_method: Linear regression # statistical technique used for fitting the spectra.
+   points_select_method: 'cloud' # method to choose points for fit (cloud, centered, anchored)
+   dll_averaging: 'false' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
+   rMin: 0.25 # [meters] (equivalent to two bins)
+   rMax: 2.0 #[meters] (equivalent to 14 bins)
+   C2: 2.0 # Constant used in the calculation of the second order structure function
+   sigmaN_v: 31.6 # Expected noise level in velocity measurements [m/s]. Estimated from PDF of A0
+   EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.   
+
+   
+
+
+   
