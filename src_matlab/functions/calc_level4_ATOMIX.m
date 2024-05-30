@@ -49,6 +49,8 @@ lev4.EPSI_FLAGS = zeros(NT,NZ,NB); % Perfect data
 lev4.EPSI_CI_HIGH = NaN*ones(NT,NZ,NB);
 lev4.EPSI_CI_LOW = NaN*ones(NT,NZ,NB);
 lev4.EPSI_DEL_RATIO = NaN*ones(NT,NZ,NB); % MY METRIC
+lev4.MSPE = NaN*ones(NT,NZ,NB);
+lev4.MAD = NaN*ones(NT,NZ,NB);
 lev4.R_MAX = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A0 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A1 = NaN*ones(NT,NZ,NB);
@@ -117,7 +119,7 @@ for bb = 1:NB
             % Linear regression to get epsilon
             if length(rDelFit)>0
                 %                  if zz == 4;  options.figure = 1; end %DEBUGGING
-                [epsi,sigmaN,R2,Rinfo] = calc_eps_SF(rDelFit,dllFit,options);
+                [epsi,sigmaN,Rinfo] = calc_eps_SF(rDelFit,dllFit,options);
                 
                 % Assign to structures
                 lev4.EPSI(tt,zz,bb) = epsi;
@@ -125,10 +127,12 @@ for bb = 1:NB
                 lev4.REGRESSION_COEFF_A0(tt,zz,bb) = Rinfo.yint;
                 lev4.REGRESSION_COEFF_A1(tt,zz,bb) = Rinfo.slope;
                 lev4.REGRESSION_N(tt,zz,bb) = Rinfo.npts;
-                lev4.REGRESSION_R2(tt,zz,bb) = R2;
+                lev4.REGRESSION_R2(tt,zz,bb) = Rinfo.R2;
                 lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
                 lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
+                lev4.MSPE(tt,zz,bb) = Rinfo.MSPE;
+                lev4.MAD(tt,zz,bb) = Rinfo.MAD;
                 REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
                 REGRESSION_DLL{tt,zz,bb} = dllFit;
             end
