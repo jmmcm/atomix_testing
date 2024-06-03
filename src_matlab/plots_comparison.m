@@ -20,12 +20,12 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
@@ -39,8 +39,10 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
-dataSet = 'AQD_Windermere_bedframe';
-    processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+% dataSet = 'AQD_Windermere_bedframe';
+%     processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+%      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
+%      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
 
 
@@ -53,7 +55,7 @@ flg.plotEpsScatterZ.show = 1;
 flg.plotEpsHist.show = 1;
 flg.plotEpsRatioHistZ.show = 1;
 flg.plotEpsRatioStatsZ.show = 1;
-flg.plotA0hist.show = 0;
+flg.plotA0hist.show = 1;
 flg.plotR2hist.show = 0;
 flg.plotA1vsA0.show = 0;
 flg.plotDLL.show = 1;

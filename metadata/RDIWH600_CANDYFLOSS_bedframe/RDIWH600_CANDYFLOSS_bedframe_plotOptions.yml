@@ -62,7 +62,7 @@ plotEpsRatioStatsZ:
     
 plotDLL:
     description: Example plot of DLL vs r^(2/3) for the specifed indices
-    indTs: [318,437]
+    indTs: [318,394]
     indB: 1
     indZ: 36
     
