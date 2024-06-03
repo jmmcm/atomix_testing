@@ -29,9 +29,9 @@ for tt = 1:length(options.indT)
     % Check that extracted values agree with saved values
     dFitSaved = squeeze(lev4.REGRESSION_DLL(indT,indZ,indB,:))';
     rFitSaved = squeeze(lev4.REGRESSION_R_DEL(indT,indZ,indB,:));
-%     ind = find(~isnan(dFitSaved));
-%     dFitSaved = dFitSaved(ind);
-%     rFitSaved = rFitSaved(ind);
+    ind = find(~isnan(dFitSaved));
+    dFitSaved = dFitSaved(ind);
+    rFitSaved = rFitSaved(ind);
     
     if (sum(abs(dFitSaved - dFit)) > 1e-6) || (sum(abs(rFitSaved - rFit)) > 1e-6)
         error('Saved values inconsistent with extracted values')
