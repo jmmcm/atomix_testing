@@ -12,20 +12,20 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
@@ -84,7 +84,8 @@ else
     figEnd = 'Multiple';
     flg.twoSets = 0;
 end
-figPath=['../figures/',dataSet,'/',figDir,'/'];
+% figPath=['../figures/',dataSet,'/',figDir,'/'];
+figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/'];
 if ~exist(figPath,'dir') & flg.saveFigs
     disp(['Making ',figPath,'. Press a key to continue.']),pause
     mkdir(figPath)

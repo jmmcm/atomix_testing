@@ -4,8 +4,10 @@ function [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet)
 % Justine McMillan
 % Oct 20, 2022
 
-dataDir = ['D:/ATOMIX/Data/', dataSet,'/'];
-metaDir = ['C:/Users/mcmil/Documents/ATOMIX/Work/Testing/metadata/', dataSet,'/'];
+% dataDir = ['D:/ATOMIX/Data/', dataSet,'/'];
+% metaDir = ['C:/Users/mcmil/Documents/ATOMIX/Work/Testing/metadata/', dataSet,'/'];
+dataDir = ['/home/jmm000/DATA/atomix/', dataSet,'/'];
+metaDir = ['../metadata/',dataSet,'/'];
 
 switch dataSet
     case 'RDI4beam_TidalChannel_GP130620BPb'

@@ -56,7 +56,9 @@ end
 
 %%
 figDir=[processIDs{1},'_vs_',processIDs{2}];
-figPath = ['../figures/',dataSet,'/',figDir,'/SFfits/'];
+% figPath = ['../figures/',dataSet,'/',figDir,'/SFfits/'];
+figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
+
 %% Plot
 opts.indB = 1;
 opts.indZ = 25;
@@ -122,9 +124,14 @@ for tt = 2:NT
     data(1).L4.EPSI_CI_HIGH(tt,opts.indZ,opts.indB);
     data(1).L4.EPSI_CI_LOW(tt,opts.indZ,opts.indB);
 
-    figName = [figPath,'z',num2str(opts.indZ,'%02d'),'/t_',num2str(tt,'%03d'),'.png'];
+    figPathFull = [figPath,'z',num2str(opts.indZ,'%02d'),'/'];
+    figName = [figPathFull 't_',num2str(tt,'%03d'),'.png'];
     disp(['Saving: ',figName])
     drawnow
+    if ~exist(figPathFull)
+        disp(['Making ' figPathFull])
+        mkdir(figPathFull)
+    end
     saveas(gcf,figName);
     
 %     if tt == 1
