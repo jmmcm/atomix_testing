@@ -46,7 +46,7 @@ dataSpike.L2 = d.data.L2;
 dataSpike.L2.R_VEL_DETRENDED(indT,indZ,indB,150) = 0.5;
 dataSpike.L2.R_VEL_DETRENDED(indT,indZ,indB,400) = -1;
 dataSpike.L2.R_VEL_DETRENDED(indT,indZ-2,indB,300) = -0.7;
-% dataSpike.L2.R_VEL_DETRENDED(indT,indZ+4,indB,250) = 1;
+dataSpike.L2.R_VEL_DETRENDED(indT,indZ+4,indB,250) = 1;
 
 % Calc L3
 optionsLev3.order = 2;
