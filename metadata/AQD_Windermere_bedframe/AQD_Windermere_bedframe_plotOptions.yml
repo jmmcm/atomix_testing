@@ -23,7 +23,7 @@ plotENUTS:
 plotEpsTS:
     description: Time series plot of the dissipation rate
     indZ: 22
-    indB: 1
+    indB: 3
     clim: [-10, -6]
     
 plotEpsScatter:

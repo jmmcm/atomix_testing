@@ -1,4 +1,8 @@
 clear
+addpath('functions')
+addpath('../../adcp_toolbox/matlab/')
+addpath('../../utilitieswork')
+addpath('../../netcdftools_ceb/variables_flags_databases/YAMLMatlab_0/')
 set(0,'defaultfigurecolor',[1 1 1 ])
 set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
@@ -12,7 +16,7 @@ figSave = 1;
 % -------------------
 
 dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-processIDs = {'JMM_M2uC_RM5'};
+processIDs = {'JMM_M1aC_RM5'};
 
 %% load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -118,7 +122,7 @@ end
 % ylim([0.005 0.02])
 set(gca,'YTick',[0.007 0.01 0.013 0.016])
 % format
-xlabel('r^{2/3} [m^{2/3}]')
+xlabel('(\delta r)^{2/3} [m^{2/3}]')
 ylabel('D_{LL} [m^2/s^2]')
 % legend(p3,'beam 1','beam 2','beam 3','beam 4','location','northwest')
 
@@ -159,12 +163,13 @@ if figSave
     saveas(gcf,[figDir,'L4_1beam.png']);
 end
 
+
 %% Structure functions from different data sets
 % -------------------------------------------------
 clear data flags names
 dataSets = {'AQD_Windermere_bedframe','RDIWH600_CANDYFLOSS_bedframe','RDI4beam_TidalChannel_GP130620BPb','RDI4beam_TidalChannel_GP130620BPb'};
 dataSetsSN = {'Lake Windermere','Candyfloss Bedframe','Tidal Channel (Slack)','Tidal Channel (Max Flow)'};
-processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM7p5','JMM_M2uC_RM5','JMM_M2uC_RM5',};
+processIDs = {'JMM_M1aC_RM2','JMM_M1aC_RM7p5','JMM_M1aC_RM5','JMM_M1aC_RM5',};
 
 % Reverse order to get low diss to show up on top
 dataSets = fliplr(dataSets);
@@ -186,7 +191,7 @@ figure(11),clf, clear p lStr
 % setup 
 rfit = [0:0.0001:8];
 indB = 1;
-indEnsS = [23, 26, 100, 150]; % [Very low, Low, Medium, High]
+indEnsS = [25, 24, 100, 150]; % [Very low, Low, Medium, High]
 indEnsS = fliplr(indEnsS);
 indZ = 10;
 
@@ -227,7 +232,7 @@ for ii = 1:length(epsiT)-1
     
 end
 plot(Lk(1:end-1).^(2/3),DLLTLk,'--k')
-legend(p,lstr,'location','northwest')
+legend(p,lstr,'location','northwest','AutoUpdate','off')
 caxis([min(log10(epsiT)),max(log10(epsiT))])
 colormap('gray')
 cbar = colorbar;
@@ -254,12 +259,11 @@ for ii = 1:length(data)
     subplot(122)
 	loglog(r.^(2/3),DLL-A0,'.','markersize',15,'color',c);
     hold all
-    p11(ii) = loglog(rfit.^(2/3),A1*rfit.^(2/3),'color',c,'linewidth',1.2);
-    lstr{ii} = ['\epsilon = ',num2str(epsi,'%3.1e'),' W kg^{-1} [',dataSetsSN{ii},']'];
+    loglog(rfit.^(2/3),A1*rfit.^(2/3),'color',c,'linewidth',1.2);
 end
 
 % format
-legend(ax(1),p11,lstr,'location','best')
+legend(ax(1),p11,lstr,'location','best','AutoUpdate','off')
 ylim(ax(1), [-0.005,0.025])
 for ii = 1:2
     xlabel(ax(ii),'r^{2/3} [m^{2/3}]')

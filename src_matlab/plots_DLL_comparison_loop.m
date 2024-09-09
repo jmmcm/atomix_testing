@@ -12,19 +12,19 @@ set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-%     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
+% %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
+% %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
+% %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
-%     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
-%     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
-%     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
-%      processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
-%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+% %     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
+% %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
+% %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
+% %      processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
+% %     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
+%       processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
@@ -39,7 +39,7 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
 
 dataSet = 'AQD_Windermere_bedframe';
-      processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+       processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %% Data files
@@ -61,7 +61,9 @@ figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
 opts.indB = 1;
-opts.indZ = 25;
+opts.indZ = 10;
+dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(1))
+cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
 for tt = 1:NT
@@ -81,50 +83,66 @@ for tt = 1:NT
     x0 = 0.05;
     
     ax(1) = subplot('Position',[x0 axY axW axH]);
+        [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
+%     set(p(1),'color',get(p1(2),'b'))
+%     set(pl(1),'color',get(p1(2),'b'))
+%     set(p(2),'color',get(p2(2),'r'))
+%     set(pl(2),'color',get(p2(2),'r'))
+    title(ax(1),'Comparison')
+    
+    
+    
+    ax(2) = subplot('Position',[x0+offset+axW axY axW axH]);
     opts.dll_averaging = d(1).metadataGroups.L4.dll_averaging;
     opts.rMin = d(1).metadataGroups.L4.rMin;
     opts.rMax = d(1).metadataGroups.L4.rMax;
     opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
     [~,p1,t1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
+    caxis(opts.indZ+[-cMax cMax])
+    colormap(cmocean('balance'))
     try
         set(p1(2),'Marker','x','markersize',5,'color','k')
     end
     title(ax(1),clean_string(names{1}))
     
-    ax(2) = subplot('Position',[x0+offset+axW axY axW axH]);
+    
+    
+    ax(3) = subplot('Position',[x0+2*(offset+axW) axY axW axH]);
     opts.dll_averaging = d(2).metadataGroups.L4.dll_averaging;
     opts.rMin = d(2).metadataGroups.L4.rMin;
     opts.rMax = d(2).metadataGroups.L4.rMax;
     opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
     [~,p2,t2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
+    caxis(opts.indZ+[-cMax cMax])
+    colormap(cmocean('balance'))
     set(p2(1),'Marker','s')
     set(p2(2),'Marker','x','markersize',3,'color','k')%[0.9290 0.6940 0.1250])
     title(ax(2),clean_string(names{2}))
     
-    ax(3) = subplot('Position',[x0+2*(offset+axW) axY axW axH]);
-    [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
-%     set(p(1),'color',get(p1(2),'b'))
-%     set(pl(1),'color',get(p1(2),'b'))
-%     set(p(2),'color',get(p2(2),'r'))
-%     set(pl(2),'color',get(p2(2),'r'))
-    title(ax(3),'Comparison')
-    
     % Velocity profile
     ax(4) = subplot('Position',[x0+3*(offset+axW) axY axW axH]);
     
-    if dataSet ~= 'AQD_Windermere_bedframe' % ENU has wrong dimensions for AQD data
+    if ~strcmp(dataSet,'AQD_Windermere_bedframe') % ENU has wrong dimensions for AQD data
         speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
 
         speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
+        
         z = data(1).Ancillary.Z_DIST;
-        plot(speed,z,'.-','linewidth',2)
-        hold all
+        index = 1:length(z);
+        
         % plot range of profile used
-        dr = (data(1).L1.Z_DIST(2) - data(1).L1.Z_DIST(1))/cosd(data(1).L1.THETA(1));
-        nMax(1) = data(1).L4.R_MAX(opts.indT,opts.indZ,opts.indB) / dr;
-        plot(speed(opts.indZ-nMax(1):opts.indZ+nMax(1)), z(opts.indZ-nMax(1):opts.indZ+nMax(1)),'ro','linewidth',2)
-        % plot center point
-        plot(speed(opts.indZ),z(opts.indZ),'s','linewidth',2)
+         dr = (data(1).L1.Z_DIST(2) - data(1).L1.Z_DIST(1))/cosd(data(1).L1.THETA(1));
+         nMax(1) = floor(data(1).L4.R_MAX(opts.indT,opts.indZ,opts.indB) / dr /2);
+         plot(speed(opts.indZ-nMax(1):opts.indZ+nMax(1)), index(opts.indZ-nMax(1):opts.indZ+nMax(1)),'o-','color','#EDB120','linewidth',2)
+         
+        
+        hold all
+%         plot(speed,index,'linewidth',2)
+        scatter(speed,index,35,index,'filled')
+        caxis(opts.indZ+[-cMax cMax])
+        colormap(cmocean('balance'))
+%         % plot center point
+        plot(speed(opts.indZ),index(opts.indZ),'*k')
     end
     title('Speed Profile')
     
