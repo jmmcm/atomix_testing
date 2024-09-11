@@ -12,13 +12,15 @@
 
 clear all
 %close all
+colors = get(0,'defaultaxescolororder');
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
+dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 
-processID = 'BDS_M1aC_RM7p5';
+
 
 %% Flags
 flg.saveFigs = 0; % Not supported yet
@@ -53,7 +55,6 @@ yearStr = num2str(dateVec0(1));
 
 %% Plot velocities (SLOW)
 if flg.plotVelTS.show
-    
     figure_named(['BeamVel_TS']),clf,clear ax, clear plotData
     set(gcf,'Position',[200,100,700,600])
     axL = 0.10;
@@ -67,7 +68,7 @@ if flg.plotVelTS.show
     plotData.x = get_yd(L1.TIME);
     plotData.y = L1.Z_DIST;
     plotData.var = 'R_VEL';
-    for bb = 1:4
+    for bb = 1:NB
         ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
         plotData.values = L1.R_VEL(:,:,bb);
         opts.clabel= ['R\_VEL(:,:,',num2str(bb),') [m/s]'];
@@ -77,7 +78,7 @@ if flg.plotVelTS.show
             plot(plotData.x,L1.PRES,'w')
         end
     end
-    xlabel(ax(4),['year day ',yearStr])
+    xlabel(ax(NB),['year day ',yearStr])
     title(ax(1),['Beam Velocities'])
 end
 
@@ -98,14 +99,14 @@ if flg.plotEpsTS.show
     plotData.x = get_yd(L4.TIME);
     plotData.y = L4.Z_DIST;
     plotData.var = 'EPSI';
-    for bb = 1:4
+    for bb = 1:NB
         ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
         plotData.values = log10(L4.EPSI(:,:,bb));
         opts.clabel= ['log10(\epsilon_',num2str(bb),' [W/kg])'];
         plot_pcolor(ax(bb),plotData,opts);
         hold all
     end
-    xlabel(ax(4),['year day ',yearStr])
+    xlabel(ax(NB),['year day ',yearStr])
     title(ax(1),['\epsilon (beams)'])
 end
 
@@ -126,13 +127,18 @@ if flg.plotDLL.show
     
     for tt = 1:length(opts.indTs)
         opts.indT = opts.indTs(tt);
+        opts.dll_averaging = metadataGroups.L4.dll_averaging;
+        opts.rMin = metadataGroups.L4.rMin;
+        opts.rMax = metadataGroups.L4.rMax;
+        opts.points_select_method = metadataGroups.L4.points_select_method;
         axh = subplot(2,length(opts.indTs),length(opts.indTs)+tt);
         
-        [axh,p] = plot_DLL_fit(axh,L3,L4,opts)
+        [axh,p] = plot_DLL_fit(axh,L3,L4,opts);
+        set(p(2),'color',colors(tt+2,:))
         title(axh,[axh.Title.String,', indT = ',num2str(opts.indT)])
         
         plot(ax1,get_yd(L4.TIME(opts.indT))*[1 1],get(ax1,'ylim'),'-',...
-            'color',get(p,'color'),...
+            'color',get(p(2),'color'),...
             'DisplayName',['indT = ',num2str(opts.indT)])
         
         

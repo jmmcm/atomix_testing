@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: BDS # Brian Scannell
+method: 'M1aA' 
+description: Provided data (M1A). Processed using 'centered' DLL values, where values for odd bin separations are averaged. Modified third-order method for the regression model.
+ 
+

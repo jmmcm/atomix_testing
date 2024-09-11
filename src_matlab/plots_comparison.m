@@ -4,6 +4,10 @@
 % June 29, 2022
 
 clear all
+addpath('../../netcdftools_ceb/variables_flags_databases/YAMLMatlab_0/')
+addpath('../../utilitieswork/')
+addpath('../../utilitieswork/cmocean/')
+
 mname = mfilename('fullpath');
 
 set(groot,'DefaultFigurePosition',[0 0 500 500])
@@ -20,12 +24,12 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
@@ -33,13 +37,16 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
-dataSet = 'Signature5beam_TidalShelf';
+% dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
-    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
+%     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
-
+% dataSet = 'AQD_Windermere_bedframe';
+%      processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+%      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
+%      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
 
 
@@ -52,7 +59,7 @@ flg.plotEpsScatterZ.show = 1;
 flg.plotEpsHist.show = 1;
 flg.plotEpsRatioHistZ.show = 1;
 flg.plotEpsRatioStatsZ.show = 1;
-flg.plotA0hist.show = 0;
+flg.plotA0hist.show = 1;
 flg.plotR2hist.show = 0;
 flg.plotA1vsA0.show = 0;
 flg.plotDLL.show = 1;
@@ -81,7 +88,8 @@ else
     figEnd = 'Multiple';
     flg.twoSets = 0;
 end
-figPath=['../figures/',dataSet,'/',figDir,'/'];
+% figPath=['../figures/',dataSet,'/',figDir,'/'];
+figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/'];
 if ~exist(figPath,'dir') & flg.saveFigs
     disp(['Making ',figPath,'. Press a key to continue.']),pause
     mkdir(figPath)
@@ -101,7 +109,7 @@ if flg.plotEpsTS.show && flg.twoSets
     t = 1:length(data(1).L4.TIME);
     z = 1:length(data(1).L4.Z_DIST);
     
-    for ii = 1:2
+    for ii = 1:3
         if ii == 1
             eA = squeeze(data(1).L4.EPSI(:,:,indB));
             eB = squeeze(data(2).L4.EPSI(:,:,indB));
@@ -110,6 +118,10 @@ if flg.plotEpsTS.show && flg.twoSets
             eA = data(1).L4.EPSI_FINAL;
             eB = data(2).L4.EPSI_FINAL;
             varName = 'EPSI_FINAL';
+        elseif ii == 3
+            eA = mean(data(1).L4.EPSI(:,:,:),3,'omitnan');
+            eB = mean(data(2).L4.EPSI(:,:,:),3,'omitnan');
+            varName = 'EPSI_MEAN';
         end
         
         figure_named([varName,'_TS']),clf,clear ax, clear plotData
@@ -122,7 +134,11 @@ if flg.plotEpsTS.show && flg.twoSets
         plotData = struct('x',t,'y',z,'values',log10(eA'),'var','EPSI');
         opts = struct('ylabel','z index','clabel','log10(\epsilon_A)','clim',plotOptions.plotEpsTS.clim);
         plot_pcolor(ax(1),plotData,opts);
-        title([clean_string(varName),'(:,:,',num2str(indB),')'])
+        if ii == 1
+            title([clean_string(varName),'(:,:,',num2str(indB),')'])
+        else
+            title([clean_string(varName)])
+        end
         
         ax(2) =  axes('Position',[axL,0.68,axW,axH]);
         plotData = struct('x',t,'y',z,'values',log10(eB'),'var','EPSI');
@@ -141,7 +157,11 @@ if flg.plotEpsTS.show && flg.twoSets
         semilogy(t,eB(:,indZ))
         legend('\epsilon_A','\epsilon_B')
         ylabel('\epsilon [W/kg]')
-        title([clean_string(varName),'(:,',num2str(indZ),',',num2str(indB),')'])
+        if ii == 1
+            title([clean_string(varName),'(:,',num2str(indZ),',',num2str(indB),')'])
+        else
+            title([clean_string(varName),'(:,',num2str(indZ),')'])
+        end
         
         ax(5) =  axes('Position',[axL,0.15,axW,axH]);
         semilogy(t,eB(:,indZ)./eA(:,indZ),'linewidth',2)
@@ -316,10 +336,18 @@ if flg.plotDLL.show && flg.twoSets
     axY = 0.2;
     
     ax(1) = subplot('Position',[0.10 axY axW axH]);
+    opts.dll_averaging = d(1).metadataGroups.L4.dll_averaging;
+    opts.rMin = d(1).metadataGroups.L4.rMin;
+    opts.rMax = d(1).metadataGroups.L4.rMax;
+    opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
     [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     title(ax(1),clean_string(names{1}))
     
     ax(2) = subplot('Position',[0.4 axY axW axH]);
+    opts.dll_averaging = d(2).metadataGroups.L4.dll_averaging;
+    opts.rMin = d(2).metadataGroups.L4.rMin;
+    opts.rMax = d(2).metadataGroups.L4.rMax;
+    opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
     [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
     set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
     title(ax(2),clean_string(names{2}))
@@ -483,11 +511,11 @@ if flg.plotEpsRatioStatsZ.show && flg.twoSets
     %ph(2) = plot(ratiosUpperP,z,'k','DisplayName',[num2str(opts.upperPercentile),' %'])
     %ph(3) = plot(ratiosLowerP,z,'k','DisplayName',[num2str(opts.lowerPercentile),' %'])
     indGood = find(~isnan(ratiosLowerP) & ~isnan(ratiosUpperP));
-    ph(2) = fill_between([ratiosLowerP(indGood); ratiosUpperP(indGood)],[z(indGood); z(indGood)],[0.6 0.6 0.6]);
+     ph(2) = fill_between([ratiosLowerP(indGood); ratiosUpperP(indGood)],[z(indGood); z(indGood)],[0 0 0.6]);
     set(ph(2),'DisplayName',[num2str(opts.upperPercentile-opts.lowerPercentile),'% CI'])
     indGood = find(~isnan(ratiosLowerPf) & ~isnan(ratiosUpperPf));
-    ph(3) = fill_between([ratiosLowerPf(indGood); ratiosUpperPf(indGood)],[z(indGood); z(indGood)],[0.4 0.4 0.4]);
-    set(ph(3),'DisplayName',['95% CI'])
+     ph(3) = fill_between([ratiosLowerPf(indGood); ratiosUpperPf(indGood)],[z(indGood); z(indGood)],[0.4 0.4 0.4]);
+     set(ph(3),'DisplayName',['95% CI'])
     ph(4) = plot(log10(0.5)*[1 1],get(gca,'ylim'),'--r','DisplayName','factor of 2');
     plot(log10(2.0)*[1 1],get(gca,'ylim'),'--r')
     ph(5) = plot(log10(0.1)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125],'DisplayName','factor of 10');

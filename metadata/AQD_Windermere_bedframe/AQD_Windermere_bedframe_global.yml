@@ -1,0 +1,64 @@
+# Gobal metadata for ATOMIX sample data from Windermere Aquadopp on bedframe, summer stratified conditions
+
+title: sample Windermere bedframe Aquadopp ADCP data - summer
+platform_type: ADCP upward-looking on a bedframe 
+#date_created: appended automatically during file creation
+#disclaimer: also appended automatically
+comment: Windermere bedframe Aquadopp
+conventions: CF-1.6, ATOMIX
+abstract: Data collected as part of a study of the annual cycle of energy input and the impact of stratification in a temperate lake.  Observations included meteorological data, water column temperature structure and velocity measurements, as well as ADCP configured to provide velocity data for structure function estimates of turbulent kinetic energy dissipation rate, epsilon in the bottom boundary layer and the region of the thermocline.  Observations were made over the period October 2016 to December 2017, split over five deployments with instruments typically recovered and redeployed on successive days.  Sample data comes from deployment period 4, which ran from 11th July to 16th October 2017.
+
+#Location specific
+area: Lake Windermere, South basin
+geospatial_lat_min: 54.31;
+geospatial_lat_max: 54.31;
+geospatial_lon_min: -2.95;
+geospatial_lon_max: -2.95;
+lake_floor_depth: -40;
+#geospatial_vertical_min: 
+#geospatial_vertical_max: 
+geospatial_vertical_positive: up
+geospatial_vertical_reference: lake surface
+
+#Date and time
+time_coverage_start: '2017-08-15T00:00:00Z' #yyyy-mm-ddTHH:MM:SSZ
+time_coverage_end: '2017-09-01T00:00:00Z'
+time_deployment_start: '2017-07-11T11:00:00Z'
+time_deployment_end: '2017-10-16T09:10:00Z'
+
+#Who recorded 
+institution: Bangor University; UK Centre for Ecology and Hydrology, Lancaster University
+authors: John H. Simpson, R. Iestyn Woolway, Stephen C. Maberly and Brian D. Scannell
+# project_name: 
+# cruise: 
+# cruise_report: https://www.bodc.ac.uk/resources/inventories/cruise_inventory/reports/dy034.pdf
+# vessel: RRS Discovery IMO 9588029 # IMO vessel number    
+creator_name: Dr Brian D. Scannell # Name of person or institution who created this file.
+creator_email:  brian.scannell@bangor.ac.uk  
+reference_1:  Simpson, J. H., Woolway, R. I., Scannell, B., Austin, M. J., Powell, B., & Maberly, S. C. (2021). The annual cycle of energy input, modal excitation and physical plus biogenic turbulent dissipation in a temperate lake. Water Resources Research, 57, e2020WR029441. https:// doi.org/10.1029/2020WR029441 # enter Journal doi, etc.
+reference_2:  "Wiles P. J. et al. (2006) A novel technique for measuring the rate of turbulent dissipation in the marine environemnt. Geophys. Res. Lett., 33, L21608, doi:10.1029/2006GL027050"
+reference_3: "Scannell B. D. et al. (2017) Correcting Surface Wave Bias in Structure Function Estimates of Turbulent Kinetic Energy Dissipation Rate. J. Atmos. Oceanic Technol., 34 (10), 2257-2273, doi:10.1175/JTECH-D-17-0059.1"
+acknowledgements: Sample data provided for testing epsilon algorithm for ATOMIX project
+# funding_agency: UK Natural Environment Research Council
+# keywords: 
+source: mooring  # Use a term from the SeaVoX Platform Categories vocabulary (L06) list, usually one of the following:  subsurface mooring, ship, sub-surface gliders, autonomous underwater vehicle ()
+
+# Instrument specific info for turbulence data ================
+instrument: Nortek Aquadopp 1 MHz
+# instrument_serial_number: 12239
+instrument_nominal_depth: 40 # numeric value in m
+instrument_nominal_height:  0.4 # m
+instrument_nominal_orientation: up
+mooring: Bedframe
+instrument_mounting: Bedframe with ADCP transducer at 0.4 m above deck
+# instrument_sample_interval: # in seconds
+instrument_sample_rate: 2 # in Hz (supply only 1)
+instrument_sampling_mode: burst of 1024 profiles (duration 512 seconds) with 120 minute interval between start of bursts
+instrument_burst_interval: 7200 s # s
+instrument_burst_duration: 512 s #    
+instrument_program_comment: Pulse-pulse coherent mode with extended range enabled.  Raw velocity data was subject to erroneous phase wrapping corrections apparent as secondary peaks in the velocity distribution, so an unwrapping algorithm was applied prior to import.  Configured with 44 bins, vertical bin size 10 cm, bin 1 centred at 0.50 m above transducer.
+#instrument_beam2xyz_transformation_matrix: "1.1831     0       -1.1831 0;  0      -1.1831     0 1.1831; .5518 0 0.5518 0;  0 .5518 0 0.5518"
+instrument_measured_coordinate_system: BEAM
+#instrument_nominal_velocity_range:  m/s
+ancillary_sensors: pressure sensor data used to compute water column height. #Very brief text detailing additional non-turbulence sensors here, and how they've been processed.
+

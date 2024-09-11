@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M2uC'        
+description: DLL values within turbulence 'cloud'. Regression includes all possible bin separations within specified r_max limit. Standard regression model. All flag thresholds consistent with standard values on Wiki.
+ 
+

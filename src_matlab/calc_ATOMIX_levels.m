@@ -9,11 +9,15 @@
 clear all
 mname = mfilename('fullpath');
 addpath('functions')
+addpath(genpath('../../netcdftools_ceb/'))
+addpath(genpath('../../adcp_toolbox/'))
+addpath(genpath('../../utilitieswork/'))
+
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'4F'};
-% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F'}; %ALL
+caseIDs = {'1A','1B','1C','1D'};
+% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
 
 %% Process
 for caseID = caseIDs
@@ -70,6 +74,15 @@ for caseID = caseIDs
         case '4F'
             dataSet = 'Signature5beam_TidalShelf'; rawID = 'CEB'; 
             processID = 'JMM_M2uC_RM2_rmin_3bins';
+        case '5A'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M2uC_RM2';
+        case '5B'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M1aC_RM2';
+        case '5C'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M2aC_RM2';
         otherwise
             error('Need to create case')
     end

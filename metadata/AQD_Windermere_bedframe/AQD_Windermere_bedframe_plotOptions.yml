@@ -22,9 +22,9 @@ plotENUTS:
  
 plotEpsTS:
     description: Time series plot of the dissipation rate
-    indZ: 36
-    indB: 1
-    clim: [-8, -4]
+    indZ: 22
+    indB: 3
+    clim: [-10, -6]
     
 plotEpsScatter:
     description: Scatter plot of the dissipation rate for comparing methods
@@ -62,9 +62,9 @@ plotEpsRatioStatsZ:
     
 plotDLL:
     description: Example plot of DLL vs r^(2/3) for the specifed indices
-    indTs: [318,394]
+    indTs: [26,102]
     indB: 1
-    indZ: 36
+    indZ: 10
     
 plotA1vsA0:
     description: Scatter plot of the regression coeffcients
@@ -76,7 +76,7 @@ plotA0hist:
     description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
     xlimits: [-1e-3, 3e-3]
     nbins: 100
-    A0expected: 0.00104 #2*sigmaN_v^2 = 2*0.0228^2;
+    A0expected: 5e-6 #2*sigmaN_v^2 = 2*0.0016^2;
         
 plotR2hist:
     description: Histogram of R2

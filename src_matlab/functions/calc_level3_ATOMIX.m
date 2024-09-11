@@ -87,14 +87,14 @@ NR = length(lev2.Z_DIST)-1;
 NS = length(lev2.N_SAMPLE);
 
 %% Dimensions
-lev3.TIME = nanmean(lev2.TIME,2);
+lev3.TIME = mean(lev2.TIME,2,'omitnan');%nanmean(lev2.TIME,2);
 lev3.Z_DIST = lev2.Z_DIST;
 lev3.N_BEAM = lev2.N_BEAM;
 lev3.N_DEL = [1:NZ-1]; 
 lev3.N_BOUND = [1 2];
 
 %% Time bounds
-lev3.TIME_BNDS = [nanmin(lev2.TIME,[],2) nanmax(lev2.TIME,[],2)];
+lev3.TIME_BNDS = [min(lev2.TIME,[],2,'omitnan') max(lev2.TIME,[],2,'omitnan')];
 
 %% Initialize
 lev3.R_DEL = NaN*ones(NB,NR); 

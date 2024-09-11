@@ -14,7 +14,8 @@ close all
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM00';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS01';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS01';
-dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
+% dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
+dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 
 
 %% Load data

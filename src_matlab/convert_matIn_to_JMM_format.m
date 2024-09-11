@@ -9,7 +9,7 @@ clear
 close all
 mname = mfilename('fullpath');
 
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'dJMM_M2uC_RM5'; % Method 2.1 differencing, standard regression (dJMM downloaded data, hack to distinguish downloaded and processed metadata folders)
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'dJMM_M2uC_RM5'; % Method 2.1 differencing, standard regression (dJMM downloaded data, hack to distinguish downloaded and processed metadata folders)
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5'; % Method 1 differencing, canonical regression
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aA_RM7p5'; % Method 1 differencing, modified regression
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M2uC_RM7p5'; % Method 2.1 differencing, standard regression
@@ -17,6 +17,7 @@ dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'dJMM_M2uC_RM5'; % Me
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aA_RM1p5'; % Labelled A1M (Mean deducted, Method 1 differencing, modified regression)
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M2uC_RM1p5'; % Labelled A2S (Mean deducted, Method 2 differencing, standard regression)
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB'; % Only L1 data
+dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2'; % Method 1 differencing, modified regression
 
 %% Data files
 [dataFileRoot,dataDirRoot,metaDir] = get_data_paths(dataSet);
@@ -95,6 +96,17 @@ switch dataSet
                 data.L4 = d.data.L4_A2S;
                 
                 data.L3 = convert_DLL_BDS_to_JMM(data.L3,1.5);
+            otherwise
+                error(['Need to define ',processID])
+        end
+    case 'AQD_Windermere_bedframe'
+        data.L1 = d.data.L1;
+        data.Ancillary = d.data.Ancillary;
+        switch processID
+            case 'BDS_M1aA_RM2' % A1M: Mean removed, Method 1 differencing, modified regression
+                data.L2 = d.data.L2;
+                data.L3 = d.data.L3_M1;
+                data.L4 = d.data.L4_M1A;
             otherwise
                 error(['Need to define ',processID])
         end
