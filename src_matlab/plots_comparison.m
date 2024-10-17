@@ -24,12 +24,12 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
@@ -48,6 +48,8 @@ dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
+dataSet = 'NortekSig1000_TidalChannel';
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 
 
 %% Flags

@@ -17,7 +17,7 @@ indB = options.indB;
 indZ = options.indZ;
 
 rNow = squeeze(rAll(indB,:))';
-dr = lev3.R_DIST(2) - lev3.R_DIST(1);
+dr = lev3.R_DIST(2,indB) - lev3.R_DIST(1,indB);
 
 for tt = 1:length(options.indT)
     indT = options.indT(tt);

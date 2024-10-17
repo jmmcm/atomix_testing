@@ -11,9 +11,9 @@ flg.saveFigs = 1;
 %% Dataset and processID (for Ancillary data and spectra parameters)
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
-dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
-
+dataSet = 'NortekSig1000_TidalChannel'; processID = 'JMM_M2uC_RM5';
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -29,7 +29,8 @@ dataSpec = load(specFile);
 
 %% Figures
 figDir = 'Spectra';
-figPath=['../figures/',dataSet,'/',figDir,'/'];
+% figPath=['../figures/',dataSet,'/',figDir,'/'];
+figPath=['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/'];
 
 if ~exist(figPath,'dir') & flg.saveFigs
     disp(['Making ',figPath,'. Press a key to continue.']),pause
@@ -49,7 +50,7 @@ noiseLevel = plotOptions.plotSpectra.noiseLevel; % TODO: Calculate this from slo
 Afit = plotOptions.plotSpectra.Afit;
 ylimF = plotOptions.plotSpectra.ylimF;
 ylimK = plotOptions.plotSpectra.ylimK;
-rMax = metadataGroups.L3.rMax;
+rMax = metadataGroups.L4.rMax;
 
 %% Useful variables
 [NT,NZ,NB,NF] = size(dataSpec.Sxx);
@@ -63,6 +64,8 @@ for zz = 1:length(indZall)
     
     % Get speed to use for reference
     if strcmp(spdVar,'SIGNED_SPEED') % TODO: Avg over z range
+        speed = nanmean(Anc.(spdVar)(:,indZavg),2);
+    elseif strcmp(spdVar,'SPD') % TODO: Avg over z range
         speed = nanmean(Anc.(spdVar)(:,indZavg),2);
     elseif strcmp(spdVar,'ENU_HOR')
         speed = nanmean(sqrt(Anc.ENU(:,indZavg,1).^2 + Anc.ENU(:,indZavg,2).^2),2);

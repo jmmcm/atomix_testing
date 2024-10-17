@@ -38,10 +38,13 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
 
-dataSet = 'AQD_Windermere_bedframe';
-       processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+% dataSet = 'AQD_Windermere_bedframe';
+%        processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
+
+dataSet = 'NortekSig1000_TidalChannel';
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
 
@@ -66,7 +69,7 @@ dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(1
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 1:NT
+for tt = 1:1%NT
     opts.indT = tt;
    
     
@@ -103,7 +106,7 @@ for tt = 1:NT
     try
         set(p1(2),'Marker','x','markersize',5,'color','k')
     end
-    title(ax(1),clean_string(names{1}))
+    title(ax(2),clean_string(names{1}))
     
     
     
@@ -117,7 +120,7 @@ for tt = 1:NT
     colormap(cmocean('balance'))
     set(p2(1),'Marker','s')
     set(p2(2),'Marker','x','markersize',3,'color','k')%[0.9290 0.6940 0.1250])
-    title(ax(2),clean_string(names{2}))
+    title(ax(3),clean_string(names{2}))
     
     % Velocity profile
     ax(4) = subplot('Position',[x0+3*(offset+axW) axY axW axH]);

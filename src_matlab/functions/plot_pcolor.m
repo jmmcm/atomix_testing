@@ -41,6 +41,10 @@ switch data.var
     case 'EPSIratio'
          cmap = cmocean('Balance');
 %         cmap = cmocean('oxy');
+    case 'SPD'
+        cmap = cmocean('Speed');
+    case 'DIR'
+        cmap = cmocean('phase');
     otherwise
         cmap = cmocean('Thermal');
         

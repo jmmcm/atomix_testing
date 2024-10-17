@@ -9,7 +9,7 @@ set(0,'defaultAxesYGrid','on')
 
 colors = get(0,'defaultaxescolororder');
 %%
-figDir = '../figures/paper/';
+figDir = '/home/jmm000/work/ATOMIX/figures/paper/';
 figSave = 1;
 
 %% L1 to L4 figures

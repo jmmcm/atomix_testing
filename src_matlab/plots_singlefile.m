@@ -18,13 +18,13 @@ colors = get(0,'defaultaxescolororder');
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
-dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
-
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+dataSet = 'NortekSig1000_TidalChannel'; processID = 'JMM_M1aC_RM5';
 
 
 %% Flags
 flg.saveFigs = 0; % Not supported yet
-flg.plotVelTS.show = 1;
+flg.plotVelTS.show = 0;
 flg.plotEpsTS.show = 1;
 flg.plotDLL.show = 1;
 
@@ -61,7 +61,11 @@ if flg.plotVelTS.show
     axR = 0.87;
     axH = 0.14;
     axW = axR - axL;
-    axB = [0.8:-.22:0];
+    if NB == 4
+        axB = [0.8:-.22:0];
+    elseif NB == 5
+        axB = [0.83:-0.19:0];
+    end
     
     opts = plotOptions.plotVelTS;
     opts.ylabel = 'z [m]';
@@ -92,7 +96,11 @@ if flg.plotEpsTS.show
     axR = 0.87;
     axH = 0.14;
     axW = axR - axL;
-    axB = [0.8:-.22:0];
+    if NB == 4
+        axB = [0.8:-.22:0];
+    elseif NB == 5
+        axB = [0.83:-0.19:0];
+    end
     
     opts = plotOptions.plotEpsTS;
     opts.ylabel = 'z [m]';
@@ -119,31 +127,52 @@ if flg.plotDLL.show
     clear ax plotData opts
     set(gcf,'Position',[0 50 1800 600])
     
+    opts = struct('clim',[0 1]);
+    opts.ylabel = 'z [m]';
+    plotData.x = get_yd(Anc.TIME);
+    plotData.y = Anc.Z_DIST;
+    plotData.values = Anc.SPD;
+    plotData.var = 'SPD';
+    ax0 = subplot(311);
+    plot_pcolor(ax0,plotData,opts)
+    
+%     opts = plotOptions.plotDLL;
+    %     plot_epsi(ax1,L4,opts)
+
+    opts = plotOptions.plotEpsTS;
+    opts.ylabel = 'z [m]';
+    plotData.x = get_yd(L4.TIME);
+    plotData.y = L4.Z_DIST;
+    plotData.var = 'EPSI';
+    plotData.values = log10(L4.EPSI(:,:,plotOptions.plotDLL.indB));
+    
+    ax1 = subplot(312);
+    plot_pcolor(ax1,plotData,opts)
+    hold all
+%     legend(ax1,'autoupdate','off')
+    
     opts = plotOptions.plotDLL;
-    
-    ax1 = subplot(211);
-    plot_epsi(ax1,L4,opts)
-    
-    
     for tt = 1:length(opts.indTs)
         opts.indT = opts.indTs(tt);
         opts.dll_averaging = metadataGroups.L4.dll_averaging;
         opts.rMin = metadataGroups.L4.rMin;
         opts.rMax = metadataGroups.L4.rMax;
         opts.points_select_method = metadataGroups.L4.points_select_method;
-        axh = subplot(2,length(opts.indTs),length(opts.indTs)+tt);
+        axh = subplot(3,length(opts.indTs),length(opts.indTs)+4+tt);
         
         [axh,p] = plot_DLL_fit(axh,L3,L4,opts);
         set(p(2),'color',colors(tt+2,:))
         title(axh,[axh.Title.String,', indT = ',num2str(opts.indT)])
         
-        plot(ax1,get_yd(L4.TIME(opts.indT))*[1 1],get(ax1,'ylim'),'-',...
-            'color',get(p(2),'color'),...
-            'DisplayName',['indT = ',num2str(opts.indT)])
+        p1(tt) = plot(ax1,get_yd(get_yd(L4.TIME(opts.indT)))*[1 1],get(ax1,'ylim'),'-',...
+            'color',get(p(2),'color'),'linewidth',2,...
+            'DisplayName',['indT = ',num2str(opts.indT)]);
+        plot(ax1,get(ax1,'xlim'),L4.Z_DIST(opts.indZ*[1 1]),'w')
         
         
     end
-    legend(ax1,'show')
+    legend(ax1,p1)
+    
     
 end
 

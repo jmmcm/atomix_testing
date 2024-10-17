@@ -12,10 +12,11 @@ close all
 mname = mfilename('fullpath');
 
 %% Dataset and processID (for Ancillary data and spectra parameters)
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
-dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
+% dataSet = 'NortekSig1000_TidalChannel'; processID = 'JMM_M2uC_RM5'; 
 
 %% datafiles
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);

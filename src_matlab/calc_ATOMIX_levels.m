@@ -16,7 +16,7 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'1A','1B','1C','1D'};
+caseIDs = {'6B'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
 
 %% Process
@@ -83,6 +83,12 @@ for caseID = caseIDs
         case '5C'
             dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
             processID = 'JMM_M2aC_RM2';
+        case '6A'
+            dataSet = 'NortekSig1000_TidalChannel'; rawID = 'NSL'; 
+            processID = 'JMM_M2uC_RM5';
+        case '6B'
+            dataSet = 'NortekSig1000_TidalChannel'; rawID = 'NSL'; 
+            processID = 'JMM_M1aC_RM5';
         otherwise
             error('Need to create case')
     end
@@ -242,9 +248,9 @@ for caseID = caseIDs
 
     history = get_metadata(mname);
 
-    [~,oname]=fileparts(matFileOut);
-    save(oname,'data','flags','metadataGroups','metadataGlobal','fileInfo','infoProcessing','history','-v7.3');
-    movefile(strcat(oname,'.mat'),matFileOut)
+    %[~,oname]=fileparts(matFileOut);
+    save(matFileOut,'data','flags','metadataGroups','metadataGlobal','fileInfo','infoProcessing','history','-v7.3');
+    %movefile(strcat(oname,'.mat'),matFileOut)
 
     disp(['Matfile created: ' matFileOut])
 

@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M1aC'        
+description: DLL values centered about bin. Values for odd bin separations averaged prior to regression. Standard canoncical method for the regression model.
+ 
+
