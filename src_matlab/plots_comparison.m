@@ -48,7 +48,7 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
-dataSet = 'NortekSig1000_TidalChannel';
+dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 
 
