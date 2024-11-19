@@ -19,14 +19,15 @@ colors = get(0,'defaultaxescolororder');
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
-dataSet = 'NortekSig1000_TidalChannel'; processID = 'JMM_M1aC_RM5';
+dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 
 
 %% Flags
 flg.saveFigs = 0; % Not supported yet
 flg.plotVelTS.show = 0;
-flg.plotEpsTS.show = 1;
-flg.plotDLL.show = 1;
+flg.plotEpsTS.show = 0;
+flg.plotDLL.show = 0;
+flg.plotAmp.show = 0;
 
 
 %% Load data

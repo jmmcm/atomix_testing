@@ -1,17 +1,26 @@
-% Convert beam velocities to ENU and calculate Signed Speed
+% Convert beam velocities to ENU and calculate Signed Speed.
+% Plot amplitude and compare it to the pressure to detect the surface. 
 %
 % Justine McMillan
 % Oct 10, 2024
 
 clear
+mname = mfilename('fullpath');
 
-d = load('~/DATA/atomix/NortekSig1000_TidalChannel/Downloaded/NSL/burstData_L1format.mat');
+flg.saveFigs = 1;
+figPath = '~/work/ATOMIX/figures/NortekSig1000_TidalChannel_2019_Burst/Preprocessing/';
+
+dataDir = '~/DATA/atomix/NortekSig1000_TidalChannel_2019_Burst/Downloaded/NSL/';
+dataFile = 'burstData_L1format.mat';
+
+%% Load data and format
+d = load([dataDir dataFile]);
 
 data.L1 = rmfield(d,'Config');
 data.L1.TIME = datenum(data.L1.TIME);
 data.L1.Z_DIST = data.L1.Z_DIST';
 
-% Calculate raw ENU
+%% Calculate raw ENU
 V1 = data.L1.R_VEL(:,:,1);
 V2 = data.L1.R_VEL(:,:,2);
 V3 = data.L1.R_VEL(:,:,3);
@@ -29,7 +38,7 @@ for zz = 1:length(data.L1.Z_DIST)
         XYZraw(:,zz,1),XYZraw(:,zz,2),XYZraw(:,zz,3)] = AD2CP_coordTransform(V1(:,zz),V2(:,zz),V3(:,zz),V4(:,zz),hdg,pitch,roll,options);
 end
 
-% Calculate average ENU (TODO: Read these in from metafile)
+%% Calculate segment averages
 ensLength = 300; % [s]
 freqApprox = 1/(data.L1.TIME(2)-data.L1.TIME(1))/24/3600; % [Hz]
 
@@ -60,41 +69,49 @@ velDirMagN = get_DirFromN(Anc.ENU(:,:,1),Anc.ENU(:,:,2));
 spd = sqrt(Anc.ENU(:,:,1).^2+Anc.ENU(:,:,2).^2);
 Anc.SIGNED_SPD = sign_speed(Anc.ENU(:,:,1),Anc.ENU(:,:,2),spd,velDirMagN,0);
 
-%% Plots
+%% Plot Beam Velocity
 figure(1),clf
 ax(1) = subplot(5,1,1);
-pcolor(Anc.R_VEL(:,:,1)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.R_VEL(:,:,1)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(1),cmocean('balance'))
 title('Beam 1')
 
 ax(2) = subplot(5,1,2);
-pcolor(Anc.R_VEL(:,:,2)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.R_VEL(:,:,2)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(2),cmocean('balance'))
 title('Beam 2')
 
 ax(3) = subplot(5,1,3);
-pcolor(Anc.R_VEL(:,:,3)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.R_VEL(:,:,3)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(3),cmocean('balance'))
 title('Beam 3')
 
 ax(4) = subplot(5,1,4);
-pcolor(Anc.R_VEL(:,:,4)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.R_VEL(:,:,4)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(4),cmocean('balance'))
 title('Beam 4')
 
 ax(5) = subplot(5,1,5);
-pcolor(Anc.R_VEL(:,:,5)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.R_VEL(:,:,5)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(5),cmocean('balance'))
 title('Beam 5')
 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'VelBeam.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot instrument velocities
 figure(2),clf
 ax(1) = subplot(4,1,1);
-pcolor(Anc.XYZ(:,:,1)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.XYZ(:,:,1)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(1),cmocean('balance'))
 title('X')
 
 ax(2) = subplot(4,1,2);
-pcolor(Anc.XYZ(:,:,2)'); shading flat; colorbar; caxis([-1.5 1.5])
+pcolor(Anc.XYZ(:,:,2)'); shading flat; colorbar; caxis([-1 1])
 colormap(ax(2),cmocean('balance'))
 title('Y')
 
@@ -108,7 +125,14 @@ pcolor(Anc.R_VEL(:,:,5)'); shading flat; colorbar; caxis([-0.5 0.5])
 colormap(ax(4),cmocean('balance'))
 title('Beam 5')
 
-% 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'VelXYZ.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot ENU velocities
 figure(3),clf
 ax(1) = subplot(4,1,1);
 pcolor(Anc.ENU(:,:,1)'); shading flat; colorbar; caxis([-1.5 1.5])
@@ -130,7 +154,14 @@ pcolor(Anc.ENU(:,:,4)'); shading flat; colorbar; caxis([-0.5 0.5])
 colormap(ax(4),cmocean('balance'))
 title('Err')
 
-% 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'VelENU.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot Speed and direction
 figure(4),clf
 ax(1) = subplot(4,1,1);
 pcolor(Anc.ENU(:,:,1)'); shading flat; colorbar; caxis([-1.5 1.5])
@@ -155,7 +186,15 @@ xlabel('ind_T')
 for ii = 1:4
     ylabel(ax(ii),'ind_Z')
 end
-% 
+
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'SpeedDir.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot Pressure and velocities at select range bins
 figure(5),clf
 ax(1) = subplot(5,1,1);
 plot(Anc.TIME - Anc.TIME(1),Anc.PRES)
@@ -181,7 +220,14 @@ hold all
 plot(Anc.TIME - Anc.TIME(1),velDirMagN(:,20))
 ylabel('Dir')
 
-% 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'SpeedDir_SelectBins.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot attitude data
 figure(6),clf
 ax(1) = subplot(4,1,1);
 plot(Anc.TIME - Anc.TIME(1),Anc.PRES)
@@ -196,7 +242,14 @@ ax(4) = subplot(4,1,4);
 plot(Anc.TIME - Anc.TIME(1),Anc.ROLL)
 ylabel('Roll')
 
-%% 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'Attitude.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot amplitude data with pressure superimposed
 figure(7),clf
 tRef = (Anc.TIME - datenum(2019,7,9))*24;
 for ii = 1:5
@@ -204,16 +257,140 @@ for ii = 1:5
     pcolor(tRef,Anc.Z_DIST,Anc.ABSIC(:,:,ii)'); shading flat; colorbar
     colormap(ax(ii),cmocean('amp'))
     hold all
-    p1 = plot(tRef,Anc.PRES,'c');
-    p2 = plot(tRef,Anc.PRES*0.75,'--c');
+    p1 = plot(tRef,Anc.PRES,'w');
+    p2 = plot(tRef,Anc.PRES*0.9,'c');
+    p3 = plot(tRef,Anc.PRES*0.8,'y');
+    p4 = plot(tRef,Anc.PRES*0.7,'g');
     title(['Amp - Beam ' num2str(ii)])
     ylabel('z [m]')
 end
-legend([p1 p2],'P','0.75*P')
+legend([p1 p2 p3 p4],'P','0.9*P','0.8*P','0.7*P')
 xlabel('hours since Jul 9, 2019')
 
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'Absic.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
 %% Nan above surface
-fieldIn = zeros(length(Anc.TIME),length(Anc.Z_DIST));
-[fieldOut, ~] = nan_AboveSurf(fieldIn,Anc.Z_DIST,Anc.PRES,0.75);
-nanMat = isnan(fieldOut); % ones where out of water, zeros elsewhere
-nanMat = repmat(nanMat,1,1,length(data.L1.N_BEAM)); % Make the same size as R_VEL
+ratio = 0.73;
+ratio5 = 0.79;
+fieldIn = ones(length(Anc.TIME),length(Anc.Z_DIST));
+[nanMask, ~] = nan_AboveSurf(fieldIn,Anc.Z_DIST,Anc.PRES,ratio);
+[nanMask5, ~] = nan_AboveSurf(fieldIn,Anc.Z_DIST,Anc.PRES,ratio5);
+
+Anc.ABSICqc(:,:,1) = Anc.ABSIC(:,:,1).*nanMask;
+Anc.ABSICqc(:,:,2) = Anc.ABSIC(:,:,2).*nanMask;
+Anc.ABSICqc(:,:,3) = Anc.ABSIC(:,:,3).*nanMask;
+Anc.ABSICqc(:,:,4) = Anc.ABSIC(:,:,4).*nanMask;
+Anc.ABSICqc(:,:,5) = Anc.ABSIC(:,:,5).*nanMask5;
+
+Anc.R_VELqc(:,:,1) = Anc.R_VEL(:,:,1).*nanMask;
+Anc.R_VELqc(:,:,2) = Anc.R_VEL(:,:,2).*nanMask;
+Anc.R_VELqc(:,:,3) = Anc.R_VEL(:,:,3).*nanMask;
+Anc.R_VELqc(:,:,4) = Anc.R_VEL(:,:,4).*nanMask;
+Anc.R_VELqc(:,:,5) = Anc.R_VEL(:,:,5).*nanMask5;
+
+Anc.ENUqc(:,:,1) = Anc.ENU(:,:,1).*nanMask;
+Anc.ENUqc(:,:,2) = Anc.ENU(:,:,2).*nanMask;
+Anc.ENUqc(:,:,3) = Anc.ENU(:,:,3).*nanMask;
+spdqc = spd.*nanMask;
+velDirMagNqc = velDirMagN.*nanMask;
+
+%% Plot QC'd amp
+
+figure(8),clf
+tRef = (Anc.TIME - datenum(2019,7,9))*24;
+for ii = 1:5
+    ax(ii) = subplot(5,1,ii);
+    pcolor(tRef,Anc.Z_DIST,Anc.ABSICqc(:,:,ii)'); shading flat; colorbar
+    colormap(ax(ii),cmocean('amp'))
+    hold all
+    p1 = plot(tRef,Anc.PRES,'k');
+    p2 = plot(tRef,Anc.PRES*ratio,'--c');
+    p3 = plot(tRef,Anc.PRES*ratio5,'--y');
+    if ii==5
+        r = ratio5;
+    else
+        r = ratio;
+    end
+    title(['Amp - Beam ' num2str(ii) ' (threshold = ' num2str(r) ' x PRES)'])
+    ylabel('z [m]')
+end
+legend([p1 p2 p3 p4],'P',[num2str(ratio) '*P'],[num2str(ratio5) '*P'])
+xlabel('hours since Jul 9, 2019')
+
+
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'Absic_Masked.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot qc'd velocity
+figure(9),clf
+tRef = (Anc.TIME - datenum(2019,7,9))*24;
+for ii = 1:5
+    ax(ii) = subplot(5,1,ii);
+    pcolor(tRef,Anc.Z_DIST,Anc.R_VELqc(:,:,ii)'); shading flat; colorbar
+    colormap(ax(ii),cmocean('balance'))
+    caxis([-1 1])
+    hold all
+    p1 = plot(tRef,Anc.PRES,'k');
+    p2 = plot(tRef,Anc.PRES*ratio,'c');
+    p3 = plot(tRef,Anc.PRES*ratio5,'g');
+    if ii==5
+        r = ratio5;
+    else
+        r = ratio;
+    end
+    title(['Vel - Beam ' num2str(ii) ' (threshold = ' num2str(r) ' x PRES)'])
+    ylabel('z [m]')
+end
+legend([p1 p2 p3],'P',[num2str(ratio) '*P'],[num2str(ratio5) '*P'])
+xlabel('hours since Jul 9, 2019')
+
+
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'VelBeam_Masked.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+
+%% Plot QC'd ENU, speed and dir
+figure(10),clf
+ax(1) = subplot(4,1,1);
+pcolor(Anc.ENUqc(:,:,1)'); shading flat; colorbar; caxis([-1.5 1.5])
+colormap(ax(1),cmocean('balance'))
+title('E')
+
+ax(2) = subplot(4,1,2);
+pcolor(Anc.ENUqc(:,:,2)'); shading flat; colorbar; caxis([-1.5 1.5])
+colormap(ax(2),cmocean('balance'))
+title('N')
+
+ax(3) = subplot(4,1,3);
+pcolor(spdqc'); shading flat; colorbar; caxis([0 1])
+colormap(ax(3),cmocean('speed'))
+title('Speed')
+
+ax(4) = subplot(4,1,4);
+pcolor(velDirMagNqc'); shading flat; colorbar; %caxis([-1.5 1.5])
+colormap(ax(4),cmocean('phase'))
+title('dirN')
+xlabel('ind_T')
+for ii = 1:4
+    ylabel(ax(ii),'ind_Z')
+end
+
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'SpeedDir_masked.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end
+

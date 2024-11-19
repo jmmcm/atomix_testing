@@ -12,7 +12,7 @@ plotVelTS:
  
 plotEpsTS:
     description: Time series plot of the dissipation rate
-    indZ: 17
+    indZ: 22
     indB: 1
     clim: [-7, -3]
     
@@ -80,9 +80,10 @@ plotDelEpshist:
 
 plotSpectra:
     spdVar: SPD
-    spdBins: [0.2,0.4,0.6,0.8]
+    spdBins: [0.1,0.3,0.5,0.7,0.9]
     indZall: [5, 15, 25, 35]
-    nZavg: 3 # Number of bins to average in z (should be odd)
+    freqNoise: [2, 4] # noise will be calculated for this frequency range
+    nZavg: 7 # Number of bins to average in z (should be odd)
     noiseLevel: 8e-4 # sigmaN_v^2/(fS/2), where fS=8Hz is the sample rate
     Afit: 1e-3
     ylimF: [1e-4, 1e-1]

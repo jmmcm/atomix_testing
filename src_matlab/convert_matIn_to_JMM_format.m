@@ -22,8 +22,8 @@ mname = mfilename('fullpath');
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M2uC_RM1p5'; % Labelled A2S (Mean deducted, Method 2 differencing, standard regression)
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB'; % Only L1 data
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2'; % Method 1 differencing, modified regression
-% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL'; % Only L1 data
-dataSet = 'NortekSig1000_TidalChannel_2018_Burst'; processID = 'NSL_CEB'; % Only L1 data
+dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL'; % Only L1 data
+% dataSet = 'NortekSig1000_TidalChannel_2018_Burst'; processID = 'NSL_CEB'; % Only L1 data
 
 %% Data files
 [dataFileRoot,dataDirRoot,metaDir] = get_data_paths(dataSet);
@@ -116,7 +116,7 @@ switch dataSet
             otherwise
                 error(['Need to define ',processID])
         end
-    case 'Signature5beam_TidalShelf'
+    case 'Signature5beam_TidalShelf' % Didn't use data
         data.L1 = d.lev1;
         
         % Apply flags
@@ -164,6 +164,7 @@ switch dataSet
         
     case 'NortekSig1000_TidalChannel_2019_Burst'
         data.L1 = rmfield(d,'Config');
+        data.L1 = rmfield(data.L1,{'ERR5','HEADING5','PITCH5','ROLL5','TIME5'});
         data.L1.THETA = [data.L1.THETA data.L1.THETA data.L1.THETA data.L1.THETA 0]';
         data.L1.N_BEAM = [1 2 3 4 5]';
         data.L1.BIN_SIZE = data.L1.BIN_SIZE*[1 1 1 1 1]';
@@ -171,13 +172,18 @@ switch dataSet
         data.L1.Z_DIST = data.L1.Z_DIST';
         data.L1.R_VEL_FLAGS = 0*data.L1.R_VEL;
         
-        % Flag above surface
+        % Flag above surface (Simplest QC)
         fieldIn = zeros(length(data.L1.TIME),length(data.L1.Z_DIST));
-        [fieldOut, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.72);
-        nanMat = isnan(fieldOut); % ones where out of water, zeros elsewhere
-        nanMat = repmat(nanMat,1,1,length(data.L1.N_BEAM)); % Make the same size as R_VEL
-        ind = find(nanMat);
-        data.L1.R_VEL_FLAGS(ind) = data.L1.R_VEL_FLAGS(ind)+32; % TODO: Move this and other QC to flag file
+        [fieldOut, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.73); %See sandbox file for determining these ratios
+        [fieldOut5, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.79);
+        nanMask =isnan(fieldOut);
+        nanMask5=isnan(fieldOut5);
+        
+        data.L1.R_VEL_FLAGS(:,:,1) = data.L1.R_VEL_FLAGS(:,:,1)+32*nanMask;
+        data.L1.R_VEL_FLAGS(:,:,2) = data.L1.R_VEL_FLAGS(:,:,2)+32*nanMask;
+        data.L1.R_VEL_FLAGS(:,:,3) = data.L1.R_VEL_FLAGS(:,:,3)+32*nanMask;
+        data.L1.R_VEL_FLAGS(:,:,4) = data.L1.R_VEL_FLAGS(:,:,4)+32*nanMask;
+        data.L1.R_VEL_FLAGS(:,:,5) = data.L1.R_VEL_FLAGS(:,:,5)+32*nanMask5; % 32 = flag value for out of water
         
         % Apply flags
         velB = data.L1.R_VEL;
@@ -225,7 +231,7 @@ switch dataSet
         
         data.Ancillary = Anc;
         
-    case 'NortekSig1000_TidalChannel_2018_Burst'
+    case 'NortekSig1000_TidalChannel_2018_Burst' % Didn't use data (only three bursts)
         data.L1 = data.Level1_raw;
         data.L1.BIN_SIZE = data.L1.BIN_SIZE*[1 1 1 1 1]';
         data.L1.TIME = datenum(data.L1.TIME);
