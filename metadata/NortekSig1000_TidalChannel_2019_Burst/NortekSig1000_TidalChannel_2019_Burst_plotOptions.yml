@@ -9,11 +9,15 @@
 plotVelTS:
     description: Time series plot of the beam velocity data
     cLim: [-.2, 0.2]
+
+plotEpsFlags:
+    description: Time series plot of the dissipation rate flags
+    clim: [0, 8]
  
 plotEpsTS:
     description: Time series plot of the dissipation rate
-    indZ: 22
-    indB: 1
+    indZ: 16
+    indB: 5
     clim: [-7, -3]
     
 plotEpsScatter:
@@ -23,7 +27,7 @@ plotEpsScatter:
 plotEpsScatterZ:
     description: Scatter plots of the dissipation rate as a function of Z
     limits: [1e-7, 1e-3]
-    indZs: [5,15,25,35]
+    indZs: [5,12,19,26]
     
 plotEpsHist:
     description: Histogram of the dissipation rate

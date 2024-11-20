@@ -11,6 +11,7 @@
 
 
 clear all
+mname = mfilename('fullpath');
 %close all
 colors = get(0,'defaultaxescolororder');
 
@@ -23,12 +24,13 @@ dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 
 
 %% Flags
-flg.saveFigs = 0; % Not supported yet
+flg.saveFigs = 1; % Not supported yet for all figures
 flg.plotVelTS.show = 0;
-flg.plotEpsTS.show = 0;
+flg.plotEpsTS.show = 1;
 flg.plotDLL.show = 0;
 flg.plotAmp.show = 0;
 
+figPath=['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',processID,'/'];
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -114,9 +116,86 @@ if flg.plotEpsTS.show
         opts.clabel= ['log10(\epsilon_',num2str(bb),' [W/kg])'];
         plot_pcolor(ax(bb),plotData,opts);
         hold all
+        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(floor(opts.indZ/2)),'--w')
+        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(opts.indZ),'--w')
     end
     xlabel(ax(NB),['year day ',yearStr])
     title(ax(1),['\epsilon (beams)'])
+    add_fig_info(mname,[dataSet],struct())
+    if flg.saveFigs
+        figName = [figPath,'epsilon.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+    
+    figure_named(['EPSI_TS_bins']),clf, clear ax
+    ax(1) = subplot(311);
+    pcolor(plotData.x,plotData.y,Anc.SPD'); shading flat; colorbar
+    colormap(cmocean('speed'))
+    title('speed')
+    ax(2) = subplot(312);
+    indZ = floor(opts.indZ/2);
+    for bb = 1:NB
+        semilogy(plotData.x,L4.EPSI(:,indZ,bb),'DisplayName',['beam ',num2str(bb)])
+        if bb == 1; hold all; end
+    end
+    title(['z = ' num2str(L4.Z_DIST(indZ)) ' m'])
+    ylim(10.^opts.clim)
+    colorbar
+    ylabel('\epsilon [W/kg]')
+    ax(3) = subplot(313);
+    indZ = opts.indZ;
+    for bb = 1:NB
+        semilogy(plotData.x,L4.EPSI(:,indZ,bb),'DisplayName',['beam ',num2str(bb)])
+        if bb == 1; hold all; end
+    end
+    title(['z = ' num2str(L4.Z_DIST(indZ)) ' m'])
+    legend
+    colorbar
+    xlabel('year day')
+    ylabel('\epsilon [W/kg]')
+    ylim(10.^opts.clim)
+    linkaxes(ax,'x')
+    
+    add_fig_info(mname,[dataSet],struct())
+    if flg.saveFigs
+        figName = [figPath,'epsilon_selectBins.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+    
+    figure_named(['EPSI_TS_onebeam']),clf
+    clear ax plotData opts
+    
+    opts = plotOptions.plotEpsTS;
+    ax(1) = subplot(211);
+    opts.clim = [-1 1];
+    opts.ylabel = 'z [m]';
+    plotData.x = get_yd(L1.TIME);
+    plotData.y = L1.Z_DIST;
+    plotData.var = 'R_VEL';
+    nanMask = ones(size(L1.R_VEL));
+    nanMask(find(L1.R_VEL_FLAGS>0)) = NaN;
+    plotData.values = L1.R_VEL(:,:,opts.indB).*nanMask(:,:,opts.indB);
+    opts.clabel= ['R\_VEL(:,:,',num2str(opts.indB),') [m/s])'];
+    plot_pcolor(ax(1),plotData,opts);
+    
+    ax(2) = subplot(212);
+    opts.clim = plotOptions.plotEpsTS.clim;
+    plotData.x = get_yd(L4.TIME);
+    plotData.y = L4.Z_DIST;
+    plotData.var = 'EPSI';
+    plotData.values = log10(L4.EPSI(:,:,opts.indB));
+    opts.clabel= ['log10(\epsilon_',num2str(opts.indB),' [W/kg])'];
+    plot_pcolor(ax(2),plotData,opts);
+    linkaxes(ax,'xy')
+    xlabel(ax(2),['year day ',yearStr])
+    add_fig_info(mname,[dataSet ' (Method: ' processID ')'],struct())
+    if flg.saveFigs
+        figName = [figPath,'epsilon_beam',num2str(opts.indB) '.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
 end
 
 %% Plot DLL for several time indices

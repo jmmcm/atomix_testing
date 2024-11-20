@@ -38,9 +38,13 @@ end
 switch data.var
     case 'EPSI'
         cmap = cmocean('Thermal');
+    case 'EPSI_FLAGS'
+        cmap = cmocean('Amp');
     case 'EPSIratio'
          cmap = cmocean('Balance');
 %         cmap = cmocean('oxy');
+    case 'R_VEL'
+         cmap = cmocean('Balance');
     case 'SPD'
         cmap = cmocean('Speed');
     case 'DIR'

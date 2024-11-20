@@ -275,8 +275,8 @@ if flg.saveFigs
 end
 
 %% Nan above surface
-ratio = 0.73;
-ratio5 = 0.79;
+ratio = 0.65;
+ratio5 = 0.7;
 fieldIn = ones(length(Anc.TIME),length(Anc.Z_DIST));
 [nanMask, ~] = nan_AboveSurf(fieldIn,Anc.Z_DIST,Anc.PRES,ratio);
 [nanMask5, ~] = nan_AboveSurf(fieldIn,Anc.Z_DIST,Anc.PRES,ratio5);
@@ -394,3 +394,37 @@ if flg.saveFigs
     saveas(gcf,figName);
 end
 
+%% Plot subset of raw beam velocity
+figure(11),clf
+inds = 20000:40000;
+for bb = 1:5
+    ax(bb) = subplot(5,1,bb);
+    plotData.var = 'R_VEL';
+    opts.clim = [-1 1];
+    opts.clabel = ['R\_VEL(:,:,' num2str(bb) ')'];
+    plotData.x = get_yd(data.L1.TIME(inds));
+    plotData.y = data.L1.Z_DIST;
+    plotData.values = data.L1.R_VEL(inds,:,bb)';
+    plot_pcolor(ax(bb),plotData,opts);
+    if bb == 5
+        thres = 0.7;
+    else
+        thres = 0.65;
+    end
+    hold all
+    plot(plotData.x,data.L1.PRES(inds),'k')
+    p = plot(plotData.x,thres*data.L1.PRES(inds),'color','k','DisplayName',[num2str(thres) 'x PRES']);
+    ylabel('z [m]')
+    legend(p)
+    
+end
+linkaxes(ax)
+title(ax(1),'Near surface raw beam velocities')
+ylim([6 9])
+xlabel('year day 2019')
+add_fig_info(mname,dataFile,struct())
+if flg.saveFigs
+    figName = [figPath,'VelBeam_NearSurface.png'];
+    disp(['Saving: ',figName])
+    saveas(gcf,figName);
+end

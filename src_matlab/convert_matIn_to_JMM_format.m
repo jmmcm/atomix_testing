@@ -174,8 +174,8 @@ switch dataSet
         
         % Flag above surface (Simplest QC)
         fieldIn = zeros(length(data.L1.TIME),length(data.L1.Z_DIST));
-        [fieldOut, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.73); %See sandbox file for determining these ratios
-        [fieldOut5, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.79);
+        [fieldOut, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.65); %See sandbox file for determining these ratios
+        [fieldOut5, ~] = nan_AboveSurf(fieldIn,data.L1.Z_DIST,data.L1.PRES,0.70);
         nanMask =isnan(fieldOut);
         nanMask5=isnan(fieldOut5);
         

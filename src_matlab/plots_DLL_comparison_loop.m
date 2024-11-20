@@ -43,7 +43,7 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
-dataSet = 'NortekSig1000_TidalChannel';
+dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -63,13 +63,13 @@ figDir=[processIDs{1},'_vs_',processIDs{2}];
 figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
-opts.indB = 1;
+opts.indB = 5;
 opts.indZ = 10;
-dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(1))
+dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB))
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 1:1%NT
+for tt = 88:NT
     opts.indT = tt;
    
     
@@ -78,6 +78,7 @@ for tt = 1:1%NT
 
     
     figure_named('DLL'),clf,clear ax
+%     figure('Visible','off'), clf,clear ax
     set(gcf,'Position',[0,100,1200,600])
     axW = 0.18;
     offset = 0.06;
@@ -146,17 +147,32 @@ for tt = 1:1%NT
         colormap(cmocean('balance'))
 %         % plot center point
         plot(speed(opts.indZ),index(opts.indZ),'*k')
+        
     end
     title('Speed Profile')
+    yticks = get(gca,'ytick');
+    ylabel(ax(4),'indZ')
+    
+    ax2 = axes(gcf,'position',get(ax(4),'Position'),'color','none');
+    set(ax2,'YAxisLocation','right')
+    set(ax2,'xlim',get(ax(4),'xlim'))
+    set(ax2,'ylim',get(ax(4),'ylim'))
+    dz = data(1).L1.Z_DIST(2)-data(1).L1.Z_DIST(1);
+    set(ax2,'YTickLabels',strsplit(num2str(yticks*dz)))
+    ylabel(ax2,'z [m]')
+    
+
     
     ylabel(ax(2),'')
     ylabel(ax(3),'')
-    ylabel(ax(4),'z [m]')
+    
     xlabel(ax(4),'speed [m/s]')
     linkaxes(ax(1:3),'xy')
     ylim = get(ax(1),'ylim');
     t1.Position = [0 ylim(2)];
     t2.Position = [0 ylim(2)];
+    
+    
     
     add_fig_info(mname,[dataSet,...
         ' ( indT = ',num2str(opts.indT),', ',...

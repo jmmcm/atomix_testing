@@ -7,6 +7,8 @@ clear all
 addpath('../../netcdftools_ceb/variables_flags_databases/YAMLMatlab_0/')
 addpath('../../utilitieswork/')
 addpath('../../utilitieswork/cmocean/')
+addpath('../../adcp_toolbox/matlab/')
+
 
 mname = mfilename('fullpath');
 
@@ -49,12 +51,13 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
 dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
 
 
 %% Flags
 flg.matCompare.show = 0;
 flg.saveFigs = 1;
+flg.plotEpsFlags.show = 1;
 flg.plotEpsTS.show = 1;
 flg.plotEpsScatter.show = 1;
 flg.plotEpsScatterZ.show = 1;
@@ -134,8 +137,10 @@ if flg.plotEpsTS.show && flg.twoSets
         axW = axR - axL;
         ax(1) = axes('Position',[axL,0.85,axW,axH]);
         plotData = struct('x',t,'y',z,'values',log10(eA'),'var','EPSI');
-        opts = struct('ylabel','z index','clabel','log10(\epsilon_A)','clim',plotOptions.plotEpsTS.clim);
+        opts = struct('ylabel','z index','clabel',['log10(\epsilon_{' short_names{1} '})'],'clim',plotOptions.plotEpsTS.clim);
         plot_pcolor(ax(1),plotData,opts);
+        hold all
+        plot(get(gca,'xlim'),[1 1]*indZ,'k')
         if ii == 1
             title([clean_string(varName),'(:,:,',num2str(indB),')'])
         else
@@ -144,20 +149,24 @@ if flg.plotEpsTS.show && flg.twoSets
         
         ax(2) =  axes('Position',[axL,0.68,axW,axH]);
         plotData = struct('x',t,'y',z,'values',log10(eB'),'var','EPSI');
-        opts = struct('ylabel','z index','clabel','log10(\epsilon_B)','clim',plotOptions.plotEpsTS.clim);
+        opts = struct('ylabel','z index','clabel',['log10(\epsilon_{' short_names{2} '})'],'clim',plotOptions.plotEpsTS.clim);
         plot_pcolor(ax(2),plotData,opts);
+        hold all
+        plot(get(gca,'xlim'),[1 1]*indZ,'k')
         
         ax(3) =  axes('Position',[axL,0.51,axW,axH]);
         plotData = struct('x',t,'y',z,'values',log10(eB'./eA'),'var','EPSIratio');
-        opts = struct('ylabel','z index','clabel','log10(\epsilon_B/\epsilon_A)','clim',log10([0.5 2]));
+        opts = struct('ylabel','z index','clabel',['log10(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'],'clim',log10([0.5 2]));
         plot_pcolor(ax(3),plotData,opts);
+        hold all
+        plot(get(gca,'xlim'),[1 1]*indZ,'k')
         
         
         ax(4) =  axes('Position',[axL,0.30,axW,axH]);
         semilogy(t,eA(:,indZ),'linewidth',2)
         hold all
         semilogy(t,eB(:,indZ))
-        legend('\epsilon_A','\epsilon_B')
+        legend(['\epsilon_{' short_names{1} '}'],['\epsilon_{' short_names{2} '}'])
         ylabel('\epsilon [W/kg]')
         if ii == 1
             title([clean_string(varName),'(:,',num2str(indZ),',',num2str(indB),')'])
@@ -172,18 +181,52 @@ if flg.plotEpsTS.show && flg.twoSets
         plot(get(gca,'xlim'),[1 1],'k')
         plot(get(gca,'xlim'),[0.5 0.5],'--r')
         plot(get(gca,'xlim'),[2 2],'--r')
-        ylabel('\epsilon_B/\epsilon_A')
+        ylabel(['\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '}'])
         
         % linkaxes(ax,'x')
         xlabel(' time index ')
         
-        add_fig_info(mname,[dataSet,' ( A = ',names{1},'  B = ',names{2},' )'],struct())
+        add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
         if flg.saveFigs
             figName = [figPath,varName,'_TimeSeries_',figEnd,'.png'];
             disp(['Saving: ',figName])
             saveas(gcf,figName);
         end
     end
+    
+    
+end
+
+%% Flags
+if flg.plotEpsFlags.show
+    figure_named('flags'), clf, clear ax
+    ax(1) = subplot(311);
+    plotData = struct('x',t,'y',z,'values',log2(data(1).L4.EPSI_FLAGS(:,:,indB)'),'var','EPSI_FLAGS');
+    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{1} '})'],'clim',plotOptions.plotEpsFlags.clim);
+    plot_pcolor(ax(1),plotData,opts);
+
+    
+    ax(2) = subplot(312);
+    plotData = struct('x',t,'y',z,'values',log2(data(2).L4.EPSI_FLAGS(:,:,indB)'),'var','EPSI_FLAGS');
+    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{2} '})'],'clim',plotOptions.plotEpsFlags.clim);
+    plot_pcolor(ax(2),plotData,opts);
+    
+    ax(3) =  subplot(313);
+    eA = data(1).L4.EPSI(:,:,indB);
+    eA(data(1).L4.EPSI_FLAGS(:,:,indB) >0) = NaN;
+    eB = data(2).L4.EPSI(:,:,indB);
+    eB(data(2).L4.EPSI_FLAGS(:,:,indB) >0) = NaN;
+    plotData = struct('x',t,'y',z,'values',log10(eB'./eA'),'var','EPSIratio');
+    opts = struct('ylabel','z index','clabel',['log10(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'],'clim',log10([0.5 2]));
+    plot_pcolor(ax(3),plotData,opts);
+    
+    add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
+    if flg.saveFigs
+        figName = [figPath,'FLAGS.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+    
 end
 
 %% Scatter plot of all epsilon
@@ -209,16 +252,16 @@ if flg.plotEpsScatter.show && flg.twoSets
         opts = plotOptions.plotEpsScatter;
         opts.type = 'standard';
         plot_EPSI_scatter(ax(1),eA,eB,opts);
-        xlabel('\epsilon_A [W/kg]')
-        ylabel('\epsilon_B [W/kg]')
+        xlabel(['\epsilon_{' short_names{1} '} [W/kg]'])
+        ylabel(['\epsilon_{' short_names{2} '} [W/kg]'])
         title('scatter plot')
         
         ax(2) = subplot('Position',[0.42 0.2 axW axH]);
         opts = plotOptions.plotEpsScatter;
         opts.type = 'density';
         plot_EPSI_scatter(ax(2),eA,eB,opts);
-        xlabel('log_{10}(\epsilon_A [W/kg])')
-        ylabel('log_{10}(\epsilon_B [W/kg])')
+        xlabel(['log_{10}(\epsilon_{' short_names{1} '} [W/kg])'])
+        ylabel(['log_{10}(\epsilon_{' short_names{2} '} [W/kg])'])
         title('density plot')
         
         
@@ -226,7 +269,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         plotData.var = varName;
         plotData.values = log10(data(2).L4.(varName)./data(1).L4.(varName));
         opts = plotOptions.plotEpsRatioHist;
-        opts.xlabelStr = ['log_{10}(\epsilon_B/\epsilon_A)'];
+        opts.xlabelStr = ['log_{10}(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'];
         
         %plotData.label = clean_string(names{ii});
         [ax(3),ph]=plot_histogram(ax(3),plotData,opts);
@@ -239,7 +282,7 @@ if flg.plotEpsScatter.show && flg.twoSets
         
         
         
-        add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())
+        add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
         if flg.saveFigs
             figName = [figPath,varName,'_Scatter_',figEnd,'.png'];
             disp(['Saving: ',figName])
@@ -271,11 +314,11 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         opts.type = 'standard';
         plot_EPSI_scatter(ax(1),eA,eB,opts);
         if zz == NZ;
-            xlabel('\epsilon_A [W/kg]');
+            xlabel(['\epsilon_{' short_names{1} '} [W/kg]']);
         else
             xlabel('')
         end
-        ylabel('\epsilon_B [W/kg]')
+        ylabel(['\epsilon_{' short_names{2} '} [W/kg]'])
         if zz == 1; title('scatter plot'); end
         legend off
         
@@ -284,11 +327,11 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         opts.type = 'density';
         plot_EPSI_scatter(ax(2),eA,eB,opts);
         if zz == NZ;
-            xlabel('log_{10}(\epsilon_A [W/kg])');
+            xlabel(['log_{10}(\epsilon_{' short_names{1} '} [W/kg])']);
         else
             xlabel('')
         end
-        ylabel('log_{10}(\epsilon_B [W/kg])')
+        ylabel(['log_{10}(\epsilon_{' short_names{2} '} [W/kg])'])
         if zz == 1; title('density plot'); end
         legend off
         
@@ -297,7 +340,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
         plotData.var = varName;
         plotData.values = log10(eB./eA);
         opts = plotOptions.plotEpsRatioHist;
-        opts.xlabelStr = ['log_{10}(\epsilon_B/\epsilon_A)'];
+        opts.xlabelStr = ['log_{10}(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'];
         
         %plotData.label = clean_string(names{ii});
         [ax(3),ph]=plot_histogram(ax(3),plotData,opts);
@@ -314,7 +357,7 @@ if flg.plotEpsScatterZ.show && flg.twoSets
              ['indZ = ',num2str(indZ)]})
     end
     
-    add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())
+    add_fig_info(mname,[dataSet,' ( ' short_names{1} '= ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
     if flg.saveFigs
         figName = [figPath,varName,'_ScatterZ_',figEnd,'.png'];
         disp(['Saving: ',figName])
@@ -343,7 +386,7 @@ if flg.plotDLL.show && flg.twoSets
     opts.rMax = d(1).metadataGroups.L4.rMax;
     opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
     [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
-    title(ax(1),clean_string(names{1}))
+    title(ax(1),[clean_string(names{1}) ' (' short_names{1} ')'])
     
     ax(2) = subplot('Position',[0.4 axY axW axH]);
     opts.dll_averaging = d(2).metadataGroups.L4.dll_averaging;
@@ -352,7 +395,8 @@ if flg.plotDLL.show && flg.twoSets
     opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
     [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
     set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
-    title(ax(2),clean_string(names{2}))
+    title(ax(2),[clean_string(names{2}) ' (' short_names{2} ')'])
+    
     ax(3) = subplot('Position',[0.7 axY axW axH]);
     [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
     set(p(1),'color',get(p1(2),'color'))
@@ -429,13 +473,13 @@ if flg.plotEpsHist.show
         ax = subplot('Position',[0.12 0.2 0.8,0.7]);
         for dd = 1:length(processIDs)
             plotData(dd).values = log10(data(dd).L4.(varName));
-            plotData(dd).label = clean_string(names{dd});
+            plotData(dd).label = [clean_string(names{dd}) ' (' short_names{dd} ')'];
         end
         [ax,ph]=plot_histogram(ax,plotData,opts);
         if ii == 3
             text(opts.xlimits(1)+0.1,0.9*max(get(gca,'ylim')),'EPSI\_FLAGS<=6')
         end
-        add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())
+        add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
         if flg.saveFigs
             figName = [figPath,varName,'_hist_',figEnd,'.png'];
             disp(['Saving: ',figName])
@@ -453,7 +497,7 @@ if flg.plotEpsRatioHistZ.show && flg.twoSets
     figure_named([varName,'_Hist']), clf, clear ax plotData
     plotData.var = varName ;
     opts = plotOptions.plotEpsRatioHistZ;
-    opts.xlabelStr = ['log_{10}(\epsilon_B/\epsilon_A)'];
+    opts.xlabelStr = ['log_{10}(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'];
     
     opts.displayStyle = 'stairs';
     opts.lineWidth = 1;
@@ -490,8 +534,10 @@ if flg.plotEpsRatioStatsZ.show && flg.twoSets
     varName = 'EPSI';
     for zz = 1:NZ
         eA = data(1).L4.(varName)(:,zz,:);
+%         eA(data(1).L4.EPSI_FLAGS(:,zz,:)>0) = NaN;
         eA = eA(:);
         eB = data(2).L4.(varName)(:,zz,:);
+%         eB(data(2).L4.EPSI_FLAGS(:,zz,:)>0) = NaN;
         eB = eB(:);
         ratios = log10(eB./eA);
 
@@ -522,11 +568,11 @@ if flg.plotEpsRatioStatsZ.show && flg.twoSets
     plot(log10(2.0)*[1 1],get(gca,'ylim'),'--r')
     ph(5) = plot(log10(0.1)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125],'DisplayName','factor of 10');
     plot(log10(10)*[1 1],get(gca,'ylim'),'--','color',[0.929,0.694,0.125])
-    xlabel('log10(\epsilon_B/\epsilon_A)')
+    xlabel(['log10(\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '})'])
     ylabel('z index')
     legend(ph)
 
-    add_fig_info(mname,[dataSet,' ( A = ',names{1},',  B = ',names{2},' )'],struct())
+    add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
     if flg.saveFigs
         figName = [figPath,'EPSI_ratio_statistics',figEnd,'.png'];
         disp(['Saving: ',figName])
@@ -551,7 +597,7 @@ if flg.plotA0hist.show
         plotData(ii).values = data(ii).L4.(var);
         plotData(ii).thresLow = flags(ii).L4.EPSI_FLAGS.dll_intercept_too_low.threshold;
         plotData(ii).thresHigh =  flags(ii).L4.EPSI_FLAGS.dll_intercept_too_high.threshold;
-        plotData(ii).label = clean_string(names{ii});
+        plotData(ii).label = [clean_string(names{ii}) ' (' short_names{ii} ')'];
     end
     [ax,ph]=plot_histogram(ax,plotData,opts);
     if ~isfield(opts,'A0expected')
