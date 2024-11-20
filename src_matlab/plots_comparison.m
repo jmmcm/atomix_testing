@@ -18,11 +18,11 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
@@ -50,8 +50,8 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
 
 
 %% Flags

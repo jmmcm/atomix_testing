@@ -11,11 +11,11 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 % %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 % %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 % %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
@@ -43,8 +43,8 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
 
@@ -63,13 +63,13 @@ figDir=[processIDs{1},'_vs_',processIDs{2}];
 figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
-opts.indB = 5;
-opts.indZ = 10;
+opts.indB = 1;
+opts.indZ = 7;
 dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB))
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 88:NT
+for tt = 1:2:NT
     opts.indT = tt;
    
     
@@ -77,9 +77,9 @@ for tt = 88:NT
     data(2).L4.procParams = d(2).metadataGroups.L4;
 
     
-    figure_named('DLL'),clf,clear ax
-%     figure('Visible','off'), clf,clear ax
-    set(gcf,'Position',[0,100,1200,600])
+%      figure_named('DLL'),clf,clear ax
+    figure('Visible','off'), clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
+    set(gcf,'Position',[0,100,1600,600])
     axW = 0.18;
     offset = 0.06;
     axH = 0.7;

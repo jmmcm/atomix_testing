@@ -12,12 +12,12 @@ clear all
 close all
 addpath('functions')
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM00';
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS01';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM_M1aC_RM5';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS01';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS01';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
 
 
 %% Load data
@@ -227,9 +227,13 @@ NB = length(data.L1.THETA);
 
 for bb = 1:NB
     subplot(NB,1,bb)
-    pcolor(data.L1.TIME,data.L1.Z_DIST,data.L1.ABSIC(:,:,bb)')
+    try
+        pcolor(data.L1.TIME,data.L1.Z_DIST,data.L1.ABSIC(:,:,bb)')
+    catch
+       pcolor(data.L1.TIME,data.L1.Z_DIST,data.L1.ABSI(:,:,bb)') 
+    end
     shading flat
     colorbar
     hold all
-    plot(data.L1.TIME.data.L1.PRES,'w')
+    plot(data.L1.TIME,data.L1.PRES,'w')
 end

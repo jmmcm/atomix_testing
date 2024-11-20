@@ -45,6 +45,8 @@ switch data.var
 %         cmap = cmocean('oxy');
     case 'R_VEL'
          cmap = cmocean('Balance');
+    case 'ENU'
+         cmap = cmocean('Balance');
     case 'SPD'
         cmap = cmocean('Speed');
     case 'DIR'

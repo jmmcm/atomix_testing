@@ -15,17 +15,19 @@ mname = mfilename('fullpath');
 %close all
 colors = get(0,'defaultaxescolororder');
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 
 
 %% Flags
 flg.saveFigs = 1; % Not supported yet for all figures
 flg.plotVelTS.show = 0;
+flg.plotVelAvgTS.show = 1;
+flg.plotVelENUTS.show = 1;
 flg.plotEpsTS.show = 1;
 flg.plotDLL.show = 0;
 flg.plotAmp.show = 0;
@@ -89,6 +91,87 @@ if flg.plotVelTS.show
     title(ax(1),['Beam Velocities'])
 end
 
+%% Plot averaged velocities 
+if flg.plotVelAvgTS.show
+    figure_named(['BeamVelAvg_TS']),clf,clear ax, clear plotData
+    set(gcf,'Position',[200,100,700,600])
+    axL = 0.10;
+    axR = 0.87;
+    axH = 0.14;
+    axW = axR - axL;
+    if NB == 4
+        axB = [0.8:-.22:0];
+    elseif NB == 5
+        axB = [0.83:-0.19:0];
+    end
+    
+    R_VEL_AVG = nanmean(L2.R_VEL,4);
+    
+    opts = plotOptions.plotVelTS;
+    opts.ylabel = 'z [m]';
+    plotData.x = 1:length(L3.TIME);
+    plotData.y = 1:length(L2.Z_DIST);
+    plotData.var = 'R_VEL';
+    for bb = 1:NB
+        ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
+        plotData.values = R_VEL_AVG(:,:,bb);
+        opts.clabel= ['R\_VEL(:,:,',num2str(bb),') [m/s]'];
+        plot_pcolor(ax(bb),plotData,opts);
+        hold all
+        try
+            plot(plotData.x,L1.PRES,'w')
+        end
+        ylabel('ind_Z')
+    end
+    xlabel(ax(NB),['ind_T'])
+    title(ax(1),['Beam Velocities'])
+    add_fig_info(mname,[dataSet],struct())
+    if flg.saveFigs
+        figName = [figPath,'VelBeamAvg.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+end
+
+%% Plot ENU velocities
+if flg.plotVelENUTS.show
+    figure_named(['ENUVel_TS']),clf,clear ax, clear plotData
+    NP = 4;
+    
+    opts = plotOptions.plotVelENUTS;
+    opts.ylabel = 'z [m]';
+    plotData.x = get_yd(Anc.TIME);
+    plotData.y = Anc.Z_DIST;
+    plotData.var = 'ENU';
+    for bb = 1:3
+        ax(bb) = subplot(NP,1,bb);
+        plotData.values = Anc.ENU(:,:,bb)';
+        switch bb
+            case 1; opts.clabel= ['E [m/s]'];
+            case 2; opts.clabel= ['N [m/s]'];
+            case 3; opts.clabel= ['U [m/s]'];
+        end
+        plot_pcolor(ax(bb),plotData,opts);
+        hold all
+        try
+            plot(plotData.x,L1.PRES,'k')
+        end
+    end
+    ax(4) = subplot(NP,1,4);
+    plotData.var = 'SPD';
+    plotData.values = abs(Anc.SIGNED_SPEED');
+    opts.clim = [0 2.5];
+    opts.clabel = 'SPEED [m/s]'
+    plot_pcolor(ax(4),plotData,opts);
+    xlabel(ax(NP),['year day ',yearStr])
+    add_fig_info(mname,[dataSet],struct())
+    if flg.saveFigs
+        figName = [figPath,'VelENU.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+end
+
 %% Plot dissipation
 if flg.plotEpsTS.show
     
@@ -130,8 +213,14 @@ if flg.plotEpsTS.show
     
     figure_named(['EPSI_TS_bins']),clf, clear ax
     ax(1) = subplot(311);
-    pcolor(plotData.x,plotData.y,Anc.SPD'); shading flat; colorbar
-    colormap(cmocean('speed'))
+    try
+        pcolor(plotData.x,plotData.y,Anc.SPD'); shading flat; colorbar
+        colormap(cmocean('speed'))
+    catch
+        pcolor(plotData.x,plotData.y,Anc.SIGNED_SPEED'); shading flat; colorbar
+        colormap(cmocean('balance'))
+    end
+    
     title('speed')
     ax(2) = subplot(312);
     indZ = floor(opts.indZ/2);

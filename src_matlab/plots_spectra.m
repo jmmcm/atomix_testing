@@ -13,11 +13,11 @@ colors = get(0,'DefaultAxesColorOrder');
 flg.saveFigs = 1;
 
 %% Dataset and processID (for Ancillary data and spectra parameters)
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -62,8 +62,13 @@ rMax = metadataGroups.L4.rMax;
 indFreqNoise = find(dataSpec.freq>=freqNoise(1) & dataSpec.freq<=freqNoise(2));
 %% Plot speed and z levels
 figure_named('Speed'),clf
-pcolor(1:NT,Anc.Z_DIST,Anc.SPD'); shading flat; colorbar;
-colormap(cmocean('speed'))
+try
+    pcolor(1:NT,Anc.Z_DIST,Anc.SIGNED_SPEED'); shading flat; colorbar; 
+    colormap(cmocean('balance'))
+catch
+    pcolor(1:NT,Anc.Z_DIST,Anc.SPD'); shading flat; colorbar;
+    colormap(cmocean('speed'))
+end
 
 hold all
 for zz = 1:length(indZall)
