@@ -15,8 +15,8 @@ mname = mfilename('fullpath');
 %close all
 colors = get(0,'defaultaxescolororder');
 
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'Signature5beam_TidalShelf';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
@@ -159,8 +159,9 @@ if flg.plotVelENUTS.show
     end
     ax(4) = subplot(NP,1,4);
     plotData.var = 'SPD';
-    plotData.values = abs(Anc.SIGNED_SPEED');
-    opts.clim = [0 2.5];
+%     plotData.values = abs(Anc.SIGNED_SPEED');
+    plotData.values = sqrt(Anc.ENU(:,:,1).^2+Anc.ENU(:,:,2).^2);
+    opts.clim = [0 max(plotData.values(:))];
     opts.clabel = 'SPEED [m/s]'
     plot_pcolor(ax(4),plotData,opts);
     xlabel(ax(NP),['year day ',yearStr])
@@ -188,7 +189,7 @@ if flg.plotEpsTS.show
         axB = [0.83:-0.19:0];
     end
     
-    opts = plotOptions.plotEpsTS;
+    opts = plotOptions.plotEpsTS;opts.clim
     opts.ylabel = 'z [m]';
     plotData.x = get_yd(L4.TIME);
     plotData.y = L4.Z_DIST;
@@ -213,6 +214,9 @@ if flg.plotEpsTS.show
     
     figure_named(['EPSI_TS_bins']),clf, clear ax
     ax(1) = subplot(311);
+    if ~isfield(Anc,'SPD') || ~isfield(Anc,'SIGNED_SPEED')
+        Anc.SPD = sqrt(Anc.ENU(:,:,1).^2+ Anc.ENU(:,:,2).^2);
+    end
     try
         pcolor(plotData.x,plotData.y,Anc.SPD'); shading flat; colorbar
         colormap(cmocean('speed'))

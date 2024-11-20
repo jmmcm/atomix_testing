@@ -18,20 +18,20 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','All'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
@@ -183,7 +183,7 @@ if flg.plotEpsTS.show && flg.twoSets
         plot(get(gca,'xlim'),[2 2],'--r')
         ylabel(['\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '}'])
         
-        % linkaxes(ax,'x')
+        linkaxes(ax,'x')
         xlabel(' time index ')
         
         add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())
@@ -202,13 +202,14 @@ if flg.plotEpsFlags.show
     figure_named('flags'), clf, clear ax
     ax(1) = subplot(311);
     plotData = struct('x',t,'y',z,'values',log2(data(1).L4.EPSI_FLAGS(:,:,indB)'),'var','EPSI_FLAGS');
-    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{1} '})'],'clim',plotOptions.plotEpsFlags.clim);
+    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{1} '(:,:,' num2str(indB) ')})'],'clim',plotOptions.plotEpsFlags.clim);
     plot_pcolor(ax(1),plotData,opts);
+    title(['Flags for bin ' num2str(indB)'])
 
     
     ax(2) = subplot(312);
     plotData = struct('x',t,'y',z,'values',log2(data(2).L4.EPSI_FLAGS(:,:,indB)'),'var','EPSI_FLAGS');
-    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{2} '})'],'clim',plotOptions.plotEpsFlags.clim);
+    opts = struct('ylabel','z index','clabel',['log2(Flags \epsilon_{' short_names{2} '(:,:,' num2str(indB) ')})'],'clim',plotOptions.plotEpsFlags.clim);
     plot_pcolor(ax(2),plotData,opts);
     
     ax(3) =  subplot(313);

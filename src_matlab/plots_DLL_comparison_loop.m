@@ -11,20 +11,20 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 % %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 % %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 % %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % %     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 % %      processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
 % %     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
-%       processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
+      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
@@ -69,7 +69,7 @@ dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(o
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 1:2:NT
+for tt = 250:300%1:2:NT
     opts.indT = tt;
    
     
@@ -77,8 +77,9 @@ for tt = 1:2:NT
     data(2).L4.procParams = d(2).metadataGroups.L4;
 
     
-%      figure_named('DLL'),clf,clear ax
-    figure('Visible','off'), clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
+%   figure_named('DLL')
+    figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
+    clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
     set(gcf,'Position',[0,100,1600,600])
     axW = 0.18;
     offset = 0.06;
@@ -150,12 +151,15 @@ for tt = 1:2:NT
         
     end
     title('Speed Profile')
+    xticks = get(gca,'xtick');
     yticks = get(gca,'ytick');
     ylabel(ax(4),'indZ')
     
     ax2 = axes(gcf,'position',get(ax(4),'Position'),'color','none');
     set(ax2,'YAxisLocation','right')
     set(ax2,'xlim',get(ax(4),'xlim'))
+    set(ax2,'xtick',xticks)
+%      set(ax2,'XTickLabels','') % Hack necessary to get nice saved figures
     set(ax2,'ylim',get(ax(4),'ylim'))
     dz = data(1).L1.Z_DIST(2)-data(1).L1.Z_DIST(1);
     set(ax2,'YTickLabels',strsplit(num2str(yticks*dz)))
@@ -192,11 +196,13 @@ for tt = 1:2:NT
     figPathFull = [figPath,'z',num2str(opts.indZ,'%02d'),'/'];
     figName = [figPathFull 't_',num2str(tt,'%03d'),'.png'];
     disp(['Saving: ',figName])
-    drawnow
+%     drawnow
+
     if ~exist(figPathFull)
         disp(['Making ' figPathFull])
         mkdir(figPathFull)
     end
+    
     saveas(gcf,figName);
     
 %     if tt == 1

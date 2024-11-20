@@ -13,8 +13,8 @@ colors = get(0,'DefaultAxesColorOrder');
 flg.saveFigs = 1;
 
 %% Dataset and processID (for Ancillary data and spectra parameters)
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
@@ -26,6 +26,9 @@ matFile =  [dataDir,dataFileRoot,'_',processID,'.mat'];
 load(matFile);
 try
     Anc = data.Ancillary;
+end
+if ~isfield(Anc,'SPD') || ~isfield(Anc,'SIGNED_SPEED')
+    Anc.SPD = sqrt(Anc.ENU(:,:,1).^2 + Anc.ENU(:,:,2).^2);
 end
 
 specFile = [dataDir,dataFileRoot,'_spectra','.mat'];

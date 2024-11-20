@@ -13,7 +13,7 @@ close all
 addpath('functions')
 
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM_M1aC_RM5';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS01';
+dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS01';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
