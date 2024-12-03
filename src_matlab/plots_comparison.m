@@ -26,18 +26,18 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
 
 
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %      processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
-     processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','All'};
+%      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','All'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
-%     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
+    processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'}; short_names = {'Cen','All'};
 
 % dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
@@ -46,7 +46,7 @@ dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
 
 % dataSet = 'AQD_Windermere_bedframe';
-%      processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+%      processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; short_names = {'Cen','All'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
@@ -184,6 +184,7 @@ if flg.plotEpsTS.show && flg.twoSets
         ylabel(['\epsilon_{' short_names{2} '}/\epsilon_{' short_names{1} '}'])
         
         linkaxes(ax,'x')
+        xlim([min(t) max(t)])
         xlabel(' time index ')
         
         add_fig_info(mname,[dataSet,' ( ' short_names{1} ' = ',names{1},',  ' short_names{2} ' = ',names{2},' )'],struct())

@@ -16,10 +16,10 @@ mname = mfilename('fullpath');
 colors = get(0,'defaultaxescolororder');
 
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf';
-% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M1aC_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 
 
@@ -97,11 +97,16 @@ if flg.plotVelAvgTS.show
     set(gcf,'Position',[200,100,700,600])
     axL = 0.10;
     axR = 0.87;
-    axH = 0.14;
+    
     axW = axR - axL;
-    if NB == 4
+    if NB == 3
+        axH = 0.22;
+        axB = [0.7:-0.27:0];
+    elseif NB == 4
+        axH = 0.14;
         axB = [0.8:-.22:0];
     elseif NB == 5
+        axH = 0.14;
         axB = [0.83:-0.19:0];
     end
     
@@ -181,11 +186,15 @@ if flg.plotEpsTS.show
     set(gcf,'Position',[200,100,700,600])
     axL = 0.10;
     axR = 0.87;
-    axH = 0.14;
     axW = axR - axL;
-    if NB == 4
+    if NB == 3
+        axH = 0.22;
+        axB = [0.7:-0.27:0];
+    elseif NB == 4
+        axH = 0.14;
         axB = [0.8:-.22:0];
     elseif NB == 5
+        axH = 0.14;
         axB = [0.83:-0.19:0];
     end
     
@@ -249,6 +258,7 @@ if flg.plotEpsTS.show
     ylabel('\epsilon [W/kg]')
     ylim(10.^opts.clim)
     linkaxes(ax,'x')
+    xlim([min(plotData.x) max(plotData.x)])
     
     add_fig_info(mname,[dataSet],struct())
     if flg.saveFigs
@@ -262,7 +272,7 @@ if flg.plotEpsTS.show
     
     opts = plotOptions.plotEpsTS;
     ax(1) = subplot(211);
-    opts.clim = [-1 1];
+    opts.clim = [-1 1]*0.5;
     opts.ylabel = 'z [m]';
     plotData.x = get_yd(L1.TIME);
     plotData.y = L1.Z_DIST;

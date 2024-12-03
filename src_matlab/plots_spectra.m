@@ -14,10 +14,11 @@ flg.saveFigs = 1;
 
 %% Dataset and processID (for Ancillary data and spectra parameters)
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -160,7 +161,7 @@ for zz = 1:length(indZall)
             end
             pA = loglog(dataSpec.freq,SffAvgSZ(bb,:,ss),'k','linewidth',3,'DisplayName','Avg');
             title([num2str(midS(ss)),' m/s'])
-            ylim([1e-5 1e1])
+            ylim(ylimF)
             xlim([min(dataSpec.freq) max(dataSpec.freq)])
             try
                 legend([pR pA])
@@ -222,7 +223,7 @@ for zz = 1:length(indZall)
         end
         kLim = [kMin kMax];
         loglog(kLim,Afit*kLim.^(-5/3),'k','linewidth',2,'DisplayName','k^{-5/3}')
-        plot(1/rMax*[1 1],[1e-4 1e0],'--k','DisplayName',['rMax = ',num2str(rMax),' m'])
+        plot(1/rMax*[1 1],[1e-10 1e0],'--k','DisplayName',['rMax = ',num2str(rMax),' m'])
         ylim(ylimK)
         xlim([kMin kMax])
         xlabel('k [cpm]')

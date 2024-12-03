@@ -17,12 +17,12 @@ mname = mfilename('fullpath');
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5'; % Method 1 differencing, canonical regression
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aA_RM7p5'; % Method 1 differencing, modified regression
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M2uC_RM7p5'; % Method 2.1 differencing, standard regression
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5'; % Labelled A1S (Mean deducted, Method 1 differencing, standard regression)
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5'; % Labelled A1S (Mean deducted, Method 1 differencing, standard regression)
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aA_RM1p5'; % Labelled A1M (Mean deducted, Method 1 differencing, modified regression)
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M2uC_RM1p5'; % Labelled A2S (Mean deducted, Method 2 differencing, standard regression)
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB'; % Only L1 data
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2'; % Method 1 differencing, modified regression
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL'; % Only L1 data
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL'; % Only L1 data
 % dataSet = 'NortekSig1000_TidalChannel_2018_Burst'; processID = 'NSL_CEB'; % Only L1 data
 
 %% Data files
@@ -86,6 +86,7 @@ switch dataSet
     case 'RDIWH600_CANDYFLOSS_TOP'
         data.L1 = d.data.L1;
         data.Ancillary = d.data.Ancillary;
+        data.Ancillary.ENU = cat(3,data.Ancillary.EVEL_E, data.Ancillary.EVEL_N, data.Ancillary.EVEL_U, data.Ancillary.EVEL_ERR);
         switch processID
             
             case 'BDS_M1aC_RM1p5' % A1S: Mean removed, Method 1 differencing, standard regression
@@ -105,6 +106,7 @@ switch dataSet
             otherwise
                 error(['Need to define ',processID])
         end
+        
     case 'AQD_Windermere_bedframe'
         data.L1 = d.data.L1;
         data.Ancillary = d.data.Ancillary;
@@ -116,6 +118,21 @@ switch dataSet
             otherwise
                 error(['Need to define ',processID])
         end
+        data.L1.PRES = data.L1.DEPTH;
+        
+        data.Ancillary = d.data.Ancillary;
+        
+        % ENU only at one depth in input file? (TODO: Calculate myself using beam velocities)
+        ENU = nanmean(data.Ancillary.ENU,3);
+        data.Ancillary.ENU = NaN*ones(length(data.Ancillary.TIME),length(data.L1.Z_DIST),3);
+        data.Ancillary.ENU(:,:,1) = ENU(1,:)'*ones(1,length(data.L1.Z_DIST));
+        data.Ancillary.ENU(:,:,2) = ENU(2,:)'*ones(1,length(data.L1.Z_DIST));
+        data.Ancillary.ENU(:,:,3) = ENU(3,:)'*ones(1,length(data.L1.Z_DIST));
+        
+        % speed and direction
+        data.Ancillary.DIR = get_DirFromN(data.Ancillary.ENU(:,:,1),data.Ancillary.ENU(:,:,2));
+        data.Ancillary.SPD = sqrt(data.Ancillary.ENU(:,:,1).^2+data.Ancillary.ENU(:,:,2).^2);
+        
     case 'Signature5beam_TidalShelf' % Didn't use data
         data.L1 = d.lev1;
         

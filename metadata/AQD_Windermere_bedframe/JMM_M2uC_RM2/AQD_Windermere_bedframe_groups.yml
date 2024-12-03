@@ -9,7 +9,12 @@ Ancillary:
         - N_BEAM
         
   ENU: Segment mean earth coordinate velocity (East, North, Up) by depth
-  
+
+# =====================================
+spectra: # computed from level 2 data, so length of data used is L2.segment_length
+  overlap: 50 # [%] 
+  nfft:  256 # [points] 1024 points / 256 = 4 yields 9 segments with 50% overlap (i.e. 18 degrees of freedom)
+
 # ================ L1 =================
 
 L1: # Level 1: Raw instrument data

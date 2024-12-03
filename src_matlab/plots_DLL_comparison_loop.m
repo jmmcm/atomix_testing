@@ -18,20 +18,19 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % %     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
 % %      processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
 % %     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
-      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
-
+%       processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
-%     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
+    processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
 % dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
@@ -64,12 +63,12 @@ figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
 opts.indB = 1;
-opts.indZ = 7;
+opts.indZ = 5;
 dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB))
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 250:300%1:2:NT
+for tt = 97:3:500
     opts.indT = tt;
    
     
@@ -78,7 +77,7 @@ for tt = 250:300%1:2:NT
 
     
 %   figure_named('DLL')
-    figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
+     figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
     clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
     set(gcf,'Position',[0,100,1600,600])
     axW = 0.18;
@@ -121,7 +120,9 @@ for tt = 250:300%1:2:NT
     caxis(opts.indZ+[-cMax cMax])
     colormap(cmocean('balance'))
     set(p2(1),'Marker','s')
+    try
     set(p2(2),'Marker','x','markersize',3,'color','k')%[0.9290 0.6940 0.1250])
+    end
     title(ax(3),clean_string(names{2}))
     
     % Velocity profile
@@ -171,7 +172,20 @@ for tt = 250:300%1:2:NT
     ylabel(ax(3),'')
     
     xlabel(ax(4),'speed [m/s]')
+    ylim1 = ax(1).YLim;
+    ylim2 = ax(2).YLim;
+    ylim3 = ax(3).YLim;
     linkaxes(ax(1:3),'xy')
+    
+    
+    if isnan(data(1).L4.EPSI(tt,opts.indZ,opts.indB)) && ~isnan(data(2).L4.EPSI(tt,opts.indZ,opts.indB))
+        set(ax(1),'ylim',ylim3)
+    end
+    if ~isnan(data(1).L4.EPSI(tt,opts.indZ,opts.indB)) && isnan(data(2).L4.EPSI(tt,opts.indZ,opts.indB))
+        set(ax(1),'ylim',ylim2)
+    end
+    
+    % Position text
     ylim = get(ax(1),'ylim');
     t1.Position = [0 ylim(2)];
     t2.Position = [0 ylim(2)];

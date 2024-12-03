@@ -16,7 +16,7 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'6A','6B'};
+caseIDs = {'3C'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
 
 %% Process

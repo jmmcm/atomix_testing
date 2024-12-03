@@ -1,7 +1,19 @@
 #===================================================================================
 #       PLOT OPTIONS                                                                #
 #===================================================================================    
- 
+
+plotVelTS:
+    description: Time series plot of the beam velocity data
+    clim: [-.2, 0.2]
+
+plotVelENUTS:
+    description: Time series plot of the ENU velocity data
+    clim: [-0.5, 0.5]
+
+plotEpsFlags:
+    description: Time series plot of the dissipation rate flags
+    clim: [0, 8] 
+
 plotEpsTS:
     description: Time series plot of the dissipation rate
     indZ: 17
@@ -70,8 +82,9 @@ plotDelEpshist:
     
 plotSpectra:
     spdVar: EVEL_HOR
+    freqNoise: [0.3, 0.5] # noise will be calculated for this frequency range
     spdBins: [0,0.1,0.2,0.3,0.4,0.5]
-    indZall: [2,10]
+    indZall: [3,10]
     nZavg: 3 # Number of bins to average in z (should be odd)
     noiseLevel: 0.00055 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
     Afit: 1e-3

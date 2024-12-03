@@ -13,12 +13,13 @@ close all
 addpath('functions')
 
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM_M1aC_RM5';
-dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS01';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
+dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
-% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
 
+climVel = 0.5;
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -161,12 +162,12 @@ if exist('Anc','var')
     axB = [0.8:-.22:0];
 
     t = get_yd(Anc.TIME);
-    for bb = 1:4
+    for bb = 1:length(data.L1.N_BEAM)
         ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
         plotData = struct('x',t','y',Anc.Z_DIST','values',Anc.ENU(:,:,bb)','var','R_VEL');
         opts = struct('ylabel','z [m]','clabel',['ENU(:,:,',num2str(bb),') [m/s]']);
         plot_pcolor(ax(bb),plotData,opts);
-        caxis([-1 1])
+        caxis([-1 1]*climVel)
         colormap(ax(bb),cmocean('balance'))
     end
     title(ax(1),['ENU Velocities'])
@@ -181,7 +182,7 @@ if exist('Anc','var')
         indZ = floor(length(Anc.Z_DIST)/2);
     end
     figure_named(['ENU_middepth']),clf,clear ax, clear plotData
-    for bb = 1:4 
+    for bb = 1:length(data.L1.N_BEAM)
         ax(bb) = subplot(4,1,bb);
         plot(get_yd(Anc.TIME),Anc.ENU(:,indZ,bb))
         switch bb
