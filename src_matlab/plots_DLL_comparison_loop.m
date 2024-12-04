@@ -12,9 +12,9 @@ set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
-% %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
-% %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
-% %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
 
 
@@ -27,18 +27,18 @@ set(0,'defaultAxesYGrid','on')
 %       processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
-dataSet = 'RDIWH600_CANDYFLOSS_TOP';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
-    processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
+%     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'};
 
 % dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
 
-% dataSet = 'AQD_Windermere_bedframe';
-%        processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+dataSet = 'AQD_Windermere_bedframe';
+       processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
@@ -62,13 +62,13 @@ figDir=[processIDs{1},'_vs_',processIDs{2}];
 figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
-opts.indB = 1;
-opts.indZ = 5;
+opts.indB = 2;
+opts.indZ = 20;
 dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB))
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);
-for tt = 97:3:500
+for tt = 1:3:NT
     opts.indT = tt;
    
     
@@ -76,8 +76,8 @@ for tt = 97:3:500
     data(2).L4.procParams = d(2).metadataGroups.L4;
 
     
-%   figure_named('DLL')
-     figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
+%    figure_named('DLL')
+    figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
     clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
     set(gcf,'Position',[0,100,1600,600])
     axW = 0.18;
@@ -128,7 +128,7 @@ for tt = 97:3:500
     % Velocity profile
     ax(4) = subplot('Position',[x0+3*(offset+axW) axY axW axH]);
     
-    if ~strcmp(dataSet,'AQD_Windermere_bedframe') % ENU has wrong dimensions for AQD data
+%     if ~strcmp(dataSet,'AQD_Windermere_bedframe') % ENU has wrong dimensions for AQD data
         speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
 
         speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
@@ -150,7 +150,7 @@ for tt = 97:3:500
 %         % plot center point
         plot(speed(opts.indZ),index(opts.indZ),'*k')
         
-    end
+%     end
     title('Speed Profile')
     xticks = get(gca,'xtick');
     yticks = get(gca,'ytick');

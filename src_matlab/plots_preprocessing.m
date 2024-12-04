@@ -14,12 +14,12 @@ addpath('functions')
 
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM_M1aC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
-dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
-% dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
+dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
 
-climVel = 0.5;
+climVel = 0.1;
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);

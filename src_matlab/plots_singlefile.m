@@ -17,9 +17,9 @@ colors = get(0,'defaultaxescolororder');
 
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
-dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf';
-% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M1aC_RM2';
+dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 
 
