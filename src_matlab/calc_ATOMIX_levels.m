@@ -16,7 +16,7 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'5A','5B'};
+caseIDs = {'3F','3G'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
 
 %% Process
@@ -56,6 +56,18 @@ for caseID = caseIDs
         case '3C'
             dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
             processID = 'JMM_M1aC_RM1p5';
+        case '3D'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M1aC_RM1p0';
+        case '3E'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M2uC_RM1p0';
+         case '3F'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M1aC_RM0p75';
+        case '3G'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M2uC_RM0p75';
         case '4A'
             dataSet = 'Signature5beam_TidalShelf'; rawID = 'CEB'; 
             processID = 'JMM_M2uC_RM2';

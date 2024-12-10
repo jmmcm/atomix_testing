@@ -4,10 +4,7 @@
 % June 29, 2022
 
 clear all
-addpath('../../netcdftools_ceb/variables_flags_databases/YAMLMatlab_0/')
-addpath('../../utilitieswork/')
-addpath('../../utilitieswork/cmocean/')
-addpath('../../adcp_toolbox/matlab/')
+
 
 
 mname = mfilename('fullpath');
@@ -37,7 +34,9 @@ set(0,'defaultAxesYGrid','on')
 dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
-    processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'}; short_names = {'Cen','All'};
+%     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'}; short_names = {'Cen','All'};
+%     processIDs = {'JMM_M1aC_RM1p0','JMM_M2uC_RM1p0'}; short_names = {'Cen','All'};
+    processIDs = {'JMM_M1aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'Cen','All'};
 
 % dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
