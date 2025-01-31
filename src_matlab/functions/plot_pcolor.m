@@ -47,6 +47,8 @@ switch data.var
          cmap = cmocean('Balance');
     case 'ENU'
          cmap = cmocean('Balance');
+    case 'XYZ'
+         cmap = cmocean('Balance');
     case 'SPD'
         cmap = cmocean('Speed');
     case 'DIR'

@@ -1,0 +1,51 @@
+#===================================================================================
+#       GROUP LEVEL VARIABLES QAQC FLAGS AND THRESHOLDS
+#===================================================================================     
+        
+# ================ L1 =================
+
+L1:  # Level 1: Raw instrument data (TODO: THese are really just a placeholder. Cynthia didn't provide these). 
+   R_VEL_FLAGS:
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16
+           - 32
+           - 64
+           - 128
+  
+        flag_meanings: |
+           valid_bin_low
+           valid_bin_high 
+           out_of_range_low
+           out_of_range_high
+           low_correlation
+           low_amplitude
+           excessive_tilt
+           fish_rejection
+           
+        comment:  Flags denote the cause for excluding individual velocity samples recorded by the instrument from subsequent analysis. # Add extra entries, which will appear as attributes in the netcdf
+        
+        flag_thresholds:
+           - -999 # first valid bin
+           - -999 # last valid bin
+           - -0.03 # lowest velocity considered valid 
+           - 0.03 # highest velocity considered valid
+           - 65 # CORR minimum threshold (RDI WC)
+           - -999 # ABSIC minimum threshold
+           - 20 # maximum absolute PITCH or ROLL
+           - 50 # ABSIC threshold used in fish rejection algorithm (RDI WA)
+      
+        flag_threshold_meanings: |
+           exclude_bins_below_threshold
+           exclude_bins_above_threshold
+           exclude_values_below_threshold
+           exclude_values_above_threshold
+           exclude_values_if_CORR_below_threshold
+           exclude_values_if_ABSIC_below_threshold
+           exclude_values_if_any_tilt_angle_above_threshold
+           ABSIC_threshold_for_fish_rejection_algorithm
+

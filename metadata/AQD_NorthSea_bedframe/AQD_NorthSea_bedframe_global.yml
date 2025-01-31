@@ -1,0 +1,61 @@
+# Gobal metadata for ATOMIX sample data from North Sea Aquadopp on bedframe
+
+title: North Sea Aquadopp 2009
+platform_type: Aquadopp upward-looking on a bedframe 
+#date_created: appended automatically during file creation
+#disclaimer: also appended automatically
+comment: North Sea bedframe Aquadopp
+conventions: CF-1.6, ATOMIX
+abstract: 
+
+#Location specific
+area: North Sea
+geospatial_lat_min: NaN;
+geospatial_lat_max: NaN;
+geospatial_lon_min: NaN;
+geospatial_lon_max: NaN;
+#geospatial_vertical_min: 
+#geospatial_vertical_max: 
+geospatial_vertical_positive: up
+geospatial_vertical_reference: 
+
+#Date and time
+time_coverage_start: '2009-08-09T00:09:00Z' #yyyy-mm-ddTHH:MM:SSZ
+time_coverage_end: '2009-08-10T19:00:00Z'
+time_deployment_start: '2009-08-09T00:09:00Z'
+time_deployment_end: '2009-08-10T19:00:00Z'
+
+#Who recorded 
+institution: 
+authors: 
+# project_name: 
+# cruise: 
+# cruise_report: 
+# vessel:   
+creator_name: Cynthia Bluteau # Name of person or institution who created this file.
+creator_email:   
+reference:  Bluteau et al (2011), Limnology and Oceanography Methods
+acknowledgements: Sample data provided for testing epsilon algorithm for ATOMIX project
+# funding_agency: UK Natural Environment Research Council
+# keywords: 
+source: bedframe  # Use a term from the SeaVoX Platform Categories vocabulary (L06) list, usually one of the following:  subsurface mooring, ship, sub-surface gliders, autonomous underwater vehicle ()
+
+# Instrument specific info for turbulence data ================
+instrument: Nortek Aquadopp 1 MHz # Need to check frequency
+# instrument_serial_number: 5874
+instrument_nominal_depth: 70  # numeric value in m [Need to check]
+instrument_nominal_height:  Unknown # m [ Need to check ]
+instrument_nominal_orientation: up # [ Need to check:  header file says down ] 
+mooring: Bedframe
+instrument_mounting: Bedframe with ADCP transducer at 0.4 m above deck
+# instrument_sample_interval: # in seconds
+instrument_sample_rate: 8 # in Hz (supply only 1)
+instrument_sampling_mode: burst of 1024 profiles (duration 512 seconds) with 120 minute interval between start of bursts
+instrument_burst_interval: 900 s # s
+instrument_burst_duration: 256 s #    
+instrument_program_comment: pulse-pulse coherent [Need to check]
+#instrument_beam2xyz_transformation_matrix: "1.1831     0       -1.1831 0;  0      -1.1831     0 1.1831; .5518 0 0.5518 0;  0 .5518 0 0.5518"
+instrument_measured_coordinate_system: XYZ # converted back to beam since it recorded raw pints. 
+#instrument_nominal_velocity_range:  m/s
+ancillary_sensors: pressure sensor data used to compute water column height. #Very brief text detailing additional non-turbulence sensors here, and how they've been processed.
+

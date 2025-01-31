@@ -31,12 +31,12 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','All'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
 
-dataSet = 'RDIWH600_CANDYFLOSS_TOP';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M1aC_RM1p0','JMM_M2uC_RM1p0'}; short_names = {'Cen','All'};
-    processIDs = {'JMM_M1aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'Cen','All'};
+%     processIDs = {'JMM_M1aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'Cen','All'};
 
 % dataSet = 'Signature5beam_TidalShelf';
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
@@ -52,7 +52,8 @@ dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
 
-
+dataSet = 'AQD_NorthSea_bedframe';
+    processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
 %% Flags
 flg.matCompare.show = 0;
 flg.saveFigs = 1;

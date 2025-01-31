@@ -36,14 +36,18 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 %     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
 %     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
-
-dataSet = 'AQD_Windermere_bedframe';
-       processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
+% 
+% dataSet = 'AQD_Windermere_bedframe';
+%        processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
+
+
+dataSet = 'AQD_NorthSea_bedframe';
+       processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; % Compare methods 1a and 2u
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
 
@@ -63,8 +67,8 @@ figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
 opts.indB = 2;
-opts.indZ = 20;
-dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB))
+opts.indZ = 28;
+dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB));
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
 [NT,NZ,NB] = size(data(1).L4.EPSI);

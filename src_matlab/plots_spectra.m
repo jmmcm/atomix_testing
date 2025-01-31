@@ -18,7 +18,8 @@ flg.saveFigs = 1;
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
-dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);

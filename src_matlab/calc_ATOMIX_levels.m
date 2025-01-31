@@ -16,7 +16,7 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'3F','3G'};
+caseIDs = {'7A','7B'};
 % caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
 
 %% Process
@@ -101,6 +101,12 @@ for caseID = caseIDs
         case '6B'
             dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; rawID = 'NSL'; 
             processID = 'JMM_M1aC_RM5';
+        case '7A'
+            dataSet = 'AQD_NorthSea_bedframe'; rawID = 'CEB';
+            processID = 'JMM_M2uC_RM0p3';
+        case '7B'
+            dataSet = 'AQD_NorthSea_bedframe'; rawID = 'CEB';
+            processID = 'JMM_M1aC_RM0p3';
         otherwise
             error('Need to create case')
     end

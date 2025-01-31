@@ -19,12 +19,14 @@ colors = get(0,'defaultaxescolororder');
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf';
-dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
+% dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
+dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
 
 
 %% Flags
-flg.saveFigs = 1; % Not supported yet for all figures
+flg.saveFigs = 0; % Not supported yet for all figures
 flg.plotVelTS.show = 0;
 flg.plotVelAvgTS.show = 1;
 flg.plotVelENUTS.show = 1;
@@ -133,6 +135,40 @@ if flg.plotVelAvgTS.show
     add_fig_info(mname,[dataSet],struct())
     if flg.saveFigs
         figName = [figPath,'VelBeamAvg.png'];
+        disp(['Saving: ',figName])
+        saveas(gcf,figName);
+    end
+end
+
+%% Plot XYZ velocitues
+if strcmp(dataSet, 'AQD_NorthSea_bedframe')
+    figure_named(['XYZVel_TS']),clf,clear ax, clear plotData
+    NP = 3;
+    
+    opts = plotOptions.plotVelTS;
+    opts.clim = 0.15*[-1 1];
+    opts.ylabel = 'z [m]';
+    plotData.x = get_yd(Anc.TIME);
+    plotData.y = Anc.Z_DIST;
+    plotData.var = 'XYZ';
+    for bb = 1:3
+        ax(bb) = subplot(NP,1,bb);
+        plotData.values = Anc.XYZ(:,:,bb)';
+        switch bb
+            case 1; opts.clabel= ['X [m/s]'];
+            case 2; opts.clabel= ['Y [m/s]'];
+            case 3; opts.clabel= ['Z [m/s]'];
+        end
+        plot_pcolor(ax(bb),plotData,opts);
+        hold all
+        try
+            plot(plotData.x,L1.PRES,'k')
+        end
+    end
+    xlabel(ax(NP),['year day ',yearStr])
+    add_fig_info(mname,[dataSet],struct())
+    if flg.saveFigs
+        figName = [figPath,'VelXYZ.png'];
         disp(['Saving: ',figName])
         saveas(gcf,figName);
     end

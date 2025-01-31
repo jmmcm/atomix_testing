@@ -16,8 +16,9 @@ addpath('functions')
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
-dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
+dataSet = 'AQD_NorthSea_bedframe'; processID = 'CEB';
 
 climVel = 0.1;
 
