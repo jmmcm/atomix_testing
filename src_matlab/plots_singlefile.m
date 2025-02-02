@@ -245,7 +245,7 @@ if flg.plotEpsTS.show
         opts.clabel= ['log10(\epsilon_',num2str(bb),' [W/kg])'];
         plot_pcolor(ax(bb),plotData,opts);
         hold all
-        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(floor(opts.indZ/2)),'--w')
+        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(floor(opts.indZ*3)),'--w')
         plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(opts.indZ),'--w')
     end
     xlabel(ax(NB),['year day ',yearStr])
@@ -272,7 +272,7 @@ if flg.plotEpsTS.show
     
     title('speed')
     ax(2) = subplot(312);
-    indZ = floor(opts.indZ/2);
+    indZ = floor(opts.indZ*3);
     for bb = 1:NB
         semilogy(plotData.x,L4.EPSI(:,indZ,bb),'DisplayName',['beam ',num2str(bb)])
         if bb == 1; hold all; end
