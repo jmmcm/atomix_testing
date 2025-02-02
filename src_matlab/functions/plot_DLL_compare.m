@@ -62,9 +62,30 @@ for ii = 1:2
         pl(pcount) = plot(xFit,yFit,'color',get(p(pcount),'Color'),'linewidth',2);
     end
 end
-legend(p,legendstr)
+legend(p,legendstr,'location','southeast')
 titlestr = ['z = ',num2str(lev4.Z_DIST(indZ)),' m, ',...
     'b = ',num2str(lev4.N_BEAM(indB))];
 title(titlestr)
 xlabel('(\delta r)^{2/3} [m^{2/3}]')
 ylabel('D_{LL} [m^2 s^{-2}]')
+
+ax = gca;
+pos = get(ax,'Position');
+set(ax,'position',[pos(1),pos(2),pos(3),pos(4)]);
+xlimits = get(ax,'xlim');
+
+% axis for deltaBins
+b=axes('Position',[pos(1),pos(2)+pos(4),pos(3), 1e-12]);
+set(b,'Units','normalized');
+set(b,'Color','none')
+set(b,'xlim',xlimits);
+
+nBinMax = floor(xlimits(2)^(3/2)/dr);
+xticks = ([0:2:nBinMax]*dr).^(2/3);
+for ii = 1:length(xticks)
+    xtickLabels{ii} = num2str(2*ii-2);
+end
+set(b,'tickdir','out')
+set(b,'xtick',xticks)
+set(b,'xticklabels',xtickLabels)
+xlabel(b,'\Delta Bins')

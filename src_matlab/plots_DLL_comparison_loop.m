@@ -67,7 +67,7 @@ figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
 opts.indB = 2;
-opts.indZ = 28;
+opts.indZ = 30;
 dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB));
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
@@ -80,8 +80,8 @@ for tt = 1:3:NT
     data(2).L4.procParams = d(2).metadataGroups.L4;
 
     
-%    figure_named('DLL')
-    figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
+   figure_named('DLL')
+%     figure('Visible','off','Renderer','Painters') % Renderer necessary for good printed figures
     clf,clear ax % For good printed pics need to run close all, set(0,'DefaultFigureWindowStyle','normal') 
     set(gcf,'Position',[0,100,1600,600])
     axW = 0.18;
@@ -134,15 +134,13 @@ for tt = 1:3:NT
     
 %     if ~strcmp(dataSet,'AQD_Windermere_bedframe') % ENU has wrong dimensions for AQD data
         speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
-
-        speed = sqrt(data(1).Ancillary.ENU(opts.indT,:,1).^2 + data(1).Ancillary.ENU(opts.indT,:,2).^2);
         
         z = data(1).Ancillary.Z_DIST;
         index = 1:length(z);
         
         % plot range of profile used
          dr = (data(1).L1.Z_DIST(2) - data(1).L1.Z_DIST(1))/cosd(data(1).L1.THETA(1));
-         nMax(1) = floor(data(1).L4.R_MAX(opts.indT,opts.indZ,opts.indB) / dr /2);
+         nMax(1) = floor(data(1).L4.R_MAX(opts.indT,opts.indZ,opts.indB)*1.000001 / dr /2); % Add very small percentage to RMAX to avoid rounding issues
          plot(speed(opts.indZ-nMax(1):opts.indZ+nMax(1)), index(opts.indZ-nMax(1):opts.indZ+nMax(1)),'o-','color','#EDB120','linewidth',2)
          
         
@@ -191,8 +189,8 @@ for tt = 1:3:NT
     
     % Position text
     ylim = get(ax(1),'ylim');
-    t1.Position = [0 ylim(2)];
-    t2.Position = [0 ylim(2)];
+    t1.Position = [0 0.95*ylim(2)];
+    t2.Position = [0 0.95*ylim(2)];
     
     
     
@@ -222,8 +220,7 @@ for tt = 1:3:NT
     end
     
     saveas(gcf,figName);
-    
-%     if tt == 1
+% %     if tt == 1
 %         gif(figName,'overwrite',true,'DelayTime',1/3);
 %     else
 %         gif
