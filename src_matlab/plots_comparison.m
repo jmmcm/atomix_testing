@@ -4,7 +4,8 @@
 % June 29, 2022
 
 clear all
-
+addpath('functions')
+addpath(genpath('../../netcdftools_ceb/'))
 
 
 mname = mfilename('fullpath');
@@ -54,6 +55,7 @@ set(0,'defaultAxesYGrid','on')
 
 dataSet = 'AQD_NorthSea_bedframe';
     processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
+    
 %% Flags
 flg.matCompare.show = 0;
 flg.saveFigs = 1;
