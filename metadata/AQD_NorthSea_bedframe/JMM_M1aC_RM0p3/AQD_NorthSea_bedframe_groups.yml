@@ -68,7 +68,7 @@ L4: # Level 4: Dissipation
    regression_method: Linear regression # statistical technique used for fitting the spectra.
    points_select_method: 'centered' # method to choose points for fit (cloud, centered, anchored)
    dll_averaging: 'true' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
-   rMin: 0.062 # [meters] (equivalent to two bins)
+   rMin: 0.0663 # [meters] (equivalent to two bins)
    rMax: 0.34 #[meters] (equivalent to 10 bins)
    C2: 2.0 # Constant used in the calculation of the second order structure function
    sigmaN_v: 0.00158 # Expected noise level in velocity measurements [m/s]. Estimated from PDF of A0 - may not be accurate
