@@ -69,6 +69,7 @@ plotA0hist:
     description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
     xlimits: [-1e-3, 1e-3]
     nbins: 500
+    A0expected: 5e-4 #2*sigmaN_v^2 = 2*0.0158^2;
         
 plotR2hist:
     description: Histogram of R2
