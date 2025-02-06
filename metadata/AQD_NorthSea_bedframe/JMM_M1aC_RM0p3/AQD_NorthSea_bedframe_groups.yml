@@ -71,7 +71,7 @@ L4: # Level 4: Dissipation
    rMin: 0.0663 # [meters] (equivalent to two bins)
    rMax: 0.34 #[meters] (equivalent to 10 bins)
    C2: 2.0 # Constant used in the calculation of the second order structure function
-   sigmaN_v: 0.00158 # Expected noise level in velocity measurements [m/s]. Estimated from PDF of A0 - may not be accurate
+   sigmaN_v: 0.0042 # Expected noise level in velocity measurements [m/s]. Estimated from noise floor of spectra
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.   
 
    
