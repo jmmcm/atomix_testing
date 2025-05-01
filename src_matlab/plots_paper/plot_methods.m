@@ -15,7 +15,7 @@ figSave = 1;
 %% Plot comparing different regression methods
 dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
-markers = {'s','o','^'};
+markers = {'o','s','^'};
 labels = {'Centered','All','Anchored'};
 for ii = 1:length(processIDs)
     [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -27,7 +27,7 @@ for ii = 1:length(processIDs)
 
 
     % override L4 for smaller range
-    d(ii).metadataGroups.L4.rMax = 3; % 5 range bins
+    d(ii).metadataGroups.L4.rMax = 3.2; % 6 range bins
     d(ii).metadataGroups.L4.Const = d(ii).metadataGroups.L4.C2;
     d(ii).metadataGroups.L4.order = 2;
     d(ii).metadataGroups.L4.figure = 0;
@@ -40,11 +40,11 @@ indZ = 17;
 indB = 1;
 
 fig = figure(20);clf
-set(gcf,'Position',[500 400 600 400])
+set(gcf,'Position',[500 400 800 400])
 axPos = [0.13 0.14 0.775 0.7];
 ax1 = axes(fig,'position',axPos,'color','none');
 
-for ii = 1:length(processIDs)
+for ii = 1:3%:length(processIDs)
     rDel = squeeze(data(ii).L4.REGRESSION_R_DEL(indT,indZ,indB,:));
     DLL = squeeze(data(ii).L4.REGRESSION_DLL(indT,indZ,indB,:));
     A0 = squeeze(data(ii).L4.REGRESSION_COEFF_A0(indT,indZ,indB));
@@ -53,21 +53,26 @@ for ii = 1:length(processIDs)
     rFit = [0 4.5];
     
 
-    p2(ii) = plot(rDel.^(2/3),DLL,'LineStyle','none','Marker',markers{ii},'MarkerSize',6);
+    p2(ii) = plot(rDel.^(2/3),DLL,'LineStyle','none','Marker',markers{ii},'MarkerSize',7);
     set(p2(ii),'LineStyle','none','Marker',markers{ii},...
-        'color',colors(ii,:),'MarkerFaceColor','none','linewidth',1)
+        'color',colors(ii,:),'MarkerFaceColor','none','linewidth',2)
     l{ii} = ['\epsilon = ',num2str(epsi,'%3.1e'),' W/kg (',labels{ii},')'];
     if ii == 1
         hold all
     end
-    plot(rFit.^(2/3), A0+A1*rFit.^(2/3),'Color',get(p2(ii),'Color'),'linewidth',2)
+    p3(ii) = plot(rFit.^(2/3), A0+A1*rFit.^(2/3),'Color',get(p2(ii),'Color'),'linewidth',2);
     
+    if ii == 1
+        set(p2(ii),'MarkerFaceColor',colors(ii,:))
+    end
     
+    uistack(p3(ii),'bottom')
 end
 
 
 xlimits = [0 2.5];
 ylimits = get(gca,'ylim');
+ylimits = [2e-3 10e-3]; %For presentation
 set(ax1,'xlim',xlimits)
 set(ax1,'ylim',ylimits)
 set(ax1,'XTick',(0.5/cosd(20)*[1 2 3 4 5 6]).^(2/3))
@@ -79,14 +84,13 @@ ax2 = axes(fig,'position',axPos,'color','none');
 set(ax2,'xlim',xlimits)
 set(ax2,'ylim',ylimits)
 set(ax2,'XAxisLocation','top')
-xlabel(ax2,'r^{2/3} [m^{2/3}]')
+% set(ax2,'XTick',(0.5/cosd(20)*[1 2 3 4 5 6]).^(2/3))
+xlabel(ax2,'(\delta r)^{2/3} [m^{2/3}]')
 set(ax2,'XColor',0.4*[0 1 0])
 set(ax2,'YTick',[])
 
-    
 
 
-uistack(p2,'top')
 legend(p2,l,'location','southeast')
 
 
@@ -95,5 +99,5 @@ if figSave
     disp('Saving')
    
     set(gcf,'PaperPosition',[0 0 6 3],'PaperUnits','inches')
-    saveas(gcf,[figDir,'RegressMethods.png']);
+    saveas(gcf,[figDir,'RegressMethods3.png']); % Changes for presentation
 end

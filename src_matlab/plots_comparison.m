@@ -6,7 +6,9 @@
 clear all
 addpath('functions')
 addpath(genpath('../../netcdftools_ceb/'))
-
+addpath(genpath('../../utilitieswork/'))
+addpath(genpath('../../adcp_toolbox/matlab/'))
+addpath(genpath('/home/jmm000/code/external/cmocean/'))
 
 mname = mfilename('fullpath');
 
@@ -18,10 +20,12 @@ set(0,'defaultAxesYGrid','on')
 %% Select dataset and process IDs
 % dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
-%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'}; 
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
+%     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};
 
 
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
@@ -31,6 +35,8 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M2uC_RM7p5','BDS_M1aC_RM7p5'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','All'};
 %      processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
+%       processIDs = {'JMM_M2aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'AllAvg','All'};
+%       processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5'}; short_names = {'Cen','AllAvg','All'};
 
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
@@ -38,24 +44,25 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M1aC_RM1p5','JMM_M2uC_RM1p5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M1aC_RM1p0','JMM_M2uC_RM1p0'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M1aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'Cen','All'};
-
-% dataSet = 'Signature5beam_TidalShelf';
-%     processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
-%    processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM4'}; % Compare rmax
-%     processIDs = {'JMM_M1aC_RM4','JMM_M2uC_RM4'}; % Compare methods 1a and 2u
-%     processIDs = {'JMM_M2uC_RM2','JMM_M2uC_RM2_rmin_3bins'}; % Compare method 2u with different rmin
+ %    processIDs = {'JMM_M2aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'AllAvg','All'};
+%     processIDs = {'JMM_M1aC_RM0p75','JMM_M2aC_RM0p75','JMM_M2uC_RM0p75'}; short_names = {'Cen','AllAvg','All'};
 
 % dataSet = 'AQD_Windermere_bedframe';
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2uC_RM2'}; short_names = {'Cen','All'}; % Compare methods 1a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2'}; % Compare methods 1a and 2a
-%      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; % Compare methods 2a and 2u
+%      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'AllAvg','All'};% Compare methods 2a and 2u
+%      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'Cen','AllAvg','All'};% Compare methods 2a and 2u
 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
+%     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};% Compare methods 1a and 2u
+%     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
 
 dataSet = 'AQD_NorthSea_bedframe';
-    processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
-    
+%     processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
+%      processIDs = {'JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'AllAvg','All'};
+     processIDs = {'JMM_M1aC_RM0p3','JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','AllAvg','All'};
+
 %% Flags
 flg.matCompare.show = 0;
 flg.saveFigs = 1;
@@ -84,7 +91,8 @@ for ii = 1:length(processIDs)
     flags(ii) = d(ii).flags;
     names{ii} = [d(ii).infoProcessing.creator, '_', d(ii).infoProcessing.method];
 end
-
+% d(1).history.date
+% pause
 %% Figure naming
 if length(processIDs) == 2
     figDir=[processIDs{1},'_vs_',processIDs{2}];
@@ -200,8 +208,63 @@ if flg.plotEpsTS.show && flg.twoSets
     
 end
 
+if flg.plotEpsTS.show && ~flg.twoSets
+    t = 1:length(data(1).L4.TIME);
+    z = 1:length(data(1).L4.Z_DIST);
+    indZall = floor(length(z)*[0.1 0.4 0.7]);
+    indB = plotOptions.plotEpsTS.indB;
+    
+    figure_named(['EPSI_TS']),clf,clear ax, clear plotData
+    NP = length(data);
+    for ii = 1:NP
+        ax(ii) = subaxis(NP,1,ii);
+        plotData = struct('x',t,'y',z,'values',log10(data(ii).L4.EPSI(:,:,indB))','var','EPSI');
+        opts = struct('ylabel','z index','clabel',['log10(\epsilon_{' short_names{ii} '})'],'clim',plotOptions.plotEpsTS.clim);
+        plot_pcolor(ax(ii),plotData,opts);
+        hold all
+        for jj = 1:length(indZall)
+            plot(get(gca,'xlim'),[1 1]*indZall(jj),'k')
+        end
+        if ii == 1
+            title([clean_string('EPSI'),'(:,:,',num2str(indB),')'])
+        end
+    end
+    xlabel('t index')
+    
+    figure_named(['EPSI_SelectBins']),clf,clear ax, clear plotData
+    for ii = 1:length(indZall)
+        indZ = indZall(ii);
+        ax(ii) = subaxis(NP,3,1,ii,2,1);
+        for jj = 1:NP
+            semilogy(t,data(jj).L4.EPSI(:,indZ,indB),'DisplayName',short_names{jj})
+            if jj == 1
+                hold all
+            end
+        end
+        title(ax(ii),['indZ = ',num2str(indZ)])
+        if ii == 1
+            legend()
+        end
+        
+        ax(ii+NP) = subaxis(NP,3,3,ii,1,1);
+        for jj = 1:NP
+            plotData(jj).var = 'EPSI';
+            plotData(jj).values = log10(data(jj).L4.EPSI(:,indZ,indB));
+            plotData(jj).label = short_names{jj};
+        end
+            opts = plotOptions.plotEpsHist;
+            opts.displayStyle = 'stairs';
+            opts.nbins = 50;
+            [ax(ii+NP),ph]=plot_histogram(ax(ii+NP),plotData,opts);
+  
+        
+    end
+    xlabel(ax(ii+NP),'\epsilon [W\kg]')
+    
+end
+
 %% Flags
-if flg.plotEpsFlags.show
+if flg.plotEpsFlags.show && flg.twoSets
     figure_named('flags'), clf, clear ax
     ax(1) = subplot(311);
     plotData = struct('x',t,'y',z,'values',log2(data(1).L4.EPSI_FLAGS(:,:,indB)'),'var','EPSI_FLAGS');
@@ -242,7 +305,7 @@ if flg.plotEpsScatter.show && flg.twoSets
             eA = data(1).L4.EPSI(:);
             eB = data(2).L4.EPSI(:);
             varName = 'EPSI';
-        elseif ii == 2
+        elseif ii == 2[ax(3),ph]=plot_histogram(ax(3),plotData,opts);
             eA = data(1).L4.EPSI_FINAL(:);
             eB = data(2).L4.EPSI_FINAL(:);
             varName = 'EPSI_FINAL';

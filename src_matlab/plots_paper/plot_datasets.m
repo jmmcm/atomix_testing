@@ -121,7 +121,7 @@ for ii = 1:length(epsiT)-1
     
 end
 plot(Lk(1:end-1).^(2/3),DLLTLk,'--k')
-legend(p,lstr,'location','northwest','AutoUpdate','off')
+% legend(p,lstr,'location','northwest','AutoUpdate','off')
 caxis([min(log10(epsiT)),max(log10(epsiT))])
 colormap('gray')
 cbar = colorbar;
@@ -155,7 +155,7 @@ end
 % format
 
 
-legend(ax(1),p11,lstr,'location','best','AutoUpdate','off')
+% legend(ax(1),p11,lstr,'location','best','AutoUpdate','off')
 ylim(ax(1), [-0.005,0.025])
 for ii = 1:2
     xlabel(ax(ii),'(\delta r)^{2/3} [m^{2/3}]')
@@ -165,9 +165,9 @@ xlim(ax(1),[0 4])
 xlim(ax(2),[1e-2 4])
 ylim(ax(2),[1e-8 1e-1])
 
-set(ax(1),'Position',[0.08 0.1 0.44 0.8])
+set(ax(1),'Position',[0.08 0.12 0.38 0.8])
 get(ax(2),'Position')
-set(ax(2),'Position',[0.5 0.1 0.44 0.8]) % Doesn't seem to work
+set(ax(2),'Position',[0.54 0.12 0.38 0.8]) % Doesn't seem to work
 % save
 if figSave
     disp('Saving')

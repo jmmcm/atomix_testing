@@ -11,14 +11,15 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'JMMd_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'};
+    processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'};
 
 
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
+%dataSet = 'RDIWH600_CANDYFLOSS_bedframe';
 % %     processIDs = {'BDS_M1aC_RM7p5','JMM_M1aC_RM7p5'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5_fromL2qc'};
 % %     processIDs = {'BDS_M2uC_RM7p5','JMM_M2uC_RM7p5'};
@@ -26,7 +27,8 @@ set(0,'defaultAxesYGrid','on')
 % %     processIDs = {'JMM_M1aC_RM7p5','JMM_M3uC_RM7p5'};
 %       processIDs = {'JMM_M1aC_RM7p5','JMM_M2uC_RM7p5'};
 %     processIDs = {'JMM_M1aC_RM7p5','JMM_M2aC_RM7p5','JMM_M2uC_RM7p5','JMM_M3uC_RM7p5'};
-
+%    processIDs = {'JMM_M2aC_RM7p5','JMM_M2uC_RM7p5'};
+    
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP';
 %     processIDs = {'BDS_M1aC_RM1p5','JMM_M1aC_RM1p5'};
 %     processIDs = {'BDS_M2uC_RM1p5','JMM_M2uC_RM1p5'};
@@ -46,8 +48,10 @@ set(0,'defaultAxesYGrid','on')
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; % Compare methods 1a and 2u
 
 
-dataSet = 'AQD_NorthSea_bedframe';
-       processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; % Compare methods 1a and 2u
+%dataSet = 'AQD_NorthSea_bedframe';
+%        processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; % Compare methods 1a and 2u
+    %   processIDs = {'JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; % Compare methods 2a and 2u
+
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
 
@@ -66,8 +70,8 @@ figDir=[processIDs{1},'_vs_',processIDs{2}];
 figPath = ['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',figDir,'/SFfits/'];
 
 %% Plot
-opts.indB = 2;
-opts.indZ = 30;
+opts.indB = 1;
+opts.indZ = 5;
 dr = (d(1).data.L1.Z_DIST(2) - d(1).data.L1.Z_DIST(1))/cosd(d(1).data.L1.THETA(opts.indB));
 cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
 
@@ -219,7 +223,7 @@ for tt = 1:3:NT
         mkdir(figPathFull)
     end
     
-    saveas(gcf,figName);
+   % saveas(gcf,figName);
 % %     if tt == 1
 %         gif(figName,'overwrite',true,'DelayTime',1/3);
 %     else

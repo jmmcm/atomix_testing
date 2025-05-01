@@ -16,7 +16,7 @@ function h=fill_between(xVals,yVals,color)
 x = [xVals(1,:) fliplr(xVals(2,:))];
 y = [yVals(1,:) fliplr(yVals(2,:))];
 
-alpha = 0.25; %transparency 
+alpha = 0.1; %transparency 
 h=patch(x,y,color,...
         'edgecolor','none','facealpha',alpha);
     
