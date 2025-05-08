@@ -53,15 +53,16 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'AllAvg','All'};% Compare methods 2a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'Cen','AllAvg','All'};% Compare methods 2a and 2u
 
-% dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
+dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
 %     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};% Compare methods 1a and 2u
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
+     processIDs = {'JMM_M1aC_RM3','JMM_M2aC_RM3','JMM_M2uC_RM3'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
 
-dataSet = 'AQD_NorthSea_bedframe';
+%dataSet = 'AQD_NorthSea_bedframe';
 %     processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
 %      processIDs = {'JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'AllAvg','All'};
-     processIDs = {'JMM_M1aC_RM0p3','JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','AllAvg','All'};
+%     processIDs = {'JMM_M1aC_RM0p3','JMM_M2aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','AllAvg','All'};
 
 %% Flags
 flg.matCompare.show = 0;
