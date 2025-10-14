@@ -2,10 +2,6 @@ clear all
 addpath('/home/jmm000/code/utilities/subaxis/')
 mname = mfilename('fullpath');
 
-%% 
-
-
-
 %%
 nn = 5;
 dataSets = {'RDI4beam_TidalChannel_GP130620BPb',...
@@ -60,7 +56,7 @@ colors = {'r','b',[0 0.6 0]};
 labels = {'Cen','All','AllAvg'};
 %% Data files
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
-
+metaDir = ['../' metaDir];
 for ii = 1:length(processIDs)
     processID = processIDs{ii};
     matFile = [dataDir,dataFileRoot,'_',processID,'.mat'];
@@ -73,69 +69,16 @@ end
 filePlotOptions = [metaDir,dataSet,'_plotOptions.yml'];
 plotOptions = ReadYaml(filePlotOptions);
 
-%% Plot dissipation and speed
-
-% indTall = []; % To override defaults
-figure(1),clf,clear ax
-set(gcf,'Name','EpsSpeed')
-ax(1) = subaxis(3,1,1);
-ax(2) = subaxis(3,1,3);
-ax(3) = subaxis(3,1,2);
-for dd = 1:3
-    p = plot_epsi(ax(1),data(dd).L4,struct('indB',indB,'indZ',indZ,'col',colors{dd},'varX','index','marker','.'));
-    set(p(1),'DisplayName',labels{dd})
-    hold(ax(1),'on')
-end
-for tt = 1:length(indTall)
-    plot(ax(1),[1 1]*indTall(tt),get(ax(1),'ylim'),'k','linewidth',1,'HandleVisibility','Off')
-end
-plot(ax(1), get(ax(1),'xlim'),0.1*d(1).metadataGroups.L4.sigmaN_v^3*[1 1],'--c','linewidth',2,'DisplayName','\epsilon_{min}')
-
-set(ax(1),'yscale','log')
-ylim(ax(1),limEpsi)
-ylabel(ax(1),'\epsilon [W/kg]')
-
-for dd = 1:3
-    plot(ax(3),1:length(data(dd).Ancillary.TIME),data(dd).L4.EPSI_DEL_RATIO(:,indZ,indB)')
-    hold(ax(3),'on')
-end
-for tt = 1:length(indTall)
-    plot(ax(3),[1 1]*indTall(tt),get(ax(3),'ylim'),'k','linewidth',1)
-end
-plot(ax(3),get(ax(3),'xlim'),[1 1],'k','linewidth',1)
-set(ax(3),'yscale','log')
-ylabel(ax(3),'\Delta\epsilon/\epsilon')
-
-speed = sqrt(data(1).Ancillary.ENU(:,:,1).^2 + data(1).Ancillary.ENU(:,:,2).^2);
-pcolor(ax(2),1:length(data(1).Ancillary.TIME),1:length(data(1).Ancillary.Z_DIST),speed')
-shading(ax(2),'flat')
-colormap(cmocean('speed'))
-p = get(ax(2),'Position');
-c = colorbar('Position',[p(1)+p(3)+0.02 p(2) 0.01 p(4)]); 
-hold(ax(2),'on')
-for tt = 1:length(indTall)
-    plot(ax(2),[1 1]*indTall(tt),get(ax(2),'ylim'),'k','linewidth',1)
-end
-plot(ax(2),get(ax(2),'xlim'),[1 1]*indZ,'k','linewidth',1)
-
-ylabel(c,'speed [m/s]')
-ylabel(ax(2),'z index')
 
 
-xlabel(ax(2),'t index')
-
-%shading(ax(3),'flat')
-%caxis([0 1])
-linkaxes(ax,'x')
-
-% Plot SF Fit
-for tt = 1:length(indTall)
+%% Plot SF Fit
+for tt = 2%1:length(indTall)
     figure(1+tt),clf,clear ax
     set(gcf,'Name','SFfits')
     indT = indTall(tt);
     
-    for pp = 1:5
-        ax(pp) = subaxis(1,5,pp,'SpacingHoriz',0.02);
+    for pp = 1:4
+        ax(pp) = subaxis(1,4,pp,'SpacingHoriz',0.02);
     end
 
     pAll = [];
@@ -150,8 +93,18 @@ for tt = 1:length(indTall)
         opts.colorbar = 0;
 
         axes(ax(dd))
+        
         [ax(dd),p,t]= plot_DLL_fit(ax(dd),data(dd).L3,data(dd).L4,opts);
-        title(ax(dd),{labels{dd},ax(dd).Title.String})
+        set(p(1),'MarkerFaceColor',0.8*[1 1 1])
+        delete(p(2))
+        %set(p(2),'Marker','o','MarkerFaceColor',colors{dd})
+        p(2) = plot(ax(dd),squeeze((data(dd).L4.REGRESSION_R_DEL(indT,indZ,indB,:))).^(2/3),squeeze(data(dd).L4.REGRESSION_DLL(indT,indZ,indB,:)),...
+            'o','color',colors{dd},'MarkerFaceColor',colors{dd},'DisplayName','FittedPoints');
+        legend([p(1) p(2) p(3)])
+        delete(t)
+
+        
+        title(ax(dd),{labels{dd}})
         set(p(2),'color','k','linewidth',2)
         set(p(3:5),'color',colors{dd})
         box(ax(dd),'on')
@@ -168,6 +121,10 @@ for tt = 1:length(indTall)
 
 
         pAll = [pAll pC(2)];
+        
+        epsi(dd) = data(dd).L4.EPSI(indT,indZ,indB);
+        epsi_flag(dd) = data(dd).L4.EPSI_FLAGS(indT,indZ,indB);
+        epsi_del_ratio(dd) = data(dd).L4.EPSI_DEL_RATIO(indT,indZ,indB);
 
 
 
@@ -175,7 +132,7 @@ for tt = 1:length(indTall)
 
     legend(ax(4),pAll)
     box(ax(4),'on')
-    title(ax(4),{'Comparison',ax(4).Title.String})
+    title(ax(4),{'Comparison'})
 
     for pp = 2:4
         set(ax(pp),'yticklabels','')
@@ -183,35 +140,13 @@ for tt = 1:length(indTall)
     end
     linkaxes(ax(1:4),'y')
 
-    % Velocity profile
-    axes(ax(5))
-    dr = (data(1).L4.Z_DIST(2) - data(1).L4.Z_DIST(1))/cosd(data(1).L1.THETA(indB));
-    cMax = floor(d(1).metadataGroups.L4.rMax/2/dr);
-
-    z = data(1).Ancillary.Z_DIST;
-    index = 1:length(z);
-
-    % plot range of profile used
-    dr = (data(1).L1.Z_DIST(2) - data(1).L1.Z_DIST(1))/cosd(data(1).L1.THETA(1));
-    nMax(1) = floor(data(1).L4.R_MAX(opts.indT,opts.indZ,opts.indB)*1.000001 / dr /2); % Add very small percentage to RMAX to avoid rounding issues
-    plot(speed(indT,opts.indZ-nMax(1):opts.indZ+nMax(1)), index(opts.indZ-nMax(1):opts.indZ+nMax(1)),'o-','color','#EDB120','linewidth',2)
-
-
-    hold all
-    scatter(speed(indT,:),index,35,index,'filled')
-    caxis(opts.indZ+[-cMax-1 cMax+1])
-    cmap = cmocean('balance','pivot',indZ)
-    colormap(cmap)
-    % colormap(cmocean('oxy',cMax*2,'pivot',indZ))
-    c = colorbar;
-    c.Position = [c.Position(1)+0.08 c.Position(2:4)];
-    ylabel(c,'binL')
-    plot(speed(indT,opts.indZ),index(opts.indZ),'*k')
-    title('Speed Profile')
-    xticks = get(gca,'xtick');
-    yticks = get(gca,'ytick');
-    ylabel(ax(5),'indZ')
-    xlabel(ax(5),'speed [m/s]')
+    for dd = 1:3
+    text(ax(dd),0,0.0017, ...
+        {[' \epsilon = ', num2str(epsi(dd),'%3.2e'),' W/kg (flag = ' num2str(epsi_flag(dd)) ')'],...
+        [' \Delta \epsilon / \epsilon = ',num2str(epsi_del_ratio(dd))]},...
+        'color','k');
+    end
+ 
 
     ax2 = axes(gcf,'position',get(ax(5),'Position'),'color','none');
     set(ax2,'YAxisLocation','right')

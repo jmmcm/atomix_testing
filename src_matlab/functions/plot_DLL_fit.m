@@ -60,7 +60,7 @@ for tt = 1:length(options.indT)
         end
     end
     if length(dFit)>0
-        p(2) = plot(rFit.^(2/3),dFit,'x','LineWidth',4);
+        p(2) = plot(rFit.^(2/3),dFit,'s','LineWidth',4);
         
         xval=[1 2.8];
         

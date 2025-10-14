@@ -71,19 +71,19 @@ end
 
 %% plot pcolor
 pcolor(ax,data.x,data.y,data.values)
-shading flat
-colormap(ax,cmap)
+shading(ax,'flat')
+cm = colormap(ax,cmap);
 axPos = get(ax,'Position');
-c = colorbar('Position',[axPos(1)+axPos(3)+0.02,axPos(2),0.02,axPos(4)]);
+c = colorbar(ax,'Position',[axPos(1)+axPos(3)+0.02,axPos(2),0.02,axPos(4)]);
 
 if isfield(options,'clim')
-   caxis(options.clim)
+   caxis(ax,options.clim)
 end
 if isfield(options,'ylabel')
-    ylabel(options.ylabel)
+    ylabel(ax,options.ylabel)
 end
 if isfield(options,'xlabel')
-    xlabel(options.xlabel)
+    xlabel(ax,options.xlabel)
 end
 if isfield(options,'clabel')
     ylabel(c,options.clabel)
