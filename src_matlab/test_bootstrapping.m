@@ -2,6 +2,7 @@
 
 clear 
 colors = get(0,'Defaultaxescolororder');
+mname = mfilename('fullpath');
 
 Nrealizations = [10 100 500 1000];
 colors = colors(2:end,:);
@@ -10,18 +11,18 @@ colors = colors(2:end,:);
 % processIDs = {'JMM_M2aC_RM5'}; 
 % indZ = 17; indT = 1; indB = 1; clim = [-6 -4];
 
-% dataSet = 'AQD_Windermere_bedframe';
-% processIDs = {'JMM_M2aC_RM2'};
-% indZ = 15; indT = 1; indB = 1; clim = [-10 -8];
-% 
+dataSet = 'AQD_Windermere_bedframe';
+processIDs = {'JMM_M2aC_RM2'};
+indZ = 15; indT = 1; indB = 1; clim = [-10 -8];
+
 % dataSet = 'AQD_NorthSea_bedframe';
 % processIDs = {'JMM_M2aC_RM0p3'};
 % indZ = 15; indT = 1; indB = 1; clim = [-10 -6];
 
 
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
-processIDs = {'JMM_M2aC_RM3'};
-indZ = 15; indT = 134; indB = 1; clim = [-6 -3];
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
+% processIDs = {'JMM_M2aC_RM3'};
+% indZ = 15; indT = 134; indB = 1; clim = [-6 -3];
 
 
 %% load data
@@ -63,7 +64,23 @@ title(ax,'')
 title(['indT = ',num2str(indT),', indB = ', num2str(indB),', indZ = ',num2str(indZ)])
 
 %% Test bootstrapping
-[epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,500);
+sigmaN = d.metadataGroups.L4.sigmaN_v;
+
+[epsiOld,sigmaNOld,RinfoOld] = calc_eps_SF_bkup(r',Dll',struct('order',2,'sigmaN_v',sigmaN,'figure',0));
+
+[epsiBS,sigmaN,Rinfo] = calc_eps_SF(r',Dll',struct('order',2,'sigmaN_v',sigmaN,'Nbootstrap',500,'figure',0));
+
+% if ~isequal(epsi_ci, Rinfo.CI_epsi_regression)
+%     disp('datafile')
+%     Rinfo.CI_epsi_regression
+%     disp('function')
+%     epsi_ci
+%     disp('diff')
+%     Rinfo.CI_epsi_regression - epsi_ci
+%     warning('CIs from regression in datafile not the same as those exported from function'), pause
+% else
+%     disp('Values from updated function are equal to those in data file')
+% end
 
 
 %% 
@@ -76,33 +93,27 @@ for tt = 1:length(data.L4.TIME)
     r = squeeze(data.L4.REGRESSION_R_DEL(tt,indZ,indB,:));
     Dll = squeeze(data.L4.REGRESSION_DLL(tt,indZ,indB,:));
     
-%     for nn =1:length(Nrealizations)
-%         [epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,Nrealizations(nn));
-%         epsiBS_value(tt,nn)   = epsiBS;
-%         epsiBS_ci_low(tt,nn) = epsiBS_ci(1);
-%         epsiBS_ci_hgh(tt,nn) = epsiBS_ci(2);
-%     end
-
-    [epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,Nrealizations(1));
+    [epsiBS,sigmaN,Rinfo] = calc_eps_SF(r',Dll', ...
+        struct('figure',0,'order',2,'sigmaN_v',sigmaN,'Nbootstrap',Nrealizations(1)));
     epsiBS1all(tt)   = epsiBS;
-    epsiBS1_ci_all(tt,:) = epsiBS_ci;
+    epsiBS1_ci_all(tt,:) = Rinfo.CI_epsi_bootstrap;
     
-    [epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,Nrealizations(2));
+    [epsiBS,sigmaN,Rinfo] = calc_eps_SF(r',Dll', ...
+        struct('figure',0,'order',2,'sigmaN_v',sigmaN,'Nbootstrap',Nrealizations(2)));
     epsiBS2all(tt)   = epsiBS;
-    epsiBS2_ci_all(tt,:) = epsiBS_ci;
-    
-    [epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,Nrealizations(3));
+    epsiBS2_ci_all(tt,:) = Rinfo.CI_epsi_bootstrap;
+
+    [epsiBS,sigmaN,Rinfo] = calc_eps_SF(r',Dll', ...
+        struct('figure',0,'order',2,'sigmaN_v',sigmaN,'Nbootstrap',Nrealizations(3)));
     epsiBS3all(tt)   = epsiBS;
-    epsiBS3_ci_all(tt,:) = epsiBS_ci;
-    
-    [epsiBS,epsiBS_ci,Lin]=bootstrap_structurefunction(r,Dll,Nrealizations(4));
+    epsiBS3_ci_all(tt,:) = Rinfo.CI_epsi_bootstrap;
+
+    [epsiBS,sigmaN,Rinfo] = calc_eps_SF(r',Dll', ...
+        struct('figure',0,'order',2,'sigmaN_v',sigmaN,'Nbootstrap',Nrealizations(4)));
     epsiBS4all(tt)   = epsiBS;
-    epsiBS4_ci_all(tt,:) = epsiBS_ci;
-    
-    
-%     [epsiBS0500,epsiBS0500_ci,Lin]=bootstrap_structurefunction(r,Dll,10);
-%     epsiBS0500all(tt)   = epsiBS0500;
-%     epsiBS0500_ci_all(tt,:) = epsiBS0500_ci;
+    epsiBS4_ci_all(tt,:) = Rinfo.CI_epsi_bootstrap;
+
+   
 end
 
 %%
@@ -135,6 +146,7 @@ set(gca,'yscale','linear')
 legend([p1 p2 p3 p4 p5 p6])
 xlabel('index')
 ylabel('\epsilon [W/kg]')
+add_fig_info(mname,[],struct('position',[0.1, 0.08, 0.9, 0]))
 %%
 figure(3),clf
 ax = subplot(1,1,1)
