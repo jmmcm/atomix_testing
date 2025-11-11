@@ -16,9 +16,9 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'6A','6B','6C'};
+caseIDs = {'1D'};
 % caseIDs = {'1A','1C','2A','2C','3F','3G','5A','5B','6A','6B','7A','7B'}; % All centered and all realizations used in paper
-% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C','7A','7B'}; %ALL
+% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C','6A','6B','6C','7A','7B'}; %ALL
 
 %% Process
 for caseID = caseIDs
@@ -192,6 +192,7 @@ for caseID = caseIDs
     optionsLev4.rMax = metadataGroups.L4.rMax;
     optionsLev4.points_select_method = metadataGroups.L4.points_select_method;
     optionsLev4.dll_averaging = str2num(metadataGroups.L4.dll_averaging);
+    optionsLev4.Nbootstrap = metadataGroups.L4.n_bootstrap;
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;
     % NEW

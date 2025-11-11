@@ -15,14 +15,14 @@ mname = mfilename('fullpath');
 %close all
 colors = get(0,'defaultaxescolororder');
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M1aC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf';
 % dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M1aC_RM5';
 % dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
-dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
+% dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
 
 
 %% Flags
@@ -31,7 +31,7 @@ flg.plotVelTS.show = 0;
 flg.plotVelAvgTS.show = 1;
 flg.plotVelENUTS.show = 1;
 flg.plotEpsTS.show = 1;
-flg.plotDLL.show = 0;
+flg.plotDLL.show = 1;
 flg.plotAmp.show = 0;
 
 figPath=['/home/jmm000/work/ATOMIX/figures/',dataSet,'/',processID,'/'];
@@ -245,7 +245,7 @@ if flg.plotEpsTS.show
         opts.clabel= ['log10(\epsilon_',num2str(bb),' [W/kg])'];
         plot_pcolor(ax(bb),plotData,opts);
         hold all
-        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(floor(opts.indZ*3)),'--w')
+        plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(floor(opts.indZ*2.5)),'--w')
         plot(get(gca,'xlim'),[1 1]*L4.Z_DIST(opts.indZ),'--w')
     end
     xlabel(ax(NB),['year day ',yearStr])
@@ -272,7 +272,7 @@ if flg.plotEpsTS.show
     
     title('speed')
     ax(2) = subplot(312);
-    indZ = floor(opts.indZ*3);
+    indZ = floor(opts.indZ*2.5);
     for bb = 1:NB
         semilogy(plotData.x,L4.EPSI(:,indZ,bb),'DisplayName',['beam ',num2str(bb)])
         if bb == 1; hold all; end
@@ -377,10 +377,14 @@ if flg.plotDLL.show
         opts.rMin = metadataGroups.L4.rMin;
         opts.rMax = metadataGroups.L4.rMax;
         opts.points_select_method = metadataGroups.L4.points_select_method;
+        opts.CItype = 'Both';
+        opts.bootstrapCoeffs = [squeeze(data.L4.REGRESSION_COEFF_A0_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:)) ...
+                                squeeze(data.L4.REGRESSION_COEFF_A1_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:))];
         axh = subplot(3,length(opts.indTs),length(opts.indTs)+4+tt);
         
         [axh,p] = plot_DLL_fit(axh,L3,L4,opts);
         set(p(2),'color',colors(tt+2,:))
+        set(get(axh,'legend'),'fontsize',6)
         title(axh,[axh.Title.String,', indT = ',num2str(opts.indT)])
         
         p1(tt) = plot(ax1,get_yd(get_yd(L4.TIME(opts.indT)))*[1 1],get(ax1,'ylim'),'-',...

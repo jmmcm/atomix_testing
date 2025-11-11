@@ -18,13 +18,13 @@ set(0,'defaultAxesXGrid','on')
 set(0,'defaultAxesYGrid','on')
 
 %% Select dataset and process IDs
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'}; 
 %     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
-%     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};
+    processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};
 
 
@@ -53,11 +53,11 @@ set(0,'defaultAxesYGrid','on')
 %      processIDs = {'JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'AllAvg','All'};% Compare methods 2a and 2u
 %      processIDs = {'JMM_M1aC_RM2','JMM_M2aC_RM2','JMM_M2uC_RM2'}; short_names = {'Cen','AllAvg','All'};% Compare methods 2a and 2u
 
-dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst';
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};% Compare methods 1a and 2u
 %     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};% Compare methods 1a and 2u
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
-     processIDs = {'JMM_M1aC_RM3','JMM_M2aC_RM3','JMM_M2uC_RM3'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
+     % processIDs = {'JMM_M1aC_RM3','JMM_M2aC_RM3','JMM_M2uC_RM3'}; short_names = {'Cen','AllAvg','All'};% Compare methods 1a and 2u
 
 %dataSet = 'AQD_NorthSea_bedframe';
 %     processIDs = {'JMM_M1aC_RM0p3','JMM_M2uC_RM0p3'}; short_names = {'Cen','All'};
@@ -453,6 +453,8 @@ if flg.plotDLL.show && flg.twoSets
     opts.rMin = d(1).metadataGroups.L4.rMin;
     opts.rMax = d(1).metadataGroups.L4.rMax;
     opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
+    opts.bootstrapCoeffs = [squeeze(data(1).L4.REGRESSION_COEFF_A0_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:)) ...
+                            squeeze(data(1).L4.REGRESSION_COEFF_A1_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:))];
     [~,p1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     title(ax(1),[clean_string(names{1}) ' (' short_names{1} ')'])
     
@@ -461,6 +463,8 @@ if flg.plotDLL.show && flg.twoSets
     opts.rMin = d(2).metadataGroups.L4.rMin;
     opts.rMax = d(2).metadataGroups.L4.rMax;
     opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
+    opts.bootstrapCoeffs = [squeeze(data(2).L4.REGRESSION_COEFF_A0_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:)) ...
+                            squeeze(data(2).L4.REGRESSION_COEFF_A1_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:))];
     [~,p2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
     set(p2(2),'Marker','s','markersize',10,'color',[0.9290 0.6940 0.1250])
     title(ax(2),[clean_string(names{2}) ' (' short_names{2} ')'])

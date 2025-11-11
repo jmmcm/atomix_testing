@@ -10,6 +10,14 @@ function [ax,p,t,cbar] = plot_DLL_fit(ax,lev3,lev4,options)
 if ~isfield(options,'colorbar')
     options.colorbar = 1;
 end
+if ~isfield(options,'CItype')
+    options.CItype = 'Both';
+end
+
+if ~isfield(options,'bootstrapCoeffs')
+    options.bootstrapCoeffs = [NaN NaN];
+end
+
 % Get r and D values and apply flags
 rAll = lev3.R_DEL;
 DAll = lev3.DLL;
@@ -52,7 +60,9 @@ for tt = 1:length(options.indT)
     
     %     p(1) = plot(rFitA.^(2/3),dFitA,'.','markersize',8); hold all
     if length(dFitA)>0
-        p(1) = scatter(rFitA.^(2/3),dFitA,50,binPairs(:,1),'filled','Linewidth',3); hold all
+        p(1) = scatter(rFitA.^(2/3),dFitA,50,binPairs(:,1),'filled','Linewidth',3,...
+            'DisplayName', 'All'); 
+        hold all
         caxis([min(binPairs(:,1))-1 max(binPairs(:,1))+1]) % Make the color range go +/-1 beyond values to avoid saturation
         if options.colorbar
             cbar = colorbar;
@@ -60,17 +70,29 @@ for tt = 1:length(options.indT)
         end
     end
     if length(dFit)>0
-        p(2) = plot(rFit.^(2/3),dFit,'s','LineWidth',4);
+        p(2) = plot(rFit.^(2/3),dFit,'s','LineWidth',4,'DisplayName','Regression Points');
         
         xval=[1 2.8];
         
         % Regresstion lines and 95% CI
         beta = [lev4.REGRESSION_COEFF_A0(indT,indZ,indB),lev4.REGRESSION_COEFF_A1(indT,indZ,indB)];
-        [yUpp,yLow,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0));
-        p(3) = plot(xFit,yFit,'k','linewidth',2);
-        p(4) = plot(xFit,yLow,'--','color',0.4*[1 1 1],'linewidth',1);
-        p(5) = plot(xFit,yUpp,'--','color',0.4*[1 1 1],'linewidth',1);
-        lStr = {'All Points','Regression Points','Fit'};
+        
+        if ismember(options.CItype, {'Both', 'LSR'})
+            [yUppLSR,yLowLSR,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,...
+                    struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0,...
+                    'CItype','LSR')); 
+            p(end+1) = plot(xFit,yLowLSR,'--','color',0.5*[1 1 1],'linewidth',1,'DisplayName','CIs (LSR)');
+            plot(xFit,yUppLSR,'--','color',0.5*[1 1 1],'linewidth',1);
+        end
+        if ismember(options.CItype, {'Both', 'Bootstrap'})
+            [yUppBS,yLowBS,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,...
+                    struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0,...
+                    'CItype','Bootstrap','bootstrapCoeffs',options.bootstrapCoeffs)); 
+            p(end+1) = plot(xFit,yLowBS,'--','color',0.2*[1 1 1],'linewidth',1,'DisplayName','CIs (BS)');
+            plot(xFit,yUppBS,'--','color',0.2*[1 1 1],'linewidth',1);
+        end   
+        p(end+1) = plot(xFit,yFit,'k','linewidth',2, 'DisplayName','Fit');
+       
         xlim = get(gca,'xlim');
         ylim = get(gca,'ylim');
         t = text(xlim(1),.95*ylim(2),...
@@ -108,7 +130,7 @@ set(b,'tickdir','out')
 set(b,'xtick',xticks)
 set(b,'xticklabels',xtickLabels)
 
-legend(p,lStr,'location','southeast')
+legend(p,'location','southeast')
 titlestr = ['z = ',num2str(lev4.Z_DIST(indZ)),' m, ',...
     'b = ',num2str(lev4.N_BEAM(indB))];
 title(ax,titlestr)

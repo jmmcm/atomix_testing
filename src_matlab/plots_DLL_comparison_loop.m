@@ -94,6 +94,8 @@ for tt = 1:3:NT
     axY = 0.15;
     x0 = 0.05;
     
+    % Plot comparison
+    opts.CItype = 'None';
     ax(1) = subplot('Position',[x0 axY axW axH]);
         [p,pl]=plot_DLL_compare(data(1).L3,data(1).L4,data(2).L3,data(2).L4,opts);
 %     set(p(1),'color',get(p1(2),'b'))
@@ -103,12 +105,16 @@ for tt = 1:3:NT
     title(ax(1),'Comparison')
     
     
-    
+    % Plot first method
     ax(2) = subplot('Position',[x0+offset+axW axY axW axH]);
     opts.dll_averaging = d(1).metadataGroups.L4.dll_averaging;
     opts.rMin = d(1).metadataGroups.L4.rMin;
     opts.rMax = d(1).metadataGroups.L4.rMax;
     opts.points_select_method = d(1).metadataGroups.L4.points_select_method;
+    opts.CItype = 'Both';
+    opts.bootstrapCoeffs = [squeeze(data(1).L4.REGRESSION_COEFF_A0_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:)) ...
+                            squeeze(data(1).L4.REGRESSION_COEFF_A1_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:))];
+
     [~,p1,t1] = plot_DLL_fit(ax(1),data(1).L3,data(1).L4,opts);
     caxis(opts.indZ+[-cMax cMax])
     colormap(cmocean('balance'))
@@ -118,12 +124,14 @@ for tt = 1:3:NT
     title(ax(2),clean_string(names{1}))
     
     
-    
+    % Plot second method
     ax(3) = subplot('Position',[x0+2*(offset+axW) axY axW axH]);
     opts.dll_averaging = d(2).metadataGroups.L4.dll_averaging;
     opts.rMin = d(2).metadataGroups.L4.rMin;
     opts.rMax = d(2).metadataGroups.L4.rMax;
     opts.points_select_method = d(2).metadataGroups.L4.points_select_method;
+    opts.bootstrapCoeffs = [squeeze(data(2).L4.REGRESSION_COEFF_A0_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:)) ...
+                            squeeze(data(2).L4.REGRESSION_COEFF_A1_BOOTSTRAP(opts.indT,opts.indZ,opts.indB,:))];
     [~,p2,t2]= plot_DLL_fit(ax(2),data(2).L3,data(2).L4,opts);
     caxis(opts.indZ+[-cMax cMax])
     colormap(cmocean('balance'))
