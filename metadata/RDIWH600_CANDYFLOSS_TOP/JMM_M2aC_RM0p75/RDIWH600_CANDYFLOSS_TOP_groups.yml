@@ -82,6 +82,7 @@ L4: # Level 4: Dissipation
    dll_averaging: 'true' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
    rMin: 0.25 # [meters] (equivalent to two bins)
    rMax: 0.75 # [meters] (equivalent to 7 bins) [meters]
+   n_bootstrap: 100 # Number of realizations for bootstrapping of regression
    sigmaN_v: 0.0158 # Expected noise level in velocity measurements [m/s]. Estimated from spectra (Updated Feb 6th, 2025)
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.   
 

@@ -71,6 +71,7 @@ L4: # Level 4: Dissipation
    rMin: 0.67 # [meters] (equivalent to two bins)
    rMax: 3.0 #[meters] (equivalent to 16 bins)
    C2: 2.0 # Constant used in the calculation of the second order structure function
+   n_bootstrap: 100 # Number of realizations for bootstrapping of regression
    sigmaN_v: 0.049 # Expected noise level in velocity measurements [m/s]. Estimated from noise floor of the spectra
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.
    

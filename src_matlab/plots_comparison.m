@@ -21,10 +21,10 @@ set(0,'defaultAxesYGrid','on')
 dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
 %     processIDs = {'dJMM_M2uC_RM5','JMM_M2uC_RM5'}; % COmpare to downloaded data
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5','JMM_M3uC_RM5'}; 
-%     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'};
+     processIDs = {'JMM_M2uC_RM5','JMM_M3uC_RM5'}; short_names = {'Cen','Anc'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','All'};
 %     processIDs = {'JMM_M2aC_RM5','JMM_M3uC_RM5'};
-    processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};
+%     processIDs = {'JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'AllAvg','All'};
 %     processIDs = {'JMM_M1aC_RM5','JMM_M2aC_RM5','JMM_M2uC_RM5'}; short_names = {'Cen','AllAvg','All'};
 
 

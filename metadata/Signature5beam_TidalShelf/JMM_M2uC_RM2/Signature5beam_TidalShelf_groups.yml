@@ -72,6 +72,7 @@ L4: # Level 4: Dissipation
    rMin: 0.45 # [meters] (equivalent to two bins. Needs to be slightly higher than 2*dr since nBinMin = floor(rMin./dr);)
    rMax: 2.0 #[meters] (equivalent to 9 bins for slant beams, 10 for vertical)
    C2: 2.0 # Constant used in the calculation of the second order structure function
+   n_bootstrap: 100 # Number of realizations for bootstrapping of regression
    sigmaN_v: 0.0488 # Expected noise level in velocity measurements [m/s]. Based on peak of histogram of A0 because manufacturer value not known.
    EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.
    
