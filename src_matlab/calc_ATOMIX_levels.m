@@ -16,8 +16,14 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'1A','1B','1C','1D'};
-% caseIDs = {'1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','4A','4B','4C','4D','4E','4F','5A','5B','5C'}; %ALL
+caseIDs = {'7A','7B','7C'}; % Didn't do 4
+% caseIDs = {'1A','1C','2A','2C','3F','3G','5A','5B','6A','6B','7A','7B'}; % All centered and all realizations used in paper
+% caseIDs =   {'1A','1B','1C','1D',...
+%              '2A','2B','2C','2D',...
+%              '3A','3B','3C','3D','3E','3F','3G','3H',...
+%              '5A','5B','5C',...
+%              '6A','6B','6C',...
+%              '7A','7B','7C'}; % No 4, because no data files on GPSC and not a benchmark
 
 %% Process
 for caseID = caseIDs
@@ -56,6 +62,21 @@ for caseID = caseIDs
         case '3C'
             dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
             processID = 'JMM_M1aC_RM1p5';
+        case '3D'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M1aC_RM1p0';
+        case '3E'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M2uC_RM1p0';
+         case '3F'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M1aC_RM0p75';
+        case '3G'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M2uC_RM0p75';
+        case '3H'
+            dataSet = 'RDIWH600_CANDYFLOSS_TOP'; rawID = 'BDS_M1aC_RM1p5'; 
+            processID = 'JMM_M2aC_RM0p75';
         case '4A'
             dataSet = 'Signature5beam_TidalShelf'; rawID = 'CEB'; 
             processID = 'JMM_M2uC_RM2';
@@ -83,6 +104,24 @@ for caseID = caseIDs
         case '5C'
             dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
             processID = 'JMM_M2aC_RM2';
+        case '6A'
+            dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; rawID = 'NSL'; 
+            processID = 'JMM_M2uC_RM3';
+        case '6B'
+            dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; rawID = 'NSL'; 
+            processID = 'JMM_M1aC_RM3';
+        case '6C'
+            dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; rawID = 'NSL'; 
+            processID = 'JMM_M2aC_RM3';
+        case '7A'
+            dataSet = 'AQD_NorthSea_bedframe'; rawID = 'CEB';
+            processID = 'JMM_M2uC_RM0p3';
+        case '7B'
+            dataSet = 'AQD_NorthSea_bedframe'; rawID = 'CEB';
+            processID = 'JMM_M1aC_RM0p3';
+        case '7C'
+            dataSet = 'AQD_NorthSea_bedframe'; rawID = 'CEB';
+            processID = 'JMM_M2aC_RM0p3';
         otherwise
             error('Need to create case')
     end
@@ -158,6 +197,7 @@ for caseID = caseIDs
     optionsLev4.rMax = metadataGroups.L4.rMax;
     optionsLev4.points_select_method = metadataGroups.L4.points_select_method;
     optionsLev4.dll_averaging = str2num(metadataGroups.L4.dll_averaging);
+    optionsLev4.Nbootstrap = metadataGroups.L4.n_bootstrap;
     optionsLev4.flagFile = flagFile;
     optionsLev4.figure = 0;
     % NEW
@@ -242,9 +282,9 @@ for caseID = caseIDs
 
     history = get_metadata(mname);
 
-    [~,oname]=fileparts(matFileOut);
-    save(oname,'data','flags','metadataGroups','metadataGlobal','fileInfo','infoProcessing','history','-v7.3');
-    movefile(strcat(oname,'.mat'),matFileOut)
+    %[~,oname]=fileparts(matFileOut);
+    save(matFileOut,'data','flags','metadataGroups','metadataGlobal','fileInfo','infoProcessing','history','-v7.3');
+    %movefile(strcat(oname,'.mat'),matFileOut)
 
     disp(['Matfile created: ' matFileOut])
 

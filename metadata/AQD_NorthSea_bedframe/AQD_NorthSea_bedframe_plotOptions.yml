@@ -1,0 +1,114 @@
+#===================================================================================
+#       PLOT OPTIONS                                                                #
+#===================================================================================    
+# Dataset info:
+# - 47 range bins (3cm in size)
+# - 1.4 days of data (bursting: 4.25 mins on (2048 samples), 10.75 min off, fS=8Hz)
+# - middepth speed ~ 0.25 m/s
+
+plotVelTS:
+    description: Time series plot of the beam velocity data
+    clim: [-.15, 0.15]
+
+plotVelENUTS:
+    description: Time series plot of the ENU velocity data
+    clim: [-0.15, 0.15]
+
+plotENUTS:
+    description: Time series plot of the ENU velocity data
+    tUnits: 'relHours'
+    cLim: 
+        E: [-0.2, 0.2]
+        N: [-0.2, 0.2]
+        U: [-0.02, 0.02]
+        e: [-0.02, 0.02]
+    indZ: 17
+ 
+plotEpsTS:
+    description: Time series plot of the dissipation rate
+    indZ: 10
+    indB: 2
+    clim: [-9, -4]
+    
+plotEpsScatter:
+    description: Scatter plot of the dissipation rate for comparing methods
+    limits: [1e-9, 1e-4]
+    scale: log
+
+plotEpsScatterZ:
+    description: Scatter plots of the dissipation rate as a function of Z
+    limits: [1e-9, 1e-4]
+    indZs: [3,14,25,32]
+    
+plotEpsHist:
+    description: Histogram of the dissipation rate
+    nbins: 100
+    xlimits: [-9, -4]  
+    binLimits: [-9, -4]  
+    
+plotEpsRatioHist:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB))
+    nbins: 30
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1]  
+    
+plotEpsRatioHistZ:
+    description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    nbins: 20
+    xlimits: [-1, 1]  
+    binLimits: [-1, 1] 
+    indZs: [3,14,25,32]
+ 
+plotEpsRatioStatsZ:
+    description: Statistics of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB)) as a function of Z
+    lowerPercentile: 25
+    upperPercentile: 75
+    
+plotDLL:
+    description: Example plot of DLL vs r^(2/3) for the specifed indices
+    indTs: [26,102]
+    indB: 1
+    indZ: 10
+    
+plotA1vsA0:
+    description: Scatter plot of the regression coeffcients
+    xlimits: [-1e-3, 3e-3]
+    ylimits: [-1e-3, 2e-3]
+    
+    
+plotA0hist:
+    description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
+    xlimits: [-1e-3, 3e-3]
+    nbins: 100
+    A0expected: 3.5e-5 #2*sigmaN_v^2 = 2*0.0042^2;
+        
+plotR2hist:
+    description: Histogram of R2
+    nbins: 100
+        
+plotDelEpshist:
+    description: Histogram of deltaEps/epsilon
+    nbins: 100
+    binLimits: [0, 6]
+
+plotSpectra:
+    spdVar: ENU_HOR
+    spdBins: [0,0.04,0.08,0.12,0.16,0.2]
+    freqNoise: [2,4] # noise will be calculated for this frequency range
+    indZall: [5,15,25]
+    nZavg: 3 # Number of bins to average in z (should be odd)
+    noiseLevel: 0.00107 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
+    Afit: 5e-6
+    ylimF: [1e-6, 1e-3]
+    ylimK: [1e-10, 1e-5]
+
+plotBacktracking:
+    description: plot DLL and detrended velocities for chosen indices
+    indT: [112,423,180,180,246]
+    indB: [1,1,1,1,1]
+    indZ: [17,17,4,4,17]
+    nDelR: [6,6,4,4,6] # Bin separation to show detrended TS for (NEEDS TO BE EVEN)
+
+plotEpsFlags:
+    description: Time series plot of the dissipation rate flags
+    clim: [0, 8]

@@ -1,0 +1,8 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M2aC' # Forward differencing, bin separations averaged 
+description: DLL for all possible bin separations within specified r_max limit, but then averaged before regression. Standard regression model. 
+

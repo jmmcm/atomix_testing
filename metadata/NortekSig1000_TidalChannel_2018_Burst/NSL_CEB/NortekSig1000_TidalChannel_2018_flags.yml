@@ -1,0 +1,51 @@
+# These attributes are only added if the variable is found within each group.
+# You can add extra attributes to ANY variables that will overide any info in the data base as done for TIME and TIME_BNDS at level 2 segmented and beyond
+
+# Example ATOMIX ADCP flags. Note the use of anchors via & to avoid repeating information
+L1: #atomix_level  
+   R_VEL_FLAGS:  &vel_time_boolean  # the & creates an alias vel_time_boolean to rewrite this info later
+        standard_name: status_flag
+        flag_masks: 
+           - 1
+           - 2 
+           - 4
+           - 8
+           - 16 
+           - 32
+
+   
+        flag_meanings: | 
+           low_amplitude
+           low_correlation 
+           large_obstruction_fish
+           spike
+           suspiciously_large_velocity    
+           out_of_water_or_missing
+           
+        comment:  Flags denote the cause for removing velocity samples recorded by the instrument.  The moving median filter was applied iteratively 3x to ensure all outliers were identified. Detrended velocities greater than 5x standard devitation were also removed via the suspiciously_large_velocity check
+     
+      # Add extra entries, which will appear as attributes in the netcdf    
+        flag_thresholds:  
+           - 40 
+           - 50
+           - 15
+           - 8 # Half-window of median filter. Moving median is 2N+1
+           - 1.5    
+           - 999999
+     
+      
+        flag_threshold_meanings: |    
+           excluded_below_threshold             
+           excluded_below_threshold
+           max_allowed_amplitude_difference_btw_beams              
+           half-window_of_median_filter
+           excluded_above_threshold 
+           place_holder
+             
+
+
+
+   
+
+
+#

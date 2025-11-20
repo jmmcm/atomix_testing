@@ -8,7 +8,11 @@
 
 plotVelTS:
     description: Time series plot of the beam velocity data
-    cLim: [-.2, 0.2]
+    clim: [-.05, 0.05]
+
+plotVelENUTS:
+    description: Time series plot of the ENU velocity data
+    clim: [-0.1, 0.1]
 
 plotENUTS:
     description: Time series plot of the ENU velocity data
@@ -23,24 +27,24 @@ plotENUTS:
 plotEpsTS:
     description: Time series plot of the dissipation rate
     indZ: 22
-    indB: 3
-    clim: [-10, -6]
+    indB: 2
+    clim: [-11, -8]
     
 plotEpsScatter:
     description: Scatter plot of the dissipation rate for comparing methods
-    limits: [1e-10, 1e-4]
+    limits: [1e-11, 1e-8]
     scale: log
 
 plotEpsScatterZ:
     description: Scatter plots of the dissipation rate as a function of Z
-    limits: [1e-10, 1e-4]
+    limits: [1e-11, 1e-8]
     indZs: [3,14,25,36]
     
 plotEpsHist:
     description: Histogram of the dissipation rate
     nbins: 100
-    xlimits: [-10, -4]  
-    binLimits: [-10, -4]  
+    xlimits: [-11, -8]  
+    binLimits: [-11, -8]  
     
 plotEpsRatioHist:
     description: Histogram of the ratio of log10 of the dissipation rates (i.e. log10(eA/eB))
@@ -76,7 +80,7 @@ plotA0hist:
     description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
     xlimits: [-1e-3, 3e-3]
     nbins: 100
-    A0expected: 5e-6 #2*sigmaN_v^2 = 2*0.0016^2;
+    A0expected: 3.9e-6 #2*sigmaN_v^2 = 2*0.0014^2;    sigmaN_v: 0.0014 # Expected noise level in velocity measurements [m/s]. Estimated from velocity spectra
         
 plotR2hist:
     description: Histogram of R2
@@ -89,13 +93,14 @@ plotDelEpshist:
 
 plotSpectra:
     spdVar: ENU_HOR
-    spdBins: [0,0.1,0.2,0.3,0.4,0.5]
-    indZall: [2,10]
+    spdBins: [0,0.01,0.02,0.03,0.04,0.05]
+    freqNoise: [0.3, 0.5] # noise will be calculated for this frequency range
+    indZall: [3,10]
     nZavg: 3 # Number of bins to average in z (should be odd)
     noiseLevel: 0.00107 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
-    Afit: 1e-3
-    ylimF: [1e-4, 1e-2]
-    ylimK: [1e-5, 1e-2]
+    Afit: 1e-6
+    ylimF: [1e-6, 1e-3]
+    ylimK: [1e-10, 1e-5]
 
 plotBacktracking:
     description: plot DLL and detrended velocities for chosen indices
@@ -104,3 +109,6 @@ plotBacktracking:
     indZ: [17,17,4,4,17]
     nDelR: [6,6,4,4,6] # Bin separation to show detrended TS for (NEEDS TO BE EVEN)
 
+plotEpsFlags:
+    description: Time series plot of the dissipation rate flags
+    clim: [0, 8]

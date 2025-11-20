@@ -1,3 +1,5 @@
 *.asv
 *.nc
-figures/*
+figures
+*.m~
+*.yml~

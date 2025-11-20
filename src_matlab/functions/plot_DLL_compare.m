@@ -6,6 +6,16 @@ function [p,pl]=plot_DLL_compare(lev3Cntl,lev4Cntl,lev3Test,lev4Test,options)
 %
 % 2023-01-23: Only plot values less than R_MAX
 % 2023-04-08: Adapt to new data format (forward DLL only)
+% 2025-11-07: Add options to plot CI lines based on bootstrap results
+
+if ~isfield(options,'CItype')
+    options.CItype = 'None';
+end
+
+if ~isfield(options,'bootstrapCoeffs')
+    options.bootstrapCoeffs = [NaN NaN];
+end
+
 
 for ii = 1:2
     if ii == 1
@@ -56,15 +66,38 @@ for ii = 1:2
         %plot(rNow.^(2/3),DNow,'.','markersize',8);
         xval=[1 2.8];
         
-        % Regresstion lines and 95% CI
+        % Regression lines and 95% CI (not currently plotting CIs, but use this function in case I want to change it in the future)
         beta = [lev4.REGRESSION_COEFF_A0(indT,indZ,indB),lev4.REGRESSION_COEFF_A1(indT,indZ,indB)];
-        [~,~,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0));
+        [~,~,xFit,yFit] = plot_CI_regression_line(0.95,beta,rFit.^(2/3),dFit,...
+            struct('nPts',100,'xRange',[0 1.1*max(rFit).^(2/3)],'plotLines',0,...
+            'CItype',options.CItype,'bootstrapCoeffs',options.bootstrapCoeffs));
         pl(pcount) = plot(xFit,yFit,'color',get(p(pcount),'Color'),'linewidth',2);
     end
 end
-legend(p,legendstr)
+legend(p,legendstr,'location','southeast')
 titlestr = ['z = ',num2str(lev4.Z_DIST(indZ)),' m, ',...
     'b = ',num2str(lev4.N_BEAM(indB))];
 title(titlestr)
 xlabel('(\delta r)^{2/3} [m^{2/3}]')
 ylabel('D_{LL} [m^2 s^{-2}]')
+
+ax = gca;
+pos = get(ax,'Position');
+set(ax,'position',[pos(1),pos(2),pos(3),pos(4)]);
+xlimits = get(ax,'xlim');
+
+% axis for deltaBins
+b=axes('Position',[pos(1),pos(2)+pos(4),pos(3), 1e-12]);
+set(b,'Units','normalized');
+set(b,'Color','none')
+set(b,'xlim',xlimits);
+
+nBinMax = floor(xlimits(2)^(3/2)/dr);
+xticks = ([0:2:nBinMax]*dr).^(2/3);
+for ii = 1:length(xticks)
+    xtickLabels{ii} = num2str(2*ii-2);
+end
+set(b,'tickdir','out')
+set(b,'xtick',xticks)
+set(b,'xticklabels',xtickLabels)
+xlabel(b,'\Delta Bins')

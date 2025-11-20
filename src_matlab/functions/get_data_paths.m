@@ -18,8 +18,14 @@ switch dataSet
         dataFileRoot = 'RDIWH600_CANDYFLOSS_TOP';
     case 'AQD_Windermere_bedframe'
         dataFileRoot = 'AQD_Windermere_bedframe';
+    case 'AQD_NorthSea_bedframe'
+        dataFileRoot = 'AQD_NorthSea_bedframe';
     case 'Signature5beam_TidalShelf'
        dataFileRoot = 'Signature5beam_TidalShelf';
+    case 'NortekSig1000_TidalChannel_2019_Burst'
+       dataFileRoot = 'NortekSig1000_TidalChannel_2019_Burst';
+    case 'NortekSig1000_TidalChannel_2018_Burst'
+       dataFileRoot = 'NortekSig1000_TidalChannel_2018_Burst';
     otherwise
         error('No datafile specified')        
 end

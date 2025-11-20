@@ -8,7 +8,11 @@
 
 plotVelTS:
     description: Time series plot of the beam velocity data
-    cLim: [-.2, 0.2]
+    clim: [-.4, 0.4]
+
+plotVelENUTS:
+    description: Time series plot of the ENU velocity data
+    clim: [-0.5, 0.5]
 
 plotENUTS:
     description: Time series plot of the ENU velocity data
@@ -19,12 +23,16 @@ plotENUTS:
         U: [-0.02, 0.02]
         e: [-0.02, 0.02]
     indZ: 17
+
+plotEpsFlags:
+    description: Time series plot of the dissipation rate flags
+    clim: [0, 8]
  
 plotEpsTS:
     description: Time series plot of the dissipation rate
     indZ: 36
     indB: 1
-    clim: [-8, -4]
+    clim: [-8, -5]
     
 plotEpsScatter:
     description: Scatter plot of the dissipation rate for comparing methods
@@ -76,7 +84,7 @@ plotA0hist:
     description: Histogram of the contant regression coefficient. Used to estimate noise level or compare to expected value
     xlimits: [-1e-3, 3e-3]
     nbins: 100
-    A0expected: 0.00104 #2*sigmaN_v^2 = 2*0.0228^2;
+    A0expected: 1.1e-3 #2*sigmaN_v^2 = 2*0.0158^2;
         
 plotR2hist:
     description: Histogram of R2
@@ -89,8 +97,9 @@ plotDelEpshist:
 
 plotSpectra:
     spdVar: ENU_HOR
-    spdBins: [0,0.1,0.2,0.3,0.4,0.5]
-    indZall: [2,10]
+    spdBins: [0,0.15,0.3,0.45]
+    freqNoise: [0.3, 0.5] # noise will be calculated for this frequency range
+    indZall: [5,15,25]
     nZavg: 3 # Number of bins to average in z (should be odd)
     noiseLevel: 0.00107 # sigmaN_v^2/(fS/2), where fS=0.97Hz is the sample rate
     Afit: 1e-3

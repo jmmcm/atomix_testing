@@ -129,7 +129,7 @@ L4:
             - 0.6 # Flag values where deltaEps/Eps > value
             - 0 # Flag values where a3 < value
             - 0 # [m^(2) s^(-2)] Flag values where intercept < threshold
-            - 2.08e-3 # [m^(2) s^(-2)] Flag values where intercept > threshold (threshhold = 2*yint_expected = 2*(2*sigma_v^2), where sigma_v is expected accuracy in along-beam vel. Value determined from peak of A0 histogram since manufacturer value not known.
+            - 2.2e-3 # [m^(2) s^(-2)] Flag values where intercept > threshold (threshhold = 2*yint_expected = 2*(2*sigma_v^2), where sigma_v is expected accuracy in along-beam vel. Value from velocity spectra (updated Feb 4, 2025) .
             - 3 # Flag values where there are fewer than this number of points for the regression
             - 0 # [m^(4/3)s^(-2)] Flag values where slope < threshold (would lead to negative epsilon)
             

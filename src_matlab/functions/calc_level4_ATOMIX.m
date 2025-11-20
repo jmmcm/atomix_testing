@@ -23,8 +23,11 @@ function lev4 = calc_level4_ATOMIX(lev3,options)
 % 2022-06-29: Update to use separate function to apply flags
 % 2023-04-08: Update to use forward difference DLL for all methods
 % 2023-12-29: Update to output fitted R_DEL and DLL as matrices instead of cells
+% 2025-11-07: Update to output bootstrapping results
+
 
 if ~isfield(options,'figureCheck'); options.figureCheck = 1; end
+if ~isfield(options,'Nbootstrap'); options.Nbootstrap = 0; end
 
 
 %% Sizes
@@ -49,11 +52,24 @@ lev4.EPSI_FLAGS = zeros(NT,NZ,NB); % Perfect data
 lev4.EPSI_CI_HIGH = NaN*ones(NT,NZ,NB);
 lev4.EPSI_CI_LOW = NaN*ones(NT,NZ,NB);
 lev4.EPSI_DEL_RATIO = NaN*ones(NT,NZ,NB); % MY METRIC
+lev4.EPSI_CI_HIGH_BOOTSTRAP = NaN*ones(NT,NZ,NB);
+lev4.EPSI_CI_LOW_BOOTSTRAP = NaN*ones(NT,NZ,NB);
+lev4.EPSI_DEL_RATIO_BOOTSTRAP = NaN*ones(NT,NZ,NB); % MY METRIC
+lev4.EPSI_CI_HIGH_REGRESSION = NaN*ones(NT,NZ,NB);
+lev4.EPSI_CI_LOW_REGRESSION = NaN*ones(NT,NZ,NB);
+lev4.EPSI_DEL_RATIO_REGRESSION = NaN*ones(NT,NZ,NB); % MY METRIC
 lev4.MSPE = NaN*ones(NT,NZ,NB);
 lev4.MAD = NaN*ones(NT,NZ,NB);
 lev4.R_MAX = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A0 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_COEFF_A1 = NaN*ones(NT,NZ,NB);
+if options.Nbootstrap > 0
+    lev4.REGRESSION_COEFF_A0_BOOTSTRAP = NaN*ones(NT,NZ,NB,options.Nbootstrap);
+    lev4.REGRESSION_COEFF_A1_BOOTSTRAP = NaN*ones(NT,NZ,NB,options.Nbootstrap);
+else
+    lev4.REGRESSION_COEFF_A0_BOOTSTRAP = NaN;
+    lev4.REGRESSION_COEFF_A1_BOOTSTRAP = NaN;
+end
 lev4.REGRESSION_R2 = NaN*ones(NT,NZ,NB);
 lev4.REGRESSION_N = NaN*ones(NT,NZ,NB);
 
@@ -81,6 +97,7 @@ for bb = 1:NB
     
     % Loop through ensembles and calculate DLL and epsilon
     for tt = 1:NT
+        % disp([num2str(tt) ' of ', num2str(NT)])
         % Get simple variables
         
         dll = squeeze(lev3.DLL(tt,:,bb,:));
@@ -94,6 +111,7 @@ for bb = 1:NB
         dllQC = dll.*dll_flags;
         
         for zz = 1:NZ
+            
             
             % Get points for fit (depends on the method)
             [rDelFit,dllFit,rDelAll,dllAll,indDll,binPairs] = get_DLL_fit_data(zz,rDel,dllQC,binL,binU,dr,options);
@@ -126,11 +144,18 @@ for bb = 1:NB
                 lev4.R_MAX(tt,zz,bb) = max(rDelFit);
                 lev4.REGRESSION_COEFF_A0(tt,zz,bb) = Rinfo.yint;
                 lev4.REGRESSION_COEFF_A1(tt,zz,bb) = Rinfo.slope;
+                if options.Nbootstrap>0
+                    lev4.REGRESSION_COEFF_A0_BOOTSTRAP(tt,zz,bb,:) = Rinfo.bootstrap_coeff(:,1);
+                    lev4.REGRESSION_COEFF_A1_BOOTSTRAP(tt,zz,bb,:) = Rinfo.bootstrap_coeff(:,2);
+                end
                 lev4.REGRESSION_N(tt,zz,bb) = Rinfo.npts;
                 lev4.REGRESSION_R2(tt,zz,bb) = Rinfo.R2;
-                lev4.EPSI_CI_LOW(tt,zz,bb) = real((Rinfo.CI_slope(1)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
-                lev4.EPSI_CI_HIGH(tt,zz,bb) = real((Rinfo.CI_slope(2)/options.Const)^(3/2)); % TODO: IS THIS THE CORRECT WAY TO PROPAGATE THIS?
-                lev4.EPSI_DEL_RATIO(tt,zz,bb) = Rinfo.d_eps/epsi; % MY METRIC
+                lev4.EPSI_CI_LOW_BOOTSTRAP(tt,zz,bb) = Rinfo.CI_epsi_bootstrap(1); 
+                lev4.EPSI_CI_HIGH_BOOTSTRAP(tt,zz,bb) = Rinfo.CI_epsi_bootstrap(2); 
+                lev4.EPSI_DEL_RATIO_BOOTSTRAP(tt,zz,bb) = Rinfo.d_epsi_bootstrap/epsi; % MY METRIC
+                lev4.EPSI_CI_LOW_REGRESSION(tt,zz,bb) = Rinfo.CI_epsi_regression(1); % TODO: Remove if we settle on using bootstrap
+                lev4.EPSI_CI_HIGH_REGRESSION(tt,zz,bb) = Rinfo.CI_epsi_regression(2); % TODO: Remove if we settle on using bootstrap
+                lev4.EPSI_DEL_RATIO_REGRESSION(tt,zz,bb) = Rinfo.d_epsi_regression/epsi; % MY METRIC % TODO: Remove if we settle on using bootstrap
                 lev4.MSPE(tt,zz,bb) = Rinfo.MSPE;
                 lev4.MAD(tt,zz,bb) = Rinfo.MAD;
                 REGRESSION_R_DEL{tt,zz,bb} = rDelFit;
@@ -138,10 +163,22 @@ for bb = 1:NB
             end
             
             count = count+1;
-            disp_percdone(count,NT*NB*NZ,5)
+            disp_percdone(count,NT*NB*NZ,1)
         end
     end
 end
+
+%% Assign confidence intervals and errors to be bootstrap unless not implemented
+if options.Nbootstrap>0
+    lev4.EPSI_DEL_RATIO = lev4.EPSI_DEL_RATIO_BOOTSTRAP;
+    lev4.EPSI_CI_LOW = lev4.EPSI_CI_LOW_BOOTSTRAP;
+    lev4.EPSI_CI_HIGH = lev4.EPSI_CI_HIGH_BOOTSTRAP;
+else
+    lev4.EPSI_DEL_RATIO = lev4.EPSI_DEL_RATIO_REGRESSION;
+    lev4.EPSI_CI_LOW = lev4.EPSI_CI_LOW_REGRESSION;
+    lev4.EPSI_CI_HIGH = lev4.EPSI_CI_HIGH_REGRESSION;
+end
+
 
 %% Convert cells to matrices
 len = cellfun(@length,REGRESSION_DLL);

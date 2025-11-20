@@ -10,13 +10,17 @@
 
 clear all
 close all
+addpath('functions')
 
-% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM00';
-% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS01';
-% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS01';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID='JMM_M1aC_RM5';
+% dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'BDS_M1aC_RM7p5';
+% dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'BDS_M1aC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'CEB00';
-dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+% dataSet = 'AQD_Windermere_bedframe'; processID = 'BDS_M1aA_RM2';
+% dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'NSL';
+dataSet = 'AQD_NorthSea_bedframe'; processID = 'CEB';
 
+climVel = 0.1;
 
 %% Load data
 [dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
@@ -124,23 +128,29 @@ title(['TS: On, mean = ',num2str(mean(tDiff(indOff))),' s'])
 
 
 %% Plot beam velocities (pcolor)
-figure_named(['BeamVel_TS']),clf,clear ax, clear plotData
-set(gcf,'Position',[200,100,700,600])
-axL = 0.10;
-axR = 0.87;
-axH = 0.14;
-axW = axR - axL;
-axB = [0.8:-.22:0];
-
-t = get_yd(L1.TIME);
-for bb = 1:4
-    ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
-    plotData = struct('x',t','y',L1.Z_DIST','values',L1.R_VEL(:,:,bb)','var','R_VEL');
-    opts = struct('ylabel','z [m]','clabel',['R\_VEL(:,:,',num2str(bb),') [m/s]']);
-    plot_pcolor(ax(bb),plotData,opts);
+if 0
+    figure_named(['BeamVel_TS']),clf,clear ax, clear plotData
+    set(gcf,'Position',[200,100,700,600])
+    axL = 0.10;
+    axR = 0.87;
+    axH = 0.14;
+    axW = axR - axL;
+    if length(data.L1.N_BEAM) == 4
+        axB = [0.8:-.22:0];
+    elseif length(data.L1.N_BEAM) == 5
+        axB = [0.83:-.18:0];
+    end
+    t = get_yd(L1.TIME);
+    for bb = 1:length(data.L1.N_BEAM)
+        ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
+        plotData = struct('x',t','y',L1.Z_DIST','values',L1.R_VEL(:,:,bb)','var','R_VEL');
+        opts = struct('ylabel','z [m]','clabel',['R\_VEL(:,:,',num2str(bb),') [m/s]']);
+        plot_pcolor(ax(bb),plotData,opts);
+        colormap(ax(bb),cmocean('balance'))
+    end
+    title(ax(1),['Beam Velocities'])
+    xlabel('year day')
 end
-title(ax(1),['Beam Velocities'])
-xlabel('year day')
 
 %% Plot ENU velocities (pcolor)
 if exist('Anc','var')
@@ -153,13 +163,15 @@ if exist('Anc','var')
     axB = [0.8:-.22:0];
 
     t = get_yd(Anc.TIME);
-    for bb = 1:4
+    for bb = 1:length(data.L1.N_BEAM)
         ax(bb) = axes('Position',[axL,axB(bb),axW,axH]);
         plotData = struct('x',t','y',Anc.Z_DIST','values',Anc.ENU(:,:,bb)','var','R_VEL');
         opts = struct('ylabel','z [m]','clabel',['ENU(:,:,',num2str(bb),') [m/s]']);
         plot_pcolor(ax(bb),plotData,opts);
+        caxis([-1 1]*climVel)
+        colormap(ax(bb),cmocean('balance'))
     end
-    title(ax(1),['Beam Velocities'])
+    title(ax(1),['ENU Velocities'])
     xlabel('year day')
 end
 
@@ -171,7 +183,7 @@ if exist('Anc','var')
         indZ = floor(length(Anc.Z_DIST)/2);
     end
     figure_named(['ENU_middepth']),clf,clear ax, clear plotData
-    for bb = 1:4 
+    for bb = 1:length(data.L1.N_BEAM)
         ax(bb) = subplot(4,1,bb);
         plot(get_yd(Anc.TIME),Anc.ENU(:,indZ,bb))
         switch bb
@@ -192,10 +204,17 @@ if ~isfield(L1,'PRES')
    L1.PRES = NaN*zeros(size(L1.TIME));
 end
 plotData.y = [L1.PRES L1.HEADING L1.PITCH L1.ROLL;];
+if isfield(L1,'HEADING5')
+    plotData.y5 = [L1.PRES5 L1.HEADING5 L1.PITCH5 L1.ROLL5;];
+end
 plotData.yLabels = {'Pressure','Heading [deg]','Pitch [deg]','Roll [deg]'};
 for ii = 1:4
     ax(ii) = subplot(4,1,ii);
-    plot(plotData.x,plotData.y(:,ii))
+    plot(plotData.x,plotData.y(:,ii),'linewidth',2)
+    if isfield(plotData,'y5')
+        hold all
+        plot(plotData.x,plotData.y5(:,ii),'--','linewidth',2)
+    end
     ylabel(plotData.yLabels{ii})
 end
 xlabel('year day')
@@ -204,3 +223,19 @@ title(ax(1),['Orientation'])
 %% Histogram of speed with same averaging as spectra (NOT COMPLETED)
 %     plot_histogram(gca,struct('values',speed,'var','speed'),struct())
 
+%% plot amplitude and surface
+figure_named(['Amplitude']),clf,clear ax, clear plotData
+NB = length(data.L1.THETA);
+
+for bb = 1:NB
+    subplot(NB,1,bb)
+    try
+        pcolor(data.L1.TIME,data.L1.Z_DIST,data.L1.ABSIC(:,:,bb)')
+    catch
+       pcolor(data.L1.TIME,data.L1.Z_DIST,data.L1.ABSI(:,:,bb)') 
+    end
+    shading flat
+    colorbar
+    hold all
+    plot(data.L1.TIME,data.L1.PRES,'w')
+end

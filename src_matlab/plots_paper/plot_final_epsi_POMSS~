@@ -1,0 +1,21 @@
+clear all
+
+%%
+
+dataSet = 'RDI4beam_TidalChannel_GP130620BPb';
+processIDs = {'JMM_M2uC_RM5'};
+
+%% Data files
+[dataFileRoot,dataDir,metaDir] = get_data_paths(dataSet);
+
+for ii = 1:length(processIDs)
+    processID = processIDs{ii};
+    matFile = [dataDir,dataFileRoot,'_',processID,'.mat'];
+    d(ii) = load(matFile);
+    data(ii) = d(ii).data;
+    flags(ii) = d(ii).flags;
+    names{ii} = [d(ii).infoProcessing.creator, '_', d(ii).infoProcessing.method];
+end
+
+%%
+opts.indZ = 35;

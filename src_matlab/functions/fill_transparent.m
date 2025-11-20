@@ -15,7 +15,7 @@ xmax = xlim(2);
 ymin = ylim(1);
 ymax = ylim(2);
 
-alpha = 0.25; %transparency 
+alpha = 0.3; %transparency 
 fill([xmin xmax xmax xmin],...
         [ymin ymin ymax ymax] ,color,...
-        'edgecolor','none','facealpha',alpha)
+        'edgecolor','none','facealpha',alpha,'HandleVisibility','off')

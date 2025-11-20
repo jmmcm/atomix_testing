@@ -1,0 +1,89 @@
+#===================================================================================
+#       GROUP LEVEL SPECIFIC METADATA #
+#===================================================================================     
+        
+Ancillary:
+  dimensions:
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        
+  VAVH:  Significant wave height data (m) from a Triaxys buoy deployed on a mooring within 1 km of the ADCP mooring.   Hourly observations interpolated to L4 EPSI_FINAL times.
+  
+  TAU_S: Surface wind stress based 3 m wind speed observations from UK Met Office ODAS buoy (World Meteorological Organisation buoy number 62298) and the wave data from the Triaxys buoy, both deployed within 1 km of the ADCP mooring, based on Fairall et al. (2003) and Taylor et al. (2001).  Hourly observations interpolated to L4 EPSI_FINAL times.
+  
+  U_STAR: Surface friction velocity (m s^-1) based on TAU_S and near-surface temperature and salinity observations from moorings within 1 km of the ADCP mooring.  Interpolated to L4 EPSI_FINAL times.
+  
+  B0: Surface buoyancy flux from the sea to the atmosphere (m^2 s^-3) i.e. negative values typically indicate sea surface warming 
+  
+  LOW_scaling_factor: Law of the wall scaling factor to multiply L4 EPSI_FINAL calculated as 0.4 * z / U_STAR.^3
+  
+  ENU: Segment mean earth coordinate velocity (East, North, Up, error) by depth based on closest-bin mapping of beam velocity data 
+
+# =====================================
+spectra: # computed from level 2 data, so length of data used is L2.segment_length
+   overlap: 50 # [%] 
+   nfft: 60 # [points] 300 points / 60 = 5 yields 11 segments with 50% overlap (i.e. 22 degrees of freedom)
+    
+## ================ L1 =================
+
+L1:  # Raw instrument data
+   dimensions:  
+        - TIME
+        - Z_DIST 
+        - N_BEAM        
+    
+   processing_level:  Raw along-beam velocity data from the ADCP together with quality control flags and ancillary measurements.  # Add more information to suit
+   
+   burst_mode: 1
+   burst_length: 300 # number of profiles per burst
+
+   time_ref: 2014-01-01T00:00:00Z #yyyy-mm-ddTHH:MM:SSZ
+
+L2:  # Level 2: Segmented data
+   dimensions:  
+        - N_SEGMENT
+        - Z_DIST
+        - N_BEAM
+        - N_SAMPLE
+   processing_level:  In this group, QAQCd velocities have been split into smaller segments for processing. Each segment has been detrended to remove any linear trend.
+   detrending_method: linear least squares regression #Name of technique and citation. 
+   burst_interval: 1200 # seconds between start of subsequent bursts (set to zero for continuous sampling)
+   segment_length:  300 # seconds
+   segment_overlap_proportion: 0 # 0.5 for 50%.
+
+#==========================
+
+L3: # Level 3: Dll 
+   dimensions:  
+        - TIME
+        - Z_DIST
+        - N_BEAM
+        - N_DEL
+        - N_BOUND
+   processing_level: This group includes the structure function Dll as a function of the separation distance.  Any ancillary information required for estimatng the dissipation of turbulent kinetic energy may also be stored here. 
+   dll_method:  'forward' # 'forward' or 'center'
+   stationarity_testing: None # details on which type of stationarity testing done on the segmented velocities. Not sure if this should be reported here or level2a.
+   noise_testing: None # details of testing the noise levels, or if the signal comprises mostly of noise.
+
+#==========================
+
+L4: # Level 4: Dissipation 
+   dimensions:  
+        - TIME
+        - Z_DIST 
+        - N_BEAM 
+        - N_BOUND
+   processing_level: This group includes the results associated with fitting the structure function to data in level 3. The results for each beam, along with quality indicators and errors are provided. A final estimate for the turbulent kinetic energy dissipation is also provided. 
+   regression_model: standard
+   regression_method: Linear regression # statistical technique used for fitting the spectra.
+   C2: 2.0 # Constant used in the calculation of the second order structure function
+   points_select_method: 'cloud' # method to choose points for fit (cloud, centered, anchored)
+   dll_averaging: 'false' # 'true'/'false' (true = average all DLL for a given r_del prior to regression, false = keep all DLL for regression)
+   rMin: 0.25 # [meters] (equivalent to two bins)
+   rMax: 0.75 # [meters] (equivalent to 7 bins) [meters]
+   n_bootstrap: 100 # Number of realizations for bootstrapping of regression
+   sigmaN_v: 0.0158 # Expected noise level in velocity measurements [m/s]. Estimated from spectra (Updated Feb 6th, 2025)
+   EPSI_FINAL_method: arithmetic mean across beams of resolved EPSI after all EPSI_FLAGS applied.   
+
+ 

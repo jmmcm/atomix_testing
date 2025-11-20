@@ -74,7 +74,7 @@ if options.ratios
         end
                 
             
-                plot(limits,yMin,'--','color',col,'linewidth',2);
+                ph(end+1) = plot(limits,yMin,'--','color',col,'linewidth',2);
                 ph(end+1) = plot(limits,yMax,'--','color',col,'linewidth',2,'DisplayName',['factor of ' num2str(options.ratios(rr))]);
 %             case 'density' 
 %                 plot(log10(limits),rMin*log10(limits),'--','color',col,'linewidth',2);
