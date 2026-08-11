@@ -1,0 +1,9 @@
+#===================================================================================
+#       PROCESSING INFORMATION (see group and flag files for specific parameters #
+#===================================================================================     
+
+creator: JMM # Justine McMillan
+method: 'M2aC'        
+description: DLL values within turbulence 'cloud' for all possible bin separations within specified r_max limit, but then averaged before standard regression. All flag thresholds consistent with standard values on Wiki.
+ 
+

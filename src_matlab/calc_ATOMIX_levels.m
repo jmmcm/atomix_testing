@@ -16,12 +16,12 @@ addpath(genpath('../../utilitieswork/'))
 tic
 %% Select dataset and processing ID
 % Select one or more files to process
-caseIDs = {'7A','7B','7C'}; % Didn't do 4
+caseIDs = {'5D','5E','5F'}; % Didn't do 4
 % caseIDs = {'1A','1C','2A','2C','3F','3G','5A','5B','6A','6B','7A','7B'}; % All centered and all realizations used in paper
 % caseIDs =   {'1A','1B','1C','1D',...
 %              '2A','2B','2C','2D',...
 %              '3A','3B','3C','3D','3E','3F','3G','3H',...
-%              '5A','5B','5C',...
+%              '5A','5B','5C','5D','5E','5F'...
 %              '6A','6B','6C',...
 %              '7A','7B','7C'}; % No 4, because no data files on GPSC and not a benchmark
 
@@ -104,6 +104,15 @@ for caseID = caseIDs
         case '5C'
             dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
             processID = 'JMM_M2aC_RM2';
+        case '5D'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M2uC_RM1';
+        case '5E'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M1aC_RM1';
+        case '5F'
+            dataSet = 'AQD_Windermere_bedframe'; rawID = 'BDS_M1aA_RM2'; 
+            processID = 'JMM_M2aC_RM1';
         case '6A'
             dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; rawID = 'NSL'; 
             processID = 'JMM_M2uC_RM3';

@@ -13,12 +13,12 @@ colors = get(0,'DefaultAxesColorOrder');
 flg.saveFigs = 1;
 
 %% Dataset and processID (for Ancillary data and spectra parameters)
-dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
+% dataSet = 'RDI4beam_TidalChannel_GP130620BPb'; processID = 'JMM_M2uC_RM5';
 % dataSet = 'RDIWH600_CANDYFLOSS_bedframe'; processID = 'JMM_M2uC_RM7p5';
 % dataSet = 'RDIWH600_CANDYFLOSS_TOP'; processID = 'JMM_M2uC_RM1p5';
 % dataSet = 'Signature5beam_TidalShelf'; processID = 'JMM_M2uC_RM2'; 
 % dataSet = 'NortekSig1000_TidalChannel_2019_Burst'; processID = 'JMM_M2uC_RM5';
-% dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
+ dataSet = 'AQD_Windermere_bedframe'; processID = 'JMM_M2uC_RM2';
 % dataSet = 'AQD_NorthSea_bedframe'; processID = 'JMM_M2uC_RM0p3';
 
 %% Load data
@@ -246,7 +246,7 @@ end
 
 %% Plot noise level
 figure_named('NoiseLevel'),clf
-subplot(1,NB+1,1)
+ax(1) = subplot(1,NB+1,1);
 for bb = 1:NB
         plot(nanmean(noiselevelCalc(:,bb,:),3),indZall,'.-','DisplayName',['beam = ',num2str(bb)])
         hold all
@@ -255,7 +255,7 @@ end
 legend
 title('Average')
 for bb = 1:NB
-    subplot(1,NB+1,1+bb)
+    ax(bb+1) = subplot(1,NB+1,1+bb);
     for ss = 1:NS
             plot(noiselevelCalc(:,bb,ss),indZall,'.-','DisplayName',[num2str(midS(ss)),' m/s'])
             hold all
@@ -264,6 +264,7 @@ for bb = 1:NB
     legend
     title(['beam ' num2str(bb)])
 end
+linkaxes(ax,'xy')
 add_fig_info(mname,[dataSet],struct())
 if flg.saveFigs
     figName = [figPath,'NoiseLevels.png'];
